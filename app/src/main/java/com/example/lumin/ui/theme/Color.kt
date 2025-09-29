@@ -15,7 +15,6 @@ val LuminIntenseGray = Color(0xFF111818)
 val LuminSoftGray = Color(0xFF1C2727)
 val LuminVerySoftGray = Color(0xFF89A9A9)
 val LuminCyan = Color(0xFF10E4E2)
-
 val LuminWhite = Color(0xFFFBFBFB)
 val LuminBlack = Color(0xFF000000)
 val LuminGreen = Color(0xFF10E46F)
