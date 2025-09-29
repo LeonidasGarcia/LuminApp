@@ -38,7 +38,7 @@ fun LoginButton(
 @Composable
 fun GoogleText() {
     Text(buildAnnotatedString {
-        append("Iniciar Sesión con ")
+        append("Continuar con ")
         withStyle(style = SpanStyle(color = Color(0xFF4384f5))) {
             append("G")
         }

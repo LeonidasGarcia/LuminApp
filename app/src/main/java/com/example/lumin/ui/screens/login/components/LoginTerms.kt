@@ -9,6 +9,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,9 @@ fun LoginTerms(
             append("Al continuar, aceptas nuestros ")
             withStyle(
                 style = SpanStyle(
-                    fontWeight = FontWeight.Bold, color = LuminWhite
+                    fontWeight = FontWeight.Bold,
+                    color = LuminWhite,
+                    textDecoration = TextDecoration.Underline
                 )
             ) {
                 append(text = "Términos de Servicio ")
@@ -35,7 +38,9 @@ fun LoginTerms(
             append("y ")
             withStyle(
                 style = SpanStyle(
-                    fontWeight = FontWeight.Bold, color = LuminWhite
+                    fontWeight = FontWeight.Bold,
+                    color = LuminWhite,
+                    textDecoration = TextDecoration.Underline
                 )
             ) {
                 append(text = "Política de Privacidad")

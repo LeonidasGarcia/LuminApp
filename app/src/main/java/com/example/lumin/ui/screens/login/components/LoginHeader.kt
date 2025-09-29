@@ -67,7 +67,7 @@ fun LoginImageHeader(
         contentDescription = "Logo Lumin",
         modifier = Modifier
             .fillMaxWidth()
-            .height(250.dp)
+            .height(200.dp)
     )
 }
 
