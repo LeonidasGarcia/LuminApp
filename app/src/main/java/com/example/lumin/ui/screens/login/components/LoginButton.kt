@@ -8,11 +8,16 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lumin.ui.theme.LuminCyan
 import com.example.lumin.ui.theme.LuminSoftGray
 import com.example.lumin.ui.theme.LuminTheme
+import com.example.lumin.ui.theme.LuminWhite
 
 @Composable
 fun LoginButton(
@@ -21,13 +26,38 @@ fun LoginButton(
     Button(
         onClick = {},
         colors = ButtonDefaults.buttonColors(
-            containerColor = LuminCyan
+            containerColor = LuminWhite
         ),
         modifier = Modifier.width(300.dp),
         shape = RoundedCornerShape(16.dp)
     ) {
-        Text("Iniciar Sesión con Google", color = LuminSoftGray)
+        GoogleText()
     }
+}
+
+@Composable
+fun GoogleText() {
+    Text(buildAnnotatedString {
+        append("Iniciar Sesión con ")
+        withStyle(style = SpanStyle(color = Color(0xFF4384f5))) {
+            append("G")
+        }
+        withStyle(style = SpanStyle(color = Color(0xFFe94234))) {
+            append("o")
+        }
+        withStyle(style = SpanStyle(color = Color(0xFFf9bc03))) {
+            append("o")
+        }
+        withStyle(style = SpanStyle(color = Color(0xFF4384f5))) {
+            append("g")
+        }
+        withStyle(style = SpanStyle(color = Color(0xFF36a955))) {
+            append("l")
+        }
+        withStyle(style = SpanStyle(color = Color(0xFFe94234))) {
+            append("e")
+        }
+    }, color = LuminSoftGray)
 }
 
 @Preview(

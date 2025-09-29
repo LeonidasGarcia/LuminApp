@@ -3,7 +3,10 @@ package com.example.lumin.ui.screens.login
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,15 +36,15 @@ fun LoginScreen(
         modifier = Modifier
             .background(LuminIntenseGray)
             .fillMaxSize()
-
     ) {
-        LoginImageHeader()
         LoginHeader()
+        Spacer(modifier = Modifier.height(28.dp))
         Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LoginButton()
+            Spacer(modifier = Modifier.height(12.dp))
             LoginTerms()
         }
     }
@@ -50,7 +53,6 @@ fun LoginScreen(
 @Preview(
     showBackground = true,
     backgroundColor = 0xFF111818,
-
 )
 @Composable
 fun LoginScreenPreview() {
