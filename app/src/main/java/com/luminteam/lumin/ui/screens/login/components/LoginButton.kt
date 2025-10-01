@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.luminteam.lumin.R
@@ -42,7 +43,8 @@ fun LoginButton(
 @Composable
 fun GoogleText() {
     Text(text ="Continuar con Google",
-        color = LuminSoftGray
+        color = LuminSoftGray,
+        fontWeight = FontWeight.Medium
     )
 }
 
@@ -51,7 +53,7 @@ fun GoogleLogo() {
     Image(
         painter = painterResource(id = R.drawable.google_logo),
         contentDescription = "Google Logo",
-        modifier = Modifier.height(20.dp)
+        modifier = Modifier.height(16.dp)
     )
 }
 
