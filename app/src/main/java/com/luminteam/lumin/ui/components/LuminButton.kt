@@ -1,4 +1,4 @@
-package com.luminteam.lumin.ui.components.LuminButton
+package com.luminteam.lumin.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,22 +11,37 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.luminteam.lumin.ui.theme.LuminCyan
+import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
+import com.luminteam.lumin.R
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.Dp
+import com.luminteam.lumin.ui.theme.LuminBlack
+import com.luminteam.lumin.ui.theme.LuminYellow
 
 @Composable
 fun LuminButton(
     title: String,
     titleColor: Color = LuminWhite,
     buttonColor: Color,
+    icon: Int,
+    iconColor: Color,
     modifier: Modifier = Modifier,
+    rounded: Dp = 24.dp,
     descriptionColumn: @Composable () -> Unit
 ) {
     Button(
@@ -34,14 +49,15 @@ fun LuminButton(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight(),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(rounded),
         colors = ButtonDefaults.buttonColors(
             containerColor = buttonColor
         )
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.padding(6.dp)
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier.padding(6.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,17 +68,45 @@ fun LuminButton(
                     text = title,
                     color = titleColor,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
                 )
                 descriptionColumn()
             }
-            Text(
-                text = "->",
+            Icon(
+                painter = painterResource(id = icon),
+                tint = iconColor,
+                contentDescription = "",
                 modifier = Modifier
                     .width(52.dp)
                     .height(52.dp)
                     .align(Alignment.CenterVertically)
             )
+        }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFF111818,
+)
+@Composable
+fun LuminContinueButton() {
+    LuminTheme {
+        LuminButton(
+            title = "Continuar",
+            titleColor = LuminBlack,
+            buttonColor = LuminCyan,
+            icon = R.drawable.arrow_icon,
+            iconColor = LuminBlack,
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                Text(text = "Nivel: Básico", fontSize = 12.sp)
+                Text(text = "Sección: Variables y Salidas", fontSize = 12.sp)
+            }
         }
     }
 }
