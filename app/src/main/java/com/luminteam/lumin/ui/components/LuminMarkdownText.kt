@@ -24,6 +24,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.widget.TextViewCompat
 import coil.ImageLoader
 import com.luminteam.lumin.ui.markdown.LuminMarkdownRender
+import com.luminteam.lumin.ui.theme.LuminWhite
 import dev.jeziellago.compose.markdowntext.AutoSizeConfig
 import dev.jeziellago.compose.markdowntext.CustomTextView
 import dev.jeziellago.compose.markdowntext.applyFontFamily
@@ -49,7 +50,7 @@ fun LuminMarkdownText(
     isTextSelectable: Boolean = false,
     autoSizeConfig: AutoSizeConfig? = null,
     @FontRes fontResource: Int? = null,
-    style: TextStyle = LocalTextStyle.current,
+    style: TextStyle = TextStyle(LuminWhite),
     @IdRes viewId: Int? = null,
     onClick: (() -> Unit)? = null,
     // this option will disable all clicks on links, inside the markdown text

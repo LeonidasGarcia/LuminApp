@@ -10,6 +10,7 @@ import androidx.compose.ui.text.TextStyle
 import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
+import com.luminteam.lumin.ui.theme.LuminWhite
 import dev.jeziellago.compose.markdowntext.plugins.core.MardownCorePlugin
 import dev.jeziellago.compose.markdowntext.plugins.image.ImagesPlugin
 import io.noties.markwon.AbstractMarkwonPlugin
@@ -56,7 +57,7 @@ object LuminMarkdownRender {
                 MardownCorePlugin(
                     syntaxHighlightColor.toArgb(),
                     syntaxHighlightTextColor.toArgb(),
-                    enableUnderlineForLink,
+                    enableUnderlineForLink
                 )
             )
             .usePlugin(HtmlPlugin.create())
