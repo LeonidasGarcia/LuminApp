@@ -22,7 +22,7 @@ import com.luminteam.lumin.ui.theme.LuminWhite
 
 @Composable
 fun LoginButton(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Button(
         onClick = {},
