@@ -82,10 +82,11 @@ fun TopBar(
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(20.dp))
             if (isBackButtonVisible) {
+                Spacer(modifier = Modifier.height(20.dp))
                 BackButton(backText = backText)
             }
+            Spacer(modifier = Modifier.height(20.dp))
         }
 
     }

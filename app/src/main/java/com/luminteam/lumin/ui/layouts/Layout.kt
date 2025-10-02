@@ -8,16 +8,14 @@ import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.components.TopBar
 import com.luminteam.lumin.ui.theme.LuminTheme
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
+
 @Composable
 fun MainLayout(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
     LuminTheme {
-        Column {
+        LuminLayout {
             TopBar(
                 modifier = modifier,
                 currentPageIcon = R.drawable.book_icon,
@@ -25,102 +23,93 @@ fun MainLayout(
                 actionButtonIcon = R.drawable.user_icon,
                 isBackButtonVisible = false
             )
+            content()
         }
     }
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
+
 @Composable
 fun SectionLayout(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
     LuminTheme {
-        Column {
+        LuminLayout {
             TopBar(
                 modifier = modifier,
                 currentPageIcon = R.drawable.book_icon,
                 pageText = "Sección 1",
                 actionButtonIcon = R.drawable.user_icon,
             )
+            content()
         }
     }
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
+
 @Composable
 fun ProfileLayout(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
     LuminTheme {
-        Column {
+        LuminLayout {
             TopBar(
                 modifier = modifier,
                 currentPageIcon = R.drawable.user_icon,
                 pageText = "Usuario",
                 actionButtonIcon = R.drawable.setttings_icon
             )
+            content()
         }
     }
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
 @Composable
 fun TheoryLayout(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
     LuminTheme {
-        Column {
+        LuminLayout {
             TopBar(
                 modifier = modifier,
                 currentPageIcon = R.drawable.book_icon,
                 pageText = "Página 1",
                 actionButtonIcon = R.drawable.robot_icon
             )
+            content()
         }
     }
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
 @Composable
 fun EvaluationLayout(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
     LuminTheme {
-        Column {
+        LuminLayout {
             TopBar(
                 modifier = modifier,
                 currentPageIcon = R.drawable.book_icon,
                 pageText = "Pregunta 1",
                 actionButtonIcon = R.drawable.book_icon,
-                isBackButtonVisible = false,
                 isActionButtonVisible = false
             )
+            content()
         }
     }
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
 @Composable
 fun EvaluationResultsLayout(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
     LuminTheme {
-        Column {
+        LuminLayout {
             TopBar(
                 modifier = modifier,
                 currentPageIcon = R.drawable.book_icon,
@@ -129,40 +118,36 @@ fun EvaluationResultsLayout(
                 backText = "Ir a Secciones",
                 isActionButtonVisible = false
             )
+            content()
         }
     }
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
 @Composable
 fun ChatAITutorLayout(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
     LuminTheme {
-        Column {
+        LuminLayout {
             TopBar(
                 modifier = modifier,
                 currentPageIcon = R.drawable.robot_icon,
                 pageText = "Tutor IA",
                 actionButtonIcon = R.drawable.book_icon
             )
+            content()
         }
     }
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
 @Composable
 fun FeedbackAITutorLayout(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
     LuminTheme {
-        Column {
+        LuminLayout {
             TopBar(
                 modifier = modifier,
                 currentPageIcon = R.drawable.robot_icon,
@@ -170,6 +155,19 @@ fun FeedbackAITutorLayout(
                 actionButtonIcon = R.drawable.book_icon,
                 backText = "Volver a Resultados"
             )
+            content()
+        }
+    }
+}
+
+@Composable
+fun LuminLayout(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    LuminTheme {
+        Column {
+            content()
         }
     }
 }
