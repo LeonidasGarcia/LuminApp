@@ -32,6 +32,7 @@ fun MainLayout(
 @Composable
 fun SectionLayout(
     modifier: Modifier = Modifier,
+    pageText: String = "Sección 1",
     content: @Composable () -> Unit
 ) {
     LuminTheme {
@@ -39,7 +40,7 @@ fun SectionLayout(
             TopBar(
                 modifier = modifier,
                 currentPageIcon = R.drawable.book_icon,
-                pageText = "Sección 1",
+                pageText = pageText,
                 actionButtonIcon = R.drawable.user_icon,
             )
             content()
@@ -69,6 +70,7 @@ fun ProfileLayout(
 @Composable
 fun TheoryLayout(
     modifier: Modifier = Modifier,
+    pageText: String = "Página 1",
     content: @Composable () -> Unit
 ) {
     LuminTheme {
@@ -76,7 +78,7 @@ fun TheoryLayout(
             TopBar(
                 modifier = modifier,
                 currentPageIcon = R.drawable.book_icon,
-                pageText = "Página 1",
+                pageText = pageText,
                 actionButtonIcon = R.drawable.robot_icon
             )
             content()
@@ -87,6 +89,7 @@ fun TheoryLayout(
 @Composable
 fun EvaluationLayout(
     modifier: Modifier = Modifier,
+    pageText: String = "Pregunta 1",
     content: @Composable () -> Unit
 ) {
     LuminTheme {
@@ -94,7 +97,7 @@ fun EvaluationLayout(
             TopBar(
                 modifier = modifier,
                 currentPageIcon = R.drawable.book_icon,
-                pageText = "Pregunta 1",
+                pageText = pageText,
                 actionButtonIcon = R.drawable.book_icon,
                 isActionButtonVisible = false
             )
@@ -113,7 +116,7 @@ fun EvaluationResultsLayout(
             TopBar(
                 modifier = modifier,
                 currentPageIcon = R.drawable.book_icon,
-                pageText = "Pregunta 1",
+                pageText = "Resultados",
                 actionButtonIcon = R.drawable.book_icon,
                 backText = "Ir a Secciones",
                 isActionButtonVisible = false
