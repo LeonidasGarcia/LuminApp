@@ -126,7 +126,7 @@ fun EvaluationResultsLayout(
                 currentPageIcon = R.drawable.book_icon,
                 pageText = "Pregunta 1",
                 actionButtonIcon = R.drawable.book_icon,
-                navText = "Ir a Secciones",
+                backText = "Ir a Secciones",
                 isActionButtonVisible = false
             )
         }
@@ -168,7 +168,7 @@ fun FeedbackAITutorLayout(
                 currentPageIcon = R.drawable.robot_icon,
                 pageText = "Tutor IA",
                 actionButtonIcon = R.drawable.book_icon,
-                navText = "Volver a Resultados"
+                backText = "Volver a Resultados"
             )
         }
     }
