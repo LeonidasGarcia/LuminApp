@@ -14,6 +14,13 @@ val Inter = FontFamily(
     Font(R.font.inter_bold, weight = FontWeight.Bold)
 )
 
+val JetBrainsMono = FontFamily(
+    Font(R.font.jetmono_regular, weight = FontWeight.Normal),
+    Font(R.font.jetmono_medium, weight = FontWeight.Medium),
+    Font(R.font.jetmono_semibold, weight = FontWeight.SemiBold),
+    Font(R.font.jetmono_bold, weight = FontWeight.Bold)
+)
+
 val AppTypography = Typography(
     displayLarge = TextStyle(fontFamily = Inter),
     displayMedium = TextStyle(fontFamily = Inter),

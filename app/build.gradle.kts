@@ -98,7 +98,9 @@ dependencies {
     implementation("com.google.android.material:material:1.13.0") {
         exclude(group = "org.jetbrains", module = "annotations-java5")
     }
-
+    implementation("com.github.qawaz:compose-code-editor:2.0.3") {
+        exclude(group = "org.jetbrains", module = "annotations-java5")
+    }
     testImplementation(libs.junit) {
         exclude(group = "org.jetbrains", module = "annotations-java5")
     }

@@ -15,12 +15,6 @@ class MarkdownStringBuilder() {
         return this
     }
 
-    fun addDescription(text: String): MarkdownStringBuilder {
-        markdownString += """${text}
-"""
-        return this
-    }
-
     fun addParagraph(text: String): MarkdownStringBuilder {
         markdownString += """${text}
 """

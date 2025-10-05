@@ -20,10 +20,13 @@ import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.widget.TextViewCompat
 import coil.ImageLoader
 import com.luminteam.lumin.ui.markdown.LuminMarkdownRender
+import com.luminteam.lumin.ui.markdown.MarkdownStringBuilder
+import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
 import dev.jeziellago.compose.markdowntext.AutoSizeConfig
 import dev.jeziellago.compose.markdowntext.CustomTextView
@@ -154,4 +157,24 @@ fun LuminMarkdownText(
             textView.maxLines = maxLines
         }
     )
+}
+
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFF111818,
+)
+@Composable
+fun LuminMarkdownTextPreview() {
+    LuminTheme {
+        LuminMarkdownText(
+            markdown = MarkdownStringBuilder()
+                .addTitle("Variables y Salidas")
+                .addParagraph("Super interesante tema")
+                .addSubtitle("Variables")
+                .addParagraph("Este es el parrafo del tema")
+                .addCode("print('hola mundo')")
+                .addOutput("hola mundo")
+                .build()
+        )
+    }
 }
