@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminTheme
-import com.luminteam.lumin.ui.theme.LuminVerySoftGray
+import com.luminteam.lumin.ui.theme.LuminLightGray
 import com.luminteam.lumin.ui.theme.LuminWhite
 
 @Composable
@@ -57,11 +57,11 @@ fun UserPersonalData() {
             )
             Text(
                 text = "leonidasgarcia@gmail.com",
-                color = LuminVerySoftGray,
+                color = LuminLightGray,
                 textDecoration = TextDecoration.Underline,
                 fontSize = 12.sp
             )
-            Text(text = "20 años", color = LuminVerySoftGray, fontSize = 12.sp)
+            Text(text = "20 años", color = LuminLightGray, fontSize = 12.sp)
             Box(
                 modifier = Modifier
                     .background(LuminCyan, shape = RoundedCornerShape(16.dp))

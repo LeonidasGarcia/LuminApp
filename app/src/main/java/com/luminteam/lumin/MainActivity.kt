@@ -44,8 +44,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luminteam.lumin.ui.theme.LuminCyan
-import com.luminteam.lumin.ui.theme.LuminIntenseGray
-import com.luminteam.lumin.ui.theme.LuminSoftGray
 import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
 import com.wakaztahir.codeeditor.highlight.model.CodeLang

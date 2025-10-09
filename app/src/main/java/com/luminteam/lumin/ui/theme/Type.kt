@@ -21,6 +21,10 @@ val JetBrainsMono = FontFamily(
     Font(R.font.jetmono_bold, weight = FontWeight.Bold)
 )
 
+val Roboto = FontFamily(
+    Font(R.font.roboto_medium, weight = FontWeight.Medium),
+)
+
 val AppTypography = Typography(
     displayLarge = TextStyle(fontFamily = Inter),
     displayMedium = TextStyle(fontFamily = Inter),

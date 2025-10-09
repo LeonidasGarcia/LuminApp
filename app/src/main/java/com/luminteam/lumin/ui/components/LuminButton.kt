@@ -17,9 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,10 +26,9 @@ import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
 import com.luminteam.lumin.R
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
+import com.luminteam.lumin.ui.theme.LuminGray
 import com.luminteam.lumin.ui.theme.LuminBlack
-import com.luminteam.lumin.ui.theme.LuminYellow
 
 @Composable
 fun LuminButton(
@@ -77,8 +74,8 @@ fun LuminButton(
                 tint = iconColor,
                 contentDescription = "",
                 modifier = Modifier
-                    .width(52.dp)
-                    .height(52.dp)
+                    .width(56.dp)
+                    .height(56.dp)
                     .align(Alignment.CenterVertically)
             )
         }
@@ -104,8 +101,18 @@ fun LuminContinueButton() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                Text(text = "Nivel: Básico", fontSize = 12.sp)
-                Text(text = "Sección: Variables y Salidas", fontSize = 12.sp)
+                Text(
+                    text = "Nivel: Básico",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = LuminGray
+                )
+                Text(
+                    text = "Sección: Variables y Salidas",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = LuminGray
+                )
             }
         }
     }

@@ -27,11 +27,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.luminteam.lumin.ui.theme.LuminAltGray
+import com.luminteam.lumin.ui.theme.LuminGray
 import com.luminteam.lumin.ui.theme.LuminCyan
-import com.luminteam.lumin.ui.theme.LuminIntenseGray
+import com.luminteam.lumin.ui.theme.LuminBackground
+import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminTheme
-import com.luminteam.lumin.ui.theme.LuminVerySoftGray
+import com.luminteam.lumin.ui.theme.LuminLightGray
 
 @Preview(
     showBackground = true,
@@ -51,12 +52,12 @@ fun TopBar(
 ) {
     LuminTheme {
         Column(
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp)
+            //modifier = Modifier.padding(start = 20.dp, end = 20.dp)
         ) {
             Row(
                 modifier = Modifier
                     .background(
-                        color = LuminIntenseGray,
+                        color = LuminBackground,
                         shape = RoundedCornerShape(
                             bottomStart = 10.dp,
                             bottomEnd = 10.dp)
@@ -86,7 +87,6 @@ fun TopBar(
                 Spacer(modifier = Modifier.height(20.dp))
                 BackButton(backText = backText)
             }
-            Spacer(modifier = Modifier.height(20.dp))
         }
 
     }
@@ -102,7 +102,7 @@ fun CurrentPageIndicator(
     Box(
         modifier = Modifier
             .background(
-                color = LuminAltGray,
+                color = LuminDarkGray,
                 shape = RoundedCornerShape(10.dp)
             )
             .height(45.dp)
@@ -141,7 +141,7 @@ fun EnergyIndicator(
     Box(
         modifier = Modifier
             .background(
-                color = LuminAltGray,
+                color = LuminDarkGray,
                 shape = RoundedCornerShape(10.dp)
             )
             .height(45.dp)
@@ -154,7 +154,7 @@ fun EnergyIndicator(
         ) {
             Text(
                 text = energy.toString(),
-                color = LuminVerySoftGray,
+                color = LuminLightGray,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
             )
@@ -166,7 +166,7 @@ fun EnergyIndicator(
                 imageVector = ImageVector.vectorResource(id = R.drawable.energy_icon),
                 contentDescription = "Icono",
                 modifier = Modifier.height(24.dp),
-                tint = LuminVerySoftGray
+                tint = LuminLightGray
             )
         }
     }
@@ -182,7 +182,7 @@ fun ActionButton(
     Box(
         modifier = Modifier
             .background(
-                color = LuminAltGray,
+                color = LuminDarkGray,
                 shape = RoundedCornerShape(10.dp)
             )
             .height(45.dp)
@@ -198,7 +198,7 @@ fun ActionButton(
                 imageVector = ImageVector.vectorResource(id = actionButtonIcon),
                 contentDescription = "Icono",
                 modifier = Modifier.height(24.dp),
-                tint = LuminVerySoftGray
+                tint = LuminLightGray
             )
         }
     }
@@ -231,12 +231,12 @@ fun BackButton(
             imageVector = ImageVector.vectorResource(id = R.drawable.arrow_icon),
             contentDescription = "Icono",
             modifier = Modifier.height(24.dp).scale(scaleX = -1f, scaleY = 1f),
-            tint = LuminVerySoftGray
+            tint = LuminLightGray
         )
         Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = backText,
-            color = LuminVerySoftGray,
+            color = LuminLightGray,
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium
         )

@@ -18,15 +18,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luminteam.lumin.R
-import com.luminteam.lumin.ui.theme.LuminIntenseGray
+import com.luminteam.lumin.ui.theme.LuminBackground
 import com.luminteam.lumin.ui.theme.LuminTheme
-import com.luminteam.lumin.ui.theme.LuminVerySoftGray
+import com.luminteam.lumin.ui.theme.LuminLightGray
 
 @Composable
 fun ReturnButton() {
     Button(
         onClick = {},
-        colors = ButtonDefaults.buttonColors(LuminIntenseGray),
+        colors = ButtonDefaults.buttonColors(LuminBackground),
         contentPadding = PaddingValues(10.dp)
     ) {
         Row(
@@ -40,9 +40,9 @@ fun ReturnButton() {
                     .width(24.dp)
                     .height(24.dp)
                     .rotate(180f),
-                tint = LuminVerySoftGray
+                tint = LuminLightGray
             )
-            Text(text = "Regresar", fontSize = 20.sp, color = LuminVerySoftGray)
+            Text(text = "Regresar", fontSize = 20.sp, color = LuminLightGray)
         }
     }
 }

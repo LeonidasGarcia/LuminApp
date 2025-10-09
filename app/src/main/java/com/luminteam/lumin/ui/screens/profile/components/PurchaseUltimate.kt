@@ -20,8 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luminteam.lumin.ui.theme.LuminCyan
-import com.luminteam.lumin.ui.theme.LuminIntenseGray
-import com.luminteam.lumin.ui.theme.LuminSoftGray
+import com.luminteam.lumin.ui.theme.LuminBackground
+import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
 
@@ -42,14 +42,14 @@ fun PurchaseUltimate() {
                 textAlign = TextAlign.Center,
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Black,
-                color = LuminIntenseGray,
+                color = LuminBackground,
                 modifier = Modifier.width(170.dp)
             )
         }
         Text(text = "Iluminate con nuestros planes", fontWeight = FontWeight.Bold)
         Button(
             onClick = {},
-            colors = ButtonDefaults.buttonColors(LuminSoftGray),
+            colors = ButtonDefaults.buttonColors(LuminDarkGray),
             contentPadding = PaddingValues(vertical = 0.dp, horizontal = 24.dp)
         ) {
             Text(text = "Ver más", color = LuminWhite, fontWeight = FontWeight.Bold)

@@ -17,11 +17,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminCyan
-import com.luminteam.lumin.ui.theme.LuminSoftGray
-import com.luminteam.lumin.ui.theme.LuminVerySoftGray
+import com.luminteam.lumin.ui.theme.LuminDarkGray
+import com.luminteam.lumin.ui.theme.LuminGray
+import com.luminteam.lumin.ui.theme.LuminLightGray
 import com.luminteam.lumin.ui.theme.LuminWhite
 
 @Composable
@@ -35,7 +35,7 @@ fun ModuleButton(
         onClick = {},
         shape = RoundedCornerShape(25.dp),
         contentPadding = PaddingValues(25.dp),
-        colors = ButtonDefaults.buttonColors(if (selected) LuminCyan else LuminSoftGray),
+        colors = ButtonDefaults.buttonColors(if (selected) LuminCyan else LuminDarkGray),
         modifier = Modifier
             .width(180.dp)
             .height(180.dp)
@@ -54,14 +54,15 @@ fun ModuleButton(
             )
             Text(
                 text = title,
-                fontSize = 25.sp,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = if (selected) LuminBlack else LuminWhite
             )
             Text(
                 text = details,
-                fontSize = 15.sp,
-                color = if (selected) LuminBlack else LuminWhite
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                color = if (selected) LuminGray else LuminLightGray
             )
         }
     }

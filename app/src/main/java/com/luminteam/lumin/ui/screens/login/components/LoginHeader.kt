@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.theme.Inter
 import com.luminteam.lumin.ui.theme.LuminTheme
-import com.luminteam.lumin.ui.theme.LuminVerySoftGray
+import com.luminteam.lumin.ui.theme.LuminLightGray
 import com.luminteam.lumin.ui.theme.LuminWhite
 
 @Composable
@@ -42,7 +42,7 @@ fun LoginHeader(
         Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = "Aprende de verdad a tu manera.",
-            color = LuminVerySoftGray,
+            color = LuminLightGray,
             fontSize = 12.sp,
             textAlign = TextAlign.Center
         )

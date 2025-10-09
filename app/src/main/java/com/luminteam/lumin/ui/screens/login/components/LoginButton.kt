@@ -11,14 +11,18 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.luminteam.lumin.R
-import com.luminteam.lumin.ui.theme.LuminSoftGray
+import com.luminteam.lumin.ui.theme.LuminBlack
+import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
+import com.luminteam.lumin.ui.theme.Roboto
 
 @Composable
 fun LoginButton(
@@ -27,14 +31,16 @@ fun LoginButton(
     Button(
         onClick = {},
         colors = ButtonDefaults.buttonColors(
-            containerColor = LuminWhite
-        ),
-        modifier = Modifier.width(300.dp),
-        shape = RoundedCornerShape(16.dp)
+            containerColor = Color(0xFFF2F2F2)
+    ),
+        modifier = Modifier
+            .width(320.dp)
+            .height(45.dp),
+        shape = RoundedCornerShape(15.dp)
     ) {
         Row {
             GoogleLogo()
-            Spacer(modifier.width(8.dp))
+            Spacer(modifier.width(10.dp))
             GoogleText()
         }
     }
@@ -43,8 +49,10 @@ fun LoginButton(
 @Composable
 fun GoogleText() {
     Text(text ="Continuar con Google",
-        color = LuminSoftGray,
-        fontWeight = FontWeight.Medium
+        color = LuminBlack,
+        fontWeight = FontWeight.Medium,
+        fontFamily = Roboto,
+        fontSize = 16.sp
     )
 }
 
@@ -53,7 +61,7 @@ fun GoogleLogo() {
     Image(
         painter = painterResource(id = R.drawable.google_logo),
         contentDescription = "Google Logo",
-        modifier = Modifier.height(16.dp)
+        modifier = Modifier.height(19.dp)
     )
 }
 

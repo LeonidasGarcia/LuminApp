@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.luminteam.lumin.ui.screens.login.components.LoginButton
 import com.luminteam.lumin.ui.screens.login.components.LoginHeader
 import com.luminteam.lumin.ui.screens.login.components.LoginTerms
-import com.luminteam.lumin.ui.theme.LuminIntenseGray
+import com.luminteam.lumin.ui.theme.LuminBackground
 import com.luminteam.lumin.ui.theme.LuminTheme
 
 @Composable
@@ -25,7 +25,7 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .background(LuminIntenseGray)
+            .background(LuminBackground)
             .fillMaxSize()
     ) {
         LoginHeader()

@@ -91,7 +91,6 @@ dependencies {
     implementation("io.noties.markwon:linkify:4.6.2") {
         exclude(group = "org.jetbrains", module = "annotations-java5")
     }
-
     implementation("androidx.appcompat:appcompat:1.7.1") {
         exclude(group = "org.jetbrains", module = "annotations-java5")
     }

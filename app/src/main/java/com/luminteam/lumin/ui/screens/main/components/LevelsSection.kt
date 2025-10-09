@@ -16,7 +16,8 @@ import com.luminteam.lumin.ui.components.LuminButton
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminGreen
 import com.luminteam.lumin.ui.theme.LuminOrange
-import com.luminteam.lumin.ui.theme.LuminSoftGray
+import com.luminteam.lumin.ui.theme.LuminDarkGray
+import com.luminteam.lumin.ui.theme.LuminGray
 import com.luminteam.lumin.ui.theme.LuminWhite
 import com.luminteam.lumin.ui.theme.LuminYellow
 
@@ -58,8 +59,8 @@ val levels = listOf<Level>(
 
 @Composable
 fun LevelsSection() {
-    Column(verticalArrangement = Arrangement.spacedBy(36.dp)) {
-        Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
             LevelsHeader()
             Levels()
         }
@@ -90,7 +91,7 @@ fun Levels() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                Text(text = description, color = LuminSoftGray, fontSize = 12.sp)
+                Text(text = description, color = LuminGray, fontSize = 12.sp, fontWeight = FontWeight.Medium)
             }
         }
     }

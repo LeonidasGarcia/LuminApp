@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.luminteam.lumin.ui.theme.LuminSoftGray
+import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminTheme
 
 @Composable
@@ -18,7 +18,7 @@ fun Separator() {
         modifier = Modifier
             .fillMaxWidth()
             .height(5.dp)
-            .background(LuminSoftGray, shape = RoundedCornerShape(10.dp))
+            .background(LuminDarkGray, shape = RoundedCornerShape(10.dp))
     )
 }
 

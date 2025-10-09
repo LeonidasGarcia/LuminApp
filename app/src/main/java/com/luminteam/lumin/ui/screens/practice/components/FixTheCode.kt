@@ -31,11 +31,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luminteam.lumin.ui.components.LuminMarkdownText
+import com.luminteam.lumin.ui.theme.LuminBackground
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminCyan
-import com.luminteam.lumin.ui.theme.LuminIntenseGray
-import com.luminteam.lumin.ui.theme.LuminSoftGray
-import com.luminteam.lumin.ui.theme.LuminVerySoftGray
+import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminWhite
 import com.luminteam.lumin.ui.theme.LuminYellow
 import com.wakaztahir.codeeditor.highlight.model.CodeLang
@@ -66,7 +65,7 @@ fun FixTheCode() {
                 LuminCyan
             )
         ) {
-            Text("Corregir", color = LuminIntenseGray, fontWeight = FontWeight.Bold)
+            Text("Corregir", color = LuminBackground, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -103,14 +102,14 @@ fun CodeEditable(modifier: Modifier) {
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            LuminSoftGray
+            LuminDarkGray
         ),
         modifier = modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(LuminSoftGray)
+                .background(LuminDarkGray)
         ) {
             Box(
                 modifier = Modifier
@@ -118,17 +117,17 @@ fun CodeEditable(modifier: Modifier) {
                     .background(color = LuminCyan)
                     .padding(15.dp)
             ) {
-                Text(text = "Python", color = LuminIntenseGray, fontWeight = FontWeight.Bold)
+                Text(text = "Python", color = LuminBackground, fontWeight = FontWeight.Bold)
             }
             OutlinedTextField(
                 textStyle = TextStyle(fontSize = 15.sp),
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
-                    .background(LuminSoftGray),
+                    .background(LuminDarkGray),
                 colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = LuminSoftGray,
-                    focusedContainerColor = LuminSoftGray,
+                    unfocusedContainerColor = LuminDarkGray,
+                    focusedContainerColor = LuminDarkGray,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,

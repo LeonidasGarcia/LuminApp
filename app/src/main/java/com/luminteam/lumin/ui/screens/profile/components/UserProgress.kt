@@ -21,9 +21,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luminteam.lumin.ui.theme.LuminCyan
-import com.luminteam.lumin.ui.theme.LuminSoftGray
+import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminTheme
-import com.luminteam.lumin.ui.theme.LuminVerySoftGray
+import com.luminteam.lumin.ui.theme.LuminLightGray
 import com.luminteam.lumin.ui.theme.LuminWhite
 
 @Composable
@@ -37,7 +37,7 @@ fun UserProgress() {
         )
         Row(
             modifier = Modifier
-                .background(LuminSoftGray, shape = RoundedCornerShape(15.dp))
+                .background(LuminDarkGray, shape = RoundedCornerShape(15.dp))
                 .padding(vertical = 20.dp, horizontal = 30.dp),
             horizontalArrangement = Arrangement.spacedBy(60.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -49,7 +49,7 @@ fun UserProgress() {
                             strokeWidth = 5.dp,
                             strokeCap = StrokeCap.Butt,
                             color = LuminCyan,
-                            trackColor = LuminVerySoftGray,
+                            trackColor = LuminLightGray,
                             modifier = Modifier.size(80.dp),
                             progress = { 0.5f }
                         )

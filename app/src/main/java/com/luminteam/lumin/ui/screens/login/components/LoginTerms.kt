@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luminteam.lumin.ui.theme.LuminTheme
-import com.luminteam.lumin.ui.theme.LuminVerySoftGray
+import com.luminteam.lumin.ui.theme.LuminLightGray
 import com.luminteam.lumin.ui.theme.LuminWhite
 
 @Composable
@@ -48,7 +48,7 @@ fun LoginTerms(
         modifier = Modifier.width(260.dp),
         fontSize = 12.sp,
         lineHeight = 17.sp,
-        color = LuminVerySoftGray,
+        color = LuminLightGray,
         textAlign = TextAlign.Center
     )
 }

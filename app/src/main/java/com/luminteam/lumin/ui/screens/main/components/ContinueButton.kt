@@ -13,7 +13,7 @@ import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.components.LuminButton
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminCyan
-import com.luminteam.lumin.ui.theme.LuminSoftGray
+import com.luminteam.lumin.ui.theme.LuminDarkGray
 
 @Composable
 fun ContinueButton() {
@@ -30,8 +30,8 @@ fun ContinueButton() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
-            Text(text = "Nivel: Básico", color = LuminSoftGray, fontSize = 12.sp)
-            Text(text = "Sección: Variables y Salidas", color = LuminSoftGray, fontSize = 12.sp)
+            Text(text = "Nivel: Básico", color = LuminDarkGray, fontSize = 12.sp)
+            Text(text = "Sección: Variables y Salidas", color = LuminDarkGray, fontSize = 12.sp)
         }
     }
 }

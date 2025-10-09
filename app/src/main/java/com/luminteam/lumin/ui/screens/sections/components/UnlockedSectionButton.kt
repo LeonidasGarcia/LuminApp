@@ -5,13 +5,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.components.LuminButton
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminCyan
-import com.luminteam.lumin.ui.theme.LuminSoftGray
+import com.luminteam.lumin.ui.theme.LuminDarkGray
+import com.luminteam.lumin.ui.theme.LuminGray
 import com.luminteam.lumin.ui.theme.LuminTheme
 
 @Composable
@@ -25,7 +27,11 @@ fun UnlockedSectionButton(title: String, description: String) {
         modifier = Modifier.padding(10.dp)
     ) {
         Column {
-            Text(text = description, color = LuminSoftGray)
+            Text(
+                text = description,
+                color = LuminGray,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }

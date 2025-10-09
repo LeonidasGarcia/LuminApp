@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luminteam.lumin.ui.components.LuminMarkdownText
 import com.luminteam.lumin.ui.theme.JetBrainsMono
-import com.luminteam.lumin.ui.theme.LuminIntenseGray
 import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
 import com.wakaztahir.codeeditor.highlight.model.CodeLang
@@ -43,8 +42,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.unit.Dp
-import com.luminteam.lumin.ui.theme.LuminSoftGray
-import com.luminteam.lumin.ui.theme.LuminVerySoftGray
+import com.luminteam.lumin.ui.theme.LuminBackground
+import com.luminteam.lumin.ui.theme.LuminDarkGray
 
 const val missingToken: String = "?"
 const val indent: String = "indent"
@@ -188,7 +187,7 @@ fun MovableCode(
 
     Box(
         modifier = Modifier
-            .background(LuminSoftGray)
+            .background(LuminDarkGray)
     ) {
         Box(
             Modifier
@@ -212,7 +211,7 @@ fun MovableCode(
                     assignedHole = onClick(isMoved, assignedHole)
                 }
                 .clip(RoundedCornerShape(30.dp))
-                .background(LuminSoftGray)
+                .background(LuminDarkGray)
         ) {
             StaticCode(
                 code = chunk,
@@ -254,7 +253,7 @@ fun CodeHole(onHole: (Dp, Dp) -> Unit) {
             }
             .width(120.dp)
             .fillMaxHeight()
-            .background(LuminIntenseGray),
+            .background(LuminBackground),
         verticalAlignment = Alignment.Bottom
     ) {
         Box(

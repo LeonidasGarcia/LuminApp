@@ -35,10 +35,9 @@ import com.luminteam.lumin.ui.components.LuminMarkdownText
 import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
 import com.luminteam.lumin.R
+import com.luminteam.lumin.ui.theme.LuminBackground
 import com.luminteam.lumin.ui.theme.LuminCyan
-import com.luminteam.lumin.ui.theme.LuminIntenseGray
-import com.luminteam.lumin.ui.theme.LuminSoftGray
-import com.luminteam.lumin.ui.theme.LuminVerySoftGray
+import com.luminteam.lumin.ui.theme.LuminDarkGray
 
 @Composable
 fun SingleSelection() {
@@ -125,11 +124,11 @@ fun OptionButton(onClick: () -> Unit, option: String, selected: Boolean, modifie
         },
         modifier = modifier,
         shape = RoundedCornerShape(25.dp),
-        colors = ButtonDefaults.buttonColors(if (selected) LuminCyan else LuminSoftGray)
+        colors = ButtonDefaults.buttonColors(if (selected) LuminCyan else LuminDarkGray)
     ) {
         Text(
             text = option,
-            color = if (selected) LuminIntenseGray else LuminWhite,
+            color = if (selected) LuminBackground else LuminWhite,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
