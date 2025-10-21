@@ -1,6 +1,5 @@
-package com.luminteam.lumin.ui.screens.practice.components
+package com.luminteam.lumin.ui.screens.practice.components.questions
 
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -44,6 +42,7 @@ import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.unit.Dp
 import com.luminteam.lumin.ui.theme.LuminBackground
 import com.luminteam.lumin.ui.theme.LuminDarkGray
+import kotlin.collections.get
 
 const val missingToken: String = "?"
 const val indent: String = "indent"

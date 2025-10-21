@@ -32,10 +32,6 @@ val sections: List<Section> = listOf<Section>(
 fun SectionsScreen(title: String, description: String) {
     LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
         item {
-            ReturnButton()
-        }
-
-        item {
             Text(
                 text = "Secciones",
                 fontSize = 30.sp,
