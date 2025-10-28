@@ -9,23 +9,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.luminteam.lumin.data.SectionData
+import com.luminteam.lumin.data.levels.basic.sections.SequentialExecution
 import com.luminteam.lumin.ui.components.ReturnButton
 import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
 import com.luminteam.lumin.ui.screens.sections.components.LockedSectionButton
 import com.luminteam.lumin.ui.screens.sections.components.UnlockedSectionButton
 
-data class Section(
-    val title: String,
-    val description: String,
-    val locked: Boolean
-)
-
-val sections: List<Section> = listOf<Section>(
-    Section(title = "Sección 1", description = "Variables y Salidas", locked = false),
-    Section(title = "Sección 2", description = "Tipos de Datos", locked = true),
-    Section(title = "Sección 3", description = "Funciones", locked = true),
-    Section(title = "Sección 4", description = "Bucles", locked = true)
+val sections: List<SectionData> = listOf<SectionData>(
+    SequentialExecution
 )
 
 @Composable

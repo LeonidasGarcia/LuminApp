@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1014647136831",
+    "project_id": "lumin-c51f3",
+    "storage_bucket": "lumin-c51f3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1014647136831:android:72c0d159507285c3098e8a",
+        "android_client_info": {
+          "package_name": "com.luminteam.lumin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1014647136831-o5h9552e8ompp9hqbd2vgrf42poc4jdo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.luminteam.lumin",
+            "certificate_hash": "6473ec9e325d0314be0ad5377699cda43cf401bf"
+          }
+        },
+        {
+          "client_id": "1014647136831-hqobcchp6vbhl0rpvfqtpfjmk5jb8bj2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnbeUbePJzsmC6CBzBzmOkx2lqSxptYOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1014647136831-hqobcchp6vbhl0rpvfqtpfjmk5jb8bj2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

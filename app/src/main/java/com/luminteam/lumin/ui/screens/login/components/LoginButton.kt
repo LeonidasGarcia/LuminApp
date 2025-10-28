@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminDarkGray
@@ -27,12 +28,13 @@ import com.luminteam.lumin.ui.theme.Roboto
 @Composable
 fun LoginButton(
     modifier: Modifier = Modifier,
+    onLogin: () -> Unit = {}
 ) {
     Button(
-        onClick = {},
+        onClick = onLogin,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xFFF2F2F2)
-    ),
+        ),
         modifier = Modifier
             .width(320.dp)
             .height(45.dp),
@@ -48,7 +50,8 @@ fun LoginButton(
 
 @Composable
 fun GoogleText() {
-    Text(text ="Continuar con Google",
+    Text(
+        text = "Continuar con Google",
         color = LuminBlack,
         fontWeight = FontWeight.Medium,
         fontFamily = Roboto,

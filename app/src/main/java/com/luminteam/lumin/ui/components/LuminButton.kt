@@ -39,10 +39,11 @@ fun LuminButton(
     iconColor: Color,
     modifier: Modifier = Modifier,
     rounded: Dp = 24.dp,
+    onClick: () -> Unit = {},
     descriptionColumn: @Composable () -> Unit
 ) {
     Button(
-        onClick = {},
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight(),

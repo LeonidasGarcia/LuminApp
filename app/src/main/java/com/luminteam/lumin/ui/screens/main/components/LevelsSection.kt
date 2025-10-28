@@ -9,52 +9,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luminteam.lumin.R
+import com.luminteam.lumin.data.LevelData
+import com.luminteam.lumin.data.levels.basic.BasicLevel
 import com.luminteam.lumin.ui.components.LuminButton
+import com.luminteam.lumin.ui.screens.main.MainScreen
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminGreen
 import com.luminteam.lumin.ui.theme.LuminOrange
 import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminGray
+import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
 import com.luminteam.lumin.ui.theme.LuminYellow
 
-data class Level(
-    val title: String,
-    val titleColor: Color,
-    val buttonColor: Color,
-    val icon: Int,
-    val iconColor: Color,
-    val description: String
-)
-
-val levels = listOf<Level>(
-    Level(
-        title = "Básico",
-        titleColor = LuminBlack,
-        buttonColor = LuminGreen,
-        icon = R.drawable.easy_icon,
-        iconColor = LuminBlack,
-        description = "Lo fundamental"
-    ),
-    Level(
-        title = "Intermedio",
-        titleColor = LuminBlack,
-        buttonColor = LuminYellow,
-        icon = R.drawable.medium_icon,
-        iconColor = LuminBlack,
-        description = "Sube tu nivel"
-    ),
-    Level(
-        title = "Avanzado",
-        titleColor = LuminBlack,
-        buttonColor = LuminOrange,
-        icon = R.drawable.hard_icon,
-        iconColor = LuminBlack,
-        description = "Conviertete en un experto"
-    )
+val levels = listOf<LevelData>(
+    BasicLevel
 )
 
 @Composable
@@ -78,7 +51,7 @@ fun LevelsHeader() {
 
 @Composable
 fun Levels() {
-    levels.forEach { (title, titleColor, buttonColor, icon, iconColor, description) ->
+    levels.forEach { (title, _, titleColor, buttonColor, icon, iconColor, description) ->
         LuminButton(
             title = title,
             titleColor = titleColor,
@@ -94,5 +67,16 @@ fun Levels() {
                 Text(text = description, color = LuminGray, fontSize = 12.sp, fontWeight = FontWeight.Medium)
             }
         }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFF111818,
+)
+@Composable
+fun MainScreenPreview() {
+    LuminTheme {
+        LevelsSection()
     }
 }
