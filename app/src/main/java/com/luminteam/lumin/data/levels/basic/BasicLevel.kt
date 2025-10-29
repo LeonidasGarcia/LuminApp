@@ -13,7 +13,7 @@ val BasicLevel = LevelData(
     ),
     titleColor = LuminBlack,
     buttonColor = LuminGreen,
-    icon = R.drawable.easy_icon,
+    icon = R.drawable.arrow_icon,
     iconColor = LuminBlack,
     description = "Lo fundamental"
 )
