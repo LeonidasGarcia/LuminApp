@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -230,7 +231,7 @@ fun BackButton(
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.arrow_icon),
             contentDescription = "Icono",
-            modifier = Modifier.height(24.dp).scale(scaleX = -1f, scaleY = 1f),
+            modifier = Modifier.height(24.dp).rotate(270f),
             tint = LuminLightGray
         )
         Spacer(modifier = Modifier.width(10.dp))

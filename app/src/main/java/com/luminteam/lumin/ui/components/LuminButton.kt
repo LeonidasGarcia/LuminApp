@@ -91,7 +91,7 @@ fun LuminButton(
 fun LuminContinueButton() {
     LuminTheme {
         LuminButton(
-            title = "Continuar",
+            title = "Seguir estudiando",
             titleColor = LuminBlack,
             buttonColor = LuminCyan,
             icon = R.drawable.arrow_icon,
@@ -103,13 +103,7 @@ fun LuminContinueButton() {
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 Text(
-                    text = "Nivel: Básico",
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = LuminGray
-                )
-                Text(
-                    text = "Sección: Variables y Salidas",
+                    text = "Básico - Variables y Salidas",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     color = LuminGray
