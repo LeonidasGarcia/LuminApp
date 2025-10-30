@@ -9,20 +9,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation3.runtime.NavKey
 import com.luminteam.lumin.data.SectionData
 import com.luminteam.lumin.data.levels.basic.sections.SequentialExecution
-import com.luminteam.lumin.ui.components.ReturnButton
 import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
 import com.luminteam.lumin.ui.screens.sections.components.LockedSectionButton
 import com.luminteam.lumin.ui.screens.sections.components.UnlockedSectionButton
+import kotlinx.serialization.Serializable
 
 val sections: List<SectionData> = listOf<SectionData>(
+    SequentialExecution,
+    SequentialExecution,
+    SequentialExecution,
     SequentialExecution
 )
 
+@Serializable
+data object LevelsScreen : NavKey
+
 @Composable
-fun SectionsScreen(title: String, description: String) {
+fun LevelsScreen(title: String, description: String) {
     LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
         item {
             Text(
@@ -48,8 +55,8 @@ fun SectionsScreen(title: String, description: String) {
     backgroundColor = 0xFF111818,
 )
 @Composable
-fun SectionsScreenPreview() {
+fun LevelsScreenPreview() {
     LuminTheme {
-        SectionsScreen(title = "Sección 1", description = "Variables y Salidas")
+        LevelsScreen(title = "Sección 1", description = "Variables y Salidas")
     }
 }

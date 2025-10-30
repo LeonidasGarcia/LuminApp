@@ -14,18 +14,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.luminteam.lumin.ui.layout.BottomBar
 import com.luminteam.lumin.ui.layout.TopBar
-import com.luminteam.lumin.ui.screens.main.MainScreen
-import com.luminteam.lumin.ui.screens.profile.ProfileScreen
 import com.luminteam.lumin.ui.theme.LuminBackground
 
 @Composable
 fun RootNavigation(modifier: Modifier = Modifier) {
-    val backStack = remember { mutableStateListOf<Any>(MainScreen) }
+    val backStack = rememberNavBackStack(HomeNavigation)
     val systemUiController = rememberSystemUiController()
 
     SideEffect {
@@ -38,10 +37,10 @@ fun RootNavigation(modifier: Modifier = Modifier) {
         bottomBar = {
             BottomBar(
                 navigateHome = {
-                    backStack.add(MainScreen)
+                    backStack.add(HomeNavigation)
                 },
                 navigateProfile = {
-                    backStack.add(ProfileScreen)
+                    backStack.add(ProfileNavigation)
                 }
             )
         },
@@ -70,8 +69,8 @@ fun RootNavigation(modifier: Modifier = Modifier) {
                         rememberSaveableStateHolderNavEntryDecorator(),
                         rememberViewModelStoreNavEntryDecorator()
                     ), entryProvider = entryProvider {
-                        entry<MainScreen> { MainScreen() }
-                        entry<ProfileScreen> { ProfileScreen() }
+                        entry<HomeNavigation> { HomeNavigation() }
+                        entry<ProfileNavigation> { ProfileNavigation() }
                     }
                 )
             }
