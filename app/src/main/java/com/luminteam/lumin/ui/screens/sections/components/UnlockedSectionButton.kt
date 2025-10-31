@@ -22,7 +22,7 @@ fun UnlockedSectionButton(title: String, description: String) {
         title = title,
         titleColor = LuminBlack,
         buttonColor = LuminCyan,
-        icon = R.drawable.arrow_icon,
+        icon = R.drawable.evaluation_icon,
         iconColor = LuminBlack,
         modifier = Modifier.padding(10.dp)
     ) {

@@ -38,7 +38,7 @@ import com.luminteam.lumin.ui.theme.LuminLightGray
 @Preview(
     showBackground = true,
     backgroundColor = 0xFF111818
-    )
+)
 @Composable
 fun TopBar(
     modifier: Modifier = Modifier,
@@ -61,11 +61,11 @@ fun TopBar(
                         color = LuminBackground,
                         shape = RoundedCornerShape(
                             bottomStart = 10.dp,
-                            bottomEnd = 10.dp)
+                            bottomEnd = 10.dp
+                        )
                     )
                     .height(106.dp)
-                    .fillMaxWidth()
-                ,
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
@@ -178,7 +178,7 @@ fun EnergyIndicator(
 fun ActionButton(
     modifier: Modifier = Modifier,
     actionButtonIcon: Int,
-    onClick : () -> Unit
+    onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -229,9 +229,11 @@ fun BackButton(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.arrow_icon),
+            imageVector = ImageVector.vectorResource(id = R.drawable.back_arrow_icon),
             contentDescription = "Icono",
-            modifier = Modifier.height(24.dp).rotate(270f),
+            modifier = Modifier
+                .height(24.dp)
+                .rotate(270f),
             tint = LuminLightGray
         )
         Spacer(modifier = Modifier.width(10.dp))

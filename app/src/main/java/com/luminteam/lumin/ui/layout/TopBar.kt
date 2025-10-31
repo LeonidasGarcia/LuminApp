@@ -52,7 +52,7 @@ fun TopBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.arrow_icon),
+                painter = painterResource(id = R.drawable.back_arrow_icon),
                 tint = LuminLightGray,
                 contentDescription = "",
                 modifier = Modifier

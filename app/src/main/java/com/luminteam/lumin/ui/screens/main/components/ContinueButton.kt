@@ -21,7 +21,7 @@ fun ContinueButton() {
         title = "Continuar",
         titleColor = LuminBlack,
         buttonColor = LuminCyan,
-        icon = R.drawable.arrow_icon,
+        icon = R.drawable.back_arrow_icon,
         iconColor = LuminBlack,
         modifier = Modifier.padding(10.dp),
         rounded = 15.dp

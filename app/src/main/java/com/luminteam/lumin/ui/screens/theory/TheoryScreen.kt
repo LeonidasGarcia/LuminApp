@@ -70,7 +70,7 @@ fun TheoryScreen() {
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
-                            painterResource(R.drawable.arrow_icon),
+                            painterResource(R.drawable.back_arrow_icon),
                             contentDescription = "",
                             modifier = Modifier
                                 .width(25.dp)
@@ -94,7 +94,7 @@ fun TheoryScreen() {
                     ) {
                         Text(text = "Siguiente")
                         Icon(
-                            painterResource(R.drawable.arrow_icon),
+                            painterResource(R.drawable.back_arrow_icon),
                             contentDescription = "",
                             modifier = Modifier
                                 .width(25.dp)

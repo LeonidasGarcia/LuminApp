@@ -34,7 +34,7 @@ fun ReturnButton() {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Icon(
-                painterResource(R.drawable.arrow_icon),
+                painterResource(R.drawable.back_arrow_icon),
                 contentDescription = "",
                 modifier = Modifier
                     .width(24.dp)

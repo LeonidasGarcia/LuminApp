@@ -94,7 +94,7 @@ fun LuminContinueButton() {
             title = "Seguir estudiando",
             titleColor = LuminBlack,
             buttonColor = LuminCyan,
-            icon = R.drawable.arrow_icon,
+            icon = R.drawable.back_arrow_icon,
             iconColor = LuminBlack,
             modifier = Modifier.padding(8.dp)
         ) {

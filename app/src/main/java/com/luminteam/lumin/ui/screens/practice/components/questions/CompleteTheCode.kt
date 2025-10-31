@@ -63,7 +63,12 @@ fun CompleteTheCode() {
     var currentHole by remember { mutableStateOf(0) }
     var holeKeys by remember { mutableStateOf(mutableListOf<Int?>()) }
 
-    Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.spacedBy(30.dp)) {
+    Column(
+        modifier = Modifier
+            .background(LuminBackground)
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.spacedBy(30.dp)
+    ) {
         Text(
             text = "Completa el código",
             color = LuminWhite,

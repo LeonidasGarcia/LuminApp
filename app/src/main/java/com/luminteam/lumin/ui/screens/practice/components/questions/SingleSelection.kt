@@ -34,9 +34,9 @@ fun SingleSelection() {
     Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.spacedBy(20.dp)) {
         Column(verticalArrangement = Arrangement.spacedBy(20.dp), modifier = Modifier.weight(1f)) {
             Text(
-                text = "Selecciona la respuesa",
+                text = "Selecciona la respuesta",
                 color = LuminWhite,
-                fontSize = 36.sp,
+                fontSize = 32.sp,
                 fontWeight = FontWeight.Bold
             )
             LazyColumn(modifier = Modifier.weight(1f)) {
