@@ -9,7 +9,6 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.luminteam.lumin.ui.screens.main.MainScreen
 import com.luminteam.lumin.ui.screens.profile.ProfileScreen
 import kotlinx.serialization.Serializable
 

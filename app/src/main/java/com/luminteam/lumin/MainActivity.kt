@@ -4,11 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.luminteam.lumin.ui.navigation.RootNavigation
-import com.luminteam.lumin.ui.screens.practice.PracticeScreen
+import com.luminteam.lumin.ui.screens.learn.practice.PracticeScreen
 import com.luminteam.lumin.ui.theme.LuminTheme
-import kotlinx.serialization.Serializable
-import java.io.Serial
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
