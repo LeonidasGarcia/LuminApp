@@ -16,13 +16,16 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -30,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luminteam.lumin.ui.components.LuminMarkdownText
+import com.luminteam.lumin.ui.screens.learn.practice.domain.FixTheCodeQuestion
 import com.luminteam.lumin.ui.theme.LuminBackground
 import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminDarkGray
@@ -38,69 +42,34 @@ import com.wakaztahir.codeeditor.highlight.model.CodeLang
 import com.wakaztahir.codeeditor.highlight.prettify.PrettifyParser
 import com.wakaztahir.codeeditor.highlight.theme.CodeThemeType
 import com.wakaztahir.codeeditor.highlight.utils.parseCodeAsAnnotatedString
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
-fun FixTheCode() {
+fun FixTheCode(
+    modifier: Modifier = Modifier,
+    question: FixTheCodeQuestion,
+    onCodeModified: (String) -> Unit
+) {
+
     Column(modifier = Modifier.fillMaxHeight()) {
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(30.dp)
         ) {
-            Text(
-                text = "Corrige el código",
-                color = LuminWhite,
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold
-            )
-            LazyColumn(modifier = Modifier.sizeIn(maxHeight = 100.dp)) {
-                item {
-                    LuminMarkdownText(
-                        markdown = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut",
-                        style = TextStyle(fontSize = 20.sp, color = LuminWhite, lineHeight = 25.sp)
-                    )
-                }
-            }
-            CodeEditable()
-        }
-        Button(
-            onClick = {}, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(
-                LuminCyan
-            )
-        ) {
-            Text("Corregir", color = LuminBackground, fontWeight = FontWeight.Bold)
+            CodeEditable(code = question.answer.correctedCode, onCodeModified = onCodeModified)
         }
     }
 }
 
 @Composable
-fun CodeEditable(modifier: Modifier = Modifier) {
+fun CodeEditable(
+    modifier: Modifier = Modifier,
+    code: String,
+    onCodeModified: (String) -> Unit
+) {
     val language = CodeLang.Python
-    val code = """
-        saludo = "hola mundo"
-        
-        def decir_hola(saludo):
-            print(saludo)
-           
-        decir_hola(saludo)
-        saludo = "hola mundo"
-        
-        def decir_hola(saludo):
-            print(saludo)
-           
-        decir_hola(saludo)
-        saludo = "hola mundo"
-        
-        def decir_hola(saludo):
-            print(saludo)
-           
-        decir_hola(saludo)
-        saludo = "hola mundo"
-        
-        def decir_hola(saludo):
-            print(saludo)
-           
-        decir_hola(saludo)
-    """.trimIndent()
+    val code = code.trimIndent()
 
     val parser = remember { PrettifyParser() }
     var themeState by remember { mutableStateOf(CodeThemeType.Monokai) }
@@ -161,19 +130,11 @@ fun CodeEditable(modifier: Modifier = Modifier) {
                         code = it.text
                     )
                 )
+                onCodeModified(it.text)
             }
         )
 
     }
 
 
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
-@Composable
-fun FixTheCodePreview() {
-    FixTheCode()
 }

@@ -1,0 +1,226 @@
+package com.luminteam.lumin.ui.viewmodels
+
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import com.luminteam.lumin.ui.screens.learn.practice.domain.CompleteTheCodeQuestion
+import com.luminteam.lumin.ui.screens.learn.practice.domain.FixTheCodeQuestion
+import com.luminteam.lumin.ui.screens.learn.practice.domain.FreeResponseQuestion
+import com.luminteam.lumin.ui.screens.learn.practice.domain.Indent
+import com.luminteam.lumin.ui.screens.learn.practice.domain.Line
+import com.luminteam.lumin.ui.screens.learn.practice.domain.Missing
+import com.luminteam.lumin.ui.screens.learn.practice.domain.Question
+import com.luminteam.lumin.ui.screens.learn.practice.domain.QuestionsUiState
+import com.luminteam.lumin.ui.screens.learn.practice.domain.SingleSelectionQuestion
+import com.luminteam.lumin.ui.screens.learn.practice.domain.Token
+import com.luminteam.lumin.ui.screens.learn.practice.domain.Word
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+
+val hiperLongQuestion =
+    "Lorem ipsum dolor sit amet, ct, sed do eiu laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, ct, sed do eiu laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing"
+
+val wrongCode = """def hola_mundo():
+    print(“hola mundo”)
+
+    hola_mund()
+""".trimIndent()
+
+class LevelNavigationViewModel : ViewModel() {
+    // estas preguntas se deben solicitar cuando se accede a la práctica!!! solicitda desde el backend de lumin
+    private val _questionsUiState = MutableStateFlow(QuestionsUiState())
+    val questionsUiState: StateFlow<QuestionsUiState> = _questionsUiState.asStateFlow()
+
+    init {
+        loadMockQuestions()
+    }
+
+    fun loadMockQuestions() {
+        val questions: List<Question> = listOf(
+            SingleSelectionQuestion(
+                question = "¿Cuál es el nombre de la estructura de datos en Python que almacena elementos en un formato de 'clave-valor'?",
+                options = listOf(
+                    "List",
+                    "Set",
+                    "Dict",
+                    "Tuple"
+                )
+            ),
+            CompleteTheCodeQuestion(
+                codeLines = listOf<Line>(
+                    Line(
+                        tokens = listOf<Token>(
+                            Word(token = "def"),
+                            Missing,
+                            Word(token = "():")
+                        )
+                    ),
+                    Line(
+                        tokens = listOf<Token>(
+                            Indent,
+                            Word(token = "print('Hola mundo')")
+                        )
+                    ),
+                    Line(
+                        tokens = listOf<Token>(
+                            Missing,
+                            Word(token = "()")
+                        )
+                    ),
+                    Line(
+                        tokens = listOf<Token>(
+                            Missing,
+                            Word(token = "()")
+                        )
+                    ),
+                    Line(
+                        tokens = listOf<Token>(
+                            Missing,
+                            Word(token = "()")
+                        )
+                    )
+                ),
+                missingTokens = listOf(
+                    "saludar1",
+                    "saludar2",
+                    "saludar3",
+                    "saludar4"
+                )
+            ),
+            FreeResponseQuestion(
+                question = hiperLongQuestion
+            ),
+            FixTheCodeQuestion(
+                wrongCode = wrongCode
+            )
+        )
+
+        _questionsUiState.update {
+            it.copy(questions = questions)
+        }
+    }
+
+    private fun idOnBounds(questionId: Int): Boolean {
+        val questions = questionsUiState.value.questions
+        return !(questions.isEmpty() || questionId >= questions.size || questionId < 0)
+    }
+
+    fun updateSingleSelectionAnswer(questionId: Int, selection: String?) {
+        if (!idOnBounds(questionId)) return
+        val questions = questionsUiState.value.questions
+        val question = questions[questionId]
+        if (question is SingleSelectionQuestion) {
+            val castedQuestion = question as SingleSelectionQuestion
+
+            val newAnswer = castedQuestion.answer.copy(
+                selection = selection
+            )
+
+            val newQuestion = castedQuestion.copy(
+                answered = true,
+                answer = newAnswer
+            )
+
+            val newQuestions = questions.toMutableList().apply {
+                this[questionId] = newQuestion
+            }.toList()
+
+            _questionsUiState.update {
+                it.copy(
+                    questions = newQuestions
+                )
+            }
+        }
+    }
+
+    fun updateFreeResponseAnswer(questionId: Int, answer: String) {
+        if (!idOnBounds(questionId)) return
+        val questions = questionsUiState.value.questions
+        val question = questions[questionId]
+        if (question is FreeResponseQuestion) {
+            val castedQuestion = question as FreeResponseQuestion
+
+            val newAnswer = castedQuestion.answer.copy(
+                answer = answer
+            )
+
+            val newQuestion = castedQuestion.copy(
+                answered = answer.trim() != "",
+                answer = newAnswer
+            )
+
+            val newQuestions = questions.toMutableList().apply {
+                this[questionId] = newQuestion
+            }.toList()
+
+            _questionsUiState.update {
+                it.copy(
+                    questions = newQuestions
+                )
+            }
+        }
+    }
+
+    fun updateFixTheCodeAnswer(questionId: Int, correctedCode: String) {
+        if (!idOnBounds(questionId)) return
+        val questions = questionsUiState.value.questions
+        val question = questions[questionId]
+        if (question is FixTheCodeQuestion) {
+            val castedQuestion = question as FixTheCodeQuestion
+
+            val newAnswer = castedQuestion.answer.copy(
+                correctedCode = correctedCode
+            )
+
+            val newQuestion = castedQuestion.copy(
+                answered = correctedCode != wrongCode,
+                answer = newAnswer
+            )
+
+            val newQuestions = questions.toMutableList().apply {
+                this[questionId] = newQuestion
+            }.toList()
+
+            _questionsUiState.update {
+                it.copy(
+                    questions = newQuestions
+                )
+            }
+        }
+    }
+
+    fun updateCompleteTheCodeAnswer(
+        questionId: Int,
+        orderedTokens: List<String?>,
+        assignedChunks: MutableMap<Int, String?>
+    ) {
+        if (!idOnBounds(questionId)) return
+        val questions = questionsUiState.value.questions
+        val question = questions[questionId]
+        if (question is CompleteTheCodeQuestion) {
+            val castedQuestion = question as CompleteTheCodeQuestion
+
+            val newAnswer = castedQuestion.answer.copy(
+                orderedTokens = orderedTokens,
+                assignedChunks = assignedChunks
+            )
+
+            val missingTokens = castedQuestion.missingTokens
+            val newQuestion = castedQuestion.copy(
+                answered = missingTokens.size == orderedTokens.filterNotNull().size,
+                answer = newAnswer
+            )
+
+            val newQuestions = questions.toMutableList().apply {
+                this[questionId] = newQuestion
+            }.toList()
+
+            _questionsUiState.update {
+                it.copy(
+                    questions = newQuestions
+                )
+            }
+        }
+    }
+}

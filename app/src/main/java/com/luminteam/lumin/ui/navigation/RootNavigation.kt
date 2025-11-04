@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -24,7 +25,7 @@ import com.luminteam.lumin.ui.theme.LuminBackground
 
 @Composable
 fun RootNavigation(modifier: Modifier = Modifier) {
-    val backStack = rememberNavBackStack(HomeNavigation)
+    val backStack = rememberNavBackStack(LevelNavigation)
     val systemUiController = rememberSystemUiController()
 
     SideEffect {
@@ -34,6 +35,8 @@ fun RootNavigation(modifier: Modifier = Modifier) {
     }
 
     Scaffold(
+        modifier = Modifier.imePadding()
+        /*
         bottomBar = {
             BottomBar(
                 navigateHome = {
@@ -44,8 +47,8 @@ fun RootNavigation(modifier: Modifier = Modifier) {
                 }
             )
         },
-
-        ) { paddingValues ->
+*/
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
@@ -71,6 +74,7 @@ fun RootNavigation(modifier: Modifier = Modifier) {
                     ), entryProvider = entryProvider {
                         entry<HomeNavigation> { HomeNavigation() }
                         entry<ProfileNavigation> { ProfileNavigation() }
+                        entry<LevelNavigation> { LevelNavigation() }
                     }
                 )
             }

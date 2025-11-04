@@ -1,10 +1,15 @@
 package com.luminteam.lumin.ui.screens.learn.practice.components.questions
 
+import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,121 +24,149 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.luminteam.lumin.ui.components.LuminMarkdownText
 import com.luminteam.lumin.ui.theme.JetBrainsMono
-import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
 import com.wakaztahir.codeeditor.highlight.model.CodeLang
 import com.wakaztahir.codeeditor.highlight.prettify.PrettifyParser
 import com.wakaztahir.codeeditor.highlight.theme.CodeThemeType
 import com.wakaztahir.codeeditor.highlight.utils.parseCodeAsAnnotatedString
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.Dp
+import com.luminteam.lumin.ui.screens.learn.practice.domain.CompleteTheCodeQuestion
+import com.luminteam.lumin.ui.screens.learn.practice.domain.Indent
+import com.luminteam.lumin.ui.screens.learn.practice.domain.Line
+import com.luminteam.lumin.ui.screens.learn.practice.domain.LineAnnotated
+import com.luminteam.lumin.ui.screens.learn.practice.domain.Missing
+import com.luminteam.lumin.ui.screens.learn.practice.domain.Token
+import com.luminteam.lumin.ui.screens.learn.practice.domain.Word
 import com.luminteam.lumin.ui.theme.LuminBackground
 import com.luminteam.lumin.ui.theme.LuminDarkGray
 import kotlin.collections.get
 
-const val missingToken: String = "?"
-const val indent: String = "indent"
-
-val codeLines = listOf<List<String>>(
-    listOf("def", missingToken, "():"),
-    listOf(indent, "print('Hola mundo')"),
-    listOf(missingToken, "()"),
-    listOf(missingToken, "()"),
-    listOf(missingToken, "()")
-)
-
-val missingTokens: List<String> = listOf("saludar", "saludar", "saludar", "saludar")
+val letterDp = 13.dp
 
 @Composable
-fun CompleteTheCode() {
-    var holeMap by remember { mutableStateOf(mutableMapOf<Int, List<Dp>>()) }
+fun CompleteTheCode(
+    question: CompleteTheCodeQuestion,
+    onTokenSelected: (List<String?>, MutableMap<Int, String?>) -> Unit
+) {
     var currentHole by remember { mutableStateOf(0) }
-    var holeKeys by remember { mutableStateOf(mutableListOf<Int?>()) }
+    var holeMap by remember { mutableStateOf(mutableMapOf<Int, List<Dp>>()) }
+    var holeKeys by remember {
+        mutableStateOf(
+            question.answer.assignedChunks.entries
+                .sortedBy { it.key }
+                .map { entry ->
+                    if (entry.value != null) {
+                        entry.key
+                    } else {
+                        null
+                    }
+                })
+    }
+    var assignedChunks by remember { mutableStateOf(question.answer.assignedChunks) }
+    var isHoleMapInitialized by remember { mutableStateOf(false) }
+
+    val longestMissingToken = question.missingTokens.maxOf { it.length }
+    val codeHoleWidth = letterDp * longestMissingToken
 
     Column(
         modifier = Modifier
             .background(LuminBackground)
-            .fillMaxHeight(),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(30.dp)
     ) {
-        Text(
-            text = "Completa el código",
-            color = LuminWhite,
-            fontSize = 36.sp,
-            fontWeight = FontWeight.Bold
-        )
-        LuminMarkdownText(
-            markdown = "Completa la siguiente muestra de código",
-            style = TextStyle(fontSize = 20.sp, color = LuminWhite, lineHeight = 25.sp)
-        )
-        CodeBlock(modifier = Modifier.weight(1f), onHole = { x, y ->
-            val modifiedHoleMap = holeMap.toMutableMap()
-            modifiedHoleMap[currentHole] = listOf(x, y)
-            holeMap = modifiedHoleMap
+        CodeBlock(
+            modifier = Modifier.weight(1f),
+            codeLines = question.codeLinesAnnotated,
+            codeHoleWidth = codeHoleWidth,
+            onHole = { x, y ->
+                if (isHoleMapInitialized) return@CodeBlock
+                val modifiedHoleMap = holeMap.toMutableMap()
+                modifiedHoleMap[currentHole] = listOf(x, y)
+                holeMap = modifiedHoleMap
 
-            if (currentHole == missingTokens.size - 1) {
-                holeKeys = List(size = currentHole + 1) { null }.toMutableList()
-                currentHole = 0
-            } else {
-                currentHole++
-            }
-        })
-        CodeChunks(chunks = missingTokens, holeMap = holeMap, onClick = { isMoved, assignedHole ->
-            if (isMoved) {
-                if (assignedHole == null) {
-                    val modifiedHoleKeys = holeKeys.toMutableList()
-                    for (key in modifiedHoleKeys.indices) {
-                        if (modifiedHoleKeys[key] == null) {
-                            modifiedHoleKeys[key] = 1
-                            holeKeys = modifiedHoleKeys
-                            return@CodeChunks key
+                if (currentHole == question.missingTokens.size - 1) {
+                    currentHole = 0
+                    isHoleMapInitialized = true
+                } else {
+                    currentHole++
+                }
+            })
+        CodeChunks(
+            chunks = question.missingTokensAnnotated,
+            holeMap = holeMap,
+            codeHoleWidth = codeHoleWidth,
+            assignedChunks = assignedChunks.values.toList(),
+            onClick = { isMoved, assignedHole, chunk ->
+                if (isMoved) {
+                    // se ha movido y no tiene un hueco asignado
+                    if (assignedHole == null) {
+                        val modifiedHoleKeys = holeKeys.toMutableList()
+                        for (key in modifiedHoleKeys.indices) {
+                            if (modifiedHoleKeys[key] == null) {
+                                modifiedHoleKeys[key] = 1
+                                holeKeys = modifiedHoleKeys
+
+                                val modifiedAssignedChunks = assignedChunks.toMutableMap()
+                                modifiedAssignedChunks[key] = chunk
+                                assignedChunks = modifiedAssignedChunks
+
+                                onTokenSelected(assignedChunks.values.toList(), assignedChunks)
+
+                                return@CodeChunks key
+                            }
                         }
                     }
+                    // necesario devolver, no quedan más huecos
+                    return@CodeChunks assignedHole
                 }
+
+                // no se ha movido, pero tien un hueco asignado, se debe desaignar
+                if (assignedHole != null) {
+                    val modifiedHoleKeys = holeKeys.toMutableList()
+                    modifiedHoleKeys[assignedHole] = null
+                    holeKeys = modifiedHoleKeys
+
+                    val modifiedAssignedChunks = assignedChunks.toMutableMap()
+                    modifiedAssignedChunks[assignedHole] = null
+                    assignedChunks = modifiedAssignedChunks
+
+                    onTokenSelected(assignedChunks.values.toList(), assignedChunks)
+
+                    return@CodeChunks null
+                }
+
                 return@CodeChunks assignedHole
-            }
-
-            if (assignedHole != null) {
-                val modifiedHoleKeys = holeKeys.toMutableList()
-                modifiedHoleKeys[assignedHole] = null
-                holeKeys = modifiedHoleKeys
-                return@CodeChunks null
-            }
-
-            return@CodeChunks assignedHole
-        })
+            })
     }
 }
 
 @Composable
-fun CodeLine(tokens: List<String>, onHole: (Dp, Dp) -> Unit) {
+fun CodeLine(tokens: List<AnnotatedString?>, codeHoleWidth: Dp, onHole: (Dp, Dp) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(40.dp),
+            .height(35.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(5.dp)
     ) {
         tokens.forEach { token ->
-            if (token == indent) {
-                CodeIndent()
-            } else if (token == missingToken) {
-                CodeHole(onHole = onHole)
-            } else {
-                StaticCode(code = token)
+            when (token) {
+                is AnnotatedString -> StaticCode(parsedCode = token)
+                else -> CodeHole(codeHoleWidth = codeHoleWidth, onHole = onHole)
             }
         }
     }
@@ -142,9 +175,11 @@ fun CodeLine(tokens: List<String>, onHole: (Dp, Dp) -> Unit) {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CodeChunks(
-    chunks: List<String>,
+    chunks: List<AnnotatedString>,
+    assignedChunks: List<String?>,
     holeMap: MutableMap<Int, List<Dp>>,
-    onClick: (Boolean, Int?) -> Int?
+    codeHoleWidth: Dp,
+    onClick: (Boolean, Int?, String) -> Int?
 ) {
     FlowRow(
         modifier = Modifier
@@ -152,29 +187,54 @@ fun CodeChunks(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        chunks.forEach { chunk ->
-            MovableCode(chunk = chunk, holeMap = holeMap, onClick = onClick)
+        chunks.forEachIndexed { index, chunk ->
+            MovableCode(
+                chunk = chunk,
+                initialOffSet = if (assignedChunks.indexOf(chunk.text) == -1) null else assignedChunks.indexOf(
+                    chunk.text
+                ),
+                holeMap = holeMap,
+                codeHoleWidth = codeHoleWidth,
+                onClick = onClick
+            )
         }
     }
 }
 
 @Composable
 fun MovableCode(
-    chunk: String,
+    chunk: AnnotatedString,
+    initialOffSet: Int?,
     holeMap: MutableMap<Int, List<Dp>>,
-    onClick: (Boolean, Int?) -> Int?
+    codeHoleWidth: Dp,
+    onClick: (Boolean, Int?, String) -> Int?
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val scaleTarget = if (isPressed) 0.95f else 1.0f
+
+    val scale by animateFloatAsState(
+        targetValue = scaleTarget,
+        animationSpec = tween(durationMillis = 100),
+        label = "MovableScaleAnim"
+    )
+
+    var isRecomposed by remember { mutableStateOf(initialOffSet != null) }
+
     var initialPositionX by remember { mutableStateOf(0.dp) }
     var initialPositionY by remember { mutableStateOf(0.dp) }
 
+    var thisWidth by remember { mutableStateOf(0.dp) }
+
     var isMoved by remember { mutableStateOf(false) }
-    var assignedHole by remember { mutableStateOf<Int?>(null) }
+    var assignedHole by remember { mutableStateOf<Int?>(initialOffSet) }
 
     val density = LocalDensity.current
     val (targetX, targetY) = holeMap[assignedHole]?.toList() ?: listOf(0.dp, 0.dp)
 
     val offsetX by animateDpAsState(
-        targetValue = if (isMoved) -initialPositionX + targetX else 0.dp,
+        targetValue = if (isMoved) -initialPositionX + targetX + (codeHoleWidth / 2) - (thisWidth / 2) else 0.dp,
         animationSpec = tween(
             durationMillis = 200,
             easing = LinearEasing
@@ -182,7 +242,7 @@ fun MovableCode(
     )
 
     val offsetY by animateDpAsState(
-        targetValue = if (isMoved) -initialPositionY + targetY else 0.dp,
+        targetValue = if (isMoved) -initialPositionY + targetY - 5.dp else 0.dp,
         animationSpec = tween(
             durationMillis = 200,
             easing = LinearEasing
@@ -191,10 +251,11 @@ fun MovableCode(
 
     Box(
         modifier = Modifier
-            .background(LuminDarkGray)
+            .background(LuminDarkGray, shape = RoundedCornerShape(30.dp))
+
     ) {
         Box(
-            Modifier
+            modifier = Modifier
                 .offset(
                     x = offsetX,
                     y = offsetY
@@ -208,37 +269,59 @@ fun MovableCode(
                         initialPositionY = with(density) {
                             coordinates.positionInWindow().y.toDp()
                         }
+
+                        thisWidth = with(density) {
+                            coordinates.size.width.toDp()
+                        }
+
+                        if (isRecomposed) {
+                            isRecomposed = false
+                            isMoved = true
+                        }
                     }
                 }
-                .clickable {
+                .scale(scale)
+                .clickable(
+                    indication = null,
+                    interactionSource = interactionSource
+                ) {
                     isMoved = !isMoved
-                    assignedHole = onClick(isMoved, assignedHole)
+                    assignedHole = onClick(isMoved, assignedHole, chunk.text)
                 }
-                .clip(RoundedCornerShape(30.dp))
-                .background(LuminDarkGray)
+                .border(
+                    width = 2.dp,
+                    color = LuminDarkGray,
+                    shape = RoundedCornerShape(30.dp)
+                )
+                .background(LuminBackground, shape = RoundedCornerShape(30.dp))
         ) {
             StaticCode(
-                code = chunk,
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
+                parsedCode = chunk,
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 9.dp)
             )
         }
     }
 }
 
 @Composable
-fun CodeBlock(modifier: Modifier, onHole: (Dp, Dp) -> Unit) {
+fun CodeBlock(
+    modifier: Modifier,
+    codeLines: List<LineAnnotated>,
+    codeHoleWidth: Dp,
+    onHole: (Dp, Dp) -> Unit
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         codeLines.forEach { line ->
-            CodeLine(tokens = line, onHole = onHole)
+            CodeLine(tokens = line.tokens, codeHoleWidth = codeHoleWidth, onHole = onHole)
         }
     }
 }
 
 @Composable
-fun CodeHole(onHole: (Dp, Dp) -> Unit) {
+fun CodeHole(codeHoleWidth: Dp, onHole: (Dp, Dp) -> Unit) {
 
     val density = LocalDensity.current
 
@@ -255,7 +338,7 @@ fun CodeHole(onHole: (Dp, Dp) -> Unit) {
 
                 onHole(x, y)
             }
-            .width(120.dp)
+            .width(codeHoleWidth)
             .fillMaxHeight()
             .background(LuminBackground),
         verticalAlignment = Alignment.Bottom
@@ -270,39 +353,6 @@ fun CodeHole(onHole: (Dp, Dp) -> Unit) {
 }
 
 @Composable
-fun CodeIndent() {
-    StaticCode(code = "    ")
-}
-
-@Composable
-fun StaticCode(code: String, modifier: Modifier = Modifier) {
-    val language = CodeLang.Python
-    val code = code
-
-    val parser = remember { PrettifyParser() }
-    var themeState by remember { mutableStateOf(CodeThemeType.Monokai) }
-    val theme = remember(themeState) { themeState.theme() }
-
-    var parsedCode = remember {
-        parseCodeAsAnnotatedString(
-            parser = parser,
-            theme = theme,
-            lang = language,
-            code = code
-        )
-    }
-
-    Text(parsedCode, modifier = modifier, fontFamily = JetBrainsMono, fontSize = 20.sp)
-}
-
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
-@Composable
-fun CompleteTheCodePreview() {
-    LuminTheme {
-        CompleteTheCode()
-    }
+fun StaticCode(parsedCode: AnnotatedString, modifier: Modifier = Modifier) {
+    Text(parsedCode, modifier = modifier, fontFamily = JetBrainsMono, fontSize = 15.sp)
 }

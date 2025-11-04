@@ -32,14 +32,15 @@ data class BarItem(
 @Composable
 fun BottomBar(
     navigateHome: () -> Unit,
-    navigateProfile: () -> Unit
+    navigateProfile: () -> Unit,
+    navigateLevel: () -> Unit
 ) {
 
-    var currentRoute by remember { mutableStateOf("MainScreen") }
+    var currentRoute by remember { mutableStateOf("SectionsScreen") }
 
     val barItems = listOf(
         BarItem("MainScreen", R.drawable.home_icon, navigateHome),
-        BarItem("SectionsScreen", R.drawable.brain_icon, {}),
+        BarItem("SectionsScreen", R.drawable.brain_icon, navigateLevel),
         BarItem("ProfileScreen", R.drawable.user_icon, navigateProfile)
     )
 
