@@ -10,6 +10,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.luminteam.lumin.ui.screens.learn.levels.LevelsScreen
+import com.luminteam.lumin.ui.screens.learn.practice.PracticeResultsScreen
 import com.luminteam.lumin.ui.screens.learn.practice.PracticeScreen
 import com.luminteam.lumin.ui.screens.profile.ProfileScreen
 import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
@@ -22,7 +24,7 @@ data object LevelNavigation : NavKey
 fun LevelNavigation(
     viewModel: LevelNavigationViewModel = viewModel()
 ) {
-    val backStack = rememberNavBackStack(PracticeScreen)
+    val backStack = rememberNavBackStack(LevelsScreen)
 
     NavDisplay(
         backStack = backStack,
@@ -32,7 +34,17 @@ fun LevelNavigation(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
         ), entryProvider = entryProvider {
-            entry<PracticeScreen> { PracticeScreen(viewModel = viewModel) }
+            entry<LevelsScreen> { LevelsScreen() }
+            entry<PracticeScreen> {
+                // siempre debe recargar todas las preguntas al entrar a este lugar
+                // se debe implementar una manera de vaciar todas las preguntas cuando se termina el proceso de práctica!!!!
+                viewModel.loadMockQuestions()
+                PracticeScreen(viewModel = viewModel)
+            }
+            entry<PracticeResultsScreen> {
+                viewModel.loadMockResults()
+                PracticeResultsScreen(viewModel = viewModel)
+            }
         }
     )
 }

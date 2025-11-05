@@ -35,8 +35,7 @@ fun RootNavigation(modifier: Modifier = Modifier) {
     }
 
     Scaffold(
-        modifier = Modifier.imePadding()
-        /*
+        modifier = Modifier.imePadding(),
         bottomBar = {
             BottomBar(
                 navigateHome = {
@@ -44,10 +43,12 @@ fun RootNavigation(modifier: Modifier = Modifier) {
                 },
                 navigateProfile = {
                     backStack.add(ProfileNavigation)
+                },
+                navigateLevel = {
+                    backStack.add(LevelNavigation)
                 }
             )
-        },
-*/
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier

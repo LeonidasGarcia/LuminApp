@@ -1,6 +1,5 @@
 package com.luminteam.lumin.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.luminteam.lumin.ui.screens.learn.practice.domain.CompleteTheCodeQuestion
 import com.luminteam.lumin.ui.screens.learn.practice.domain.FixTheCodeQuestion
@@ -9,7 +8,9 @@ import com.luminteam.lumin.ui.screens.learn.practice.domain.Indent
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Line
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Missing
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Question
+import com.luminteam.lumin.ui.screens.learn.practice.domain.QuestionsResultsUiState
 import com.luminteam.lumin.ui.screens.learn.practice.domain.QuestionsUiState
+import com.luminteam.lumin.ui.screens.learn.practice.domain.ResultType
 import com.luminteam.lumin.ui.screens.learn.practice.domain.SingleSelectionQuestion
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Token
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Word
@@ -32,9 +33,10 @@ class LevelNavigationViewModel : ViewModel() {
     private val _questionsUiState = MutableStateFlow(QuestionsUiState())
     val questionsUiState: StateFlow<QuestionsUiState> = _questionsUiState.asStateFlow()
 
-    init {
-        loadMockQuestions()
-    }
+    private val _questionsResultsUiState = MutableStateFlow(QuestionsResultsUiState())
+    val questionsResultsUiState: StateFlow<QuestionsResultsUiState> =
+        _questionsResultsUiState.asStateFlow()
+
 
     fun loadMockQuestions() {
         val questions: List<Question> = listOf(
@@ -221,6 +223,31 @@ class LevelNavigationViewModel : ViewModel() {
                     questions = newQuestions
                 )
             }
+        }
+    }
+
+    // en la implementacion real, debemos enviar las preguntas junto a sus respuestas en formato json al backend para que nos retorne los resultados!!!
+    fun loadMockResults() {
+        val questionsResults = listOf(
+            true,
+            false,
+            true,
+            true,
+            false
+        )
+        val totalApproved = questionsResults.filter { it }.size
+
+        val resultType = when {
+            totalApproved < 3 -> ResultType.Disapproved
+            totalApproved >= 3 && totalApproved < 5 -> ResultType.Approved
+            else -> ResultType.FullyAproved
+        }
+
+        _questionsResultsUiState.update {
+            it.copy(
+                questionsResults = questionsResults,
+                resultType = resultType
+            )
         }
     }
 }

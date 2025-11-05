@@ -59,7 +59,6 @@ fun TopBar(
                     .width(30.dp)
                     .height(30.dp)
                     .align(Alignment.CenterVertically)
-                    .rotate(-90f)
             )
         }
         Row(

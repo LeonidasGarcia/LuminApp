@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -16,12 +17,20 @@ import com.luminteam.lumin.ui.theme.LuminGray
 import com.luminteam.lumin.ui.theme.LuminTheme
 
 @Composable
-fun UnlockedSectionButton(title: String, description: String) {
+fun UnlockedSectionButton(
+    title: String,
+    description: String,
+    backgroundColor: Color,
+    current: Boolean,
+    onCLick: () -> Unit = {}
+) {
+    val icon = if (current) R.drawable.book_icon else R.drawable.medal_icon
+
     LuminButton(
         title = title,
         titleColor = LuminBlack,
-        buttonColor = LuminCyan,
-        icon = R.drawable.evaluation_icon,
+        buttonColor = backgroundColor,
+        icon = icon,
         iconColor = LuminBlack,
         modifier = Modifier.padding(10.dp)
     ) {
@@ -32,16 +41,5 @@ fun UnlockedSectionButton(title: String, description: String) {
                 fontWeight = FontWeight.Medium
             )
         }
-    }
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
-@Composable
-fun UnlockedSectionButtonPreview() {
-    LuminTheme {
-        UnlockedSectionButton(title = "Sección 2", description = "Tipos de Datos")
     }
 }
