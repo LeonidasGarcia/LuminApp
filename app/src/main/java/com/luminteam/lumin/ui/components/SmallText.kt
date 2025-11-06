@@ -6,26 +6,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
-import com.luminteam.lumin.ui.theme.LuminWhite
+import com.luminteam.lumin.ui.theme.LuminLightGray
 
 @Composable
-fun SubtitleText(
+fun SmallText(
     modifier: Modifier = Modifier,
     text: String,
-    color: Color = LuminWhite,
-    isExternal: Boolean = false
+    color: Color = LuminLightGray,
+    isBold: Boolean = false,
+    isUnderlined: Boolean = false,
+    isCentered: Boolean = false
 ) {
     Text(
         text = text,
         modifier = modifier,
         style = TextStyle(
-            fontSize = 16.sp,
-            lineHeight = 30.sp,
-            fontWeight = FontWeight.Bold,
+            fontSize = 12.sp,
+            lineHeight = 15.sp,
+            fontWeight = if (isBold) FontWeight.Bold else FontWeight.Medium,
             color = color,
-            textDecoration = if (isExternal) TextDecoration.Underline else TextDecoration.None,
+            textDecoration = if (isUnderlined) TextDecoration.Underline else TextDecoration.None,
+            textAlign = if (isCentered) TextAlign.Center else TextAlign.Unspecified
         )
     )
 }

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Lumin" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Lumin" parent="Theme.Material3.Dark.NoActionBar" />
+
+    <style name="Theme.Lumin.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/lumin_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/lumin_logo</item>
+        <item name="windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
+        <item name="postSplashScreenTheme">@style/Theme.Lumin</item>
+    </style>
 </resources>
+

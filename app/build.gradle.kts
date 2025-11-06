@@ -102,6 +102,7 @@ dependencies {
     implementation("com.github.qawaz:compose-code-editor:2.0.3") {
         exclude(group = "org.jetbrains", module = "annotations-java5")
     }
+    implementation(libs.androidx.compose.foundation)
     testImplementation(libs.junit) {
         exclude(group = "org.jetbrains", module = "annotations-java5")
     }
@@ -146,4 +147,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
 
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
+
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }

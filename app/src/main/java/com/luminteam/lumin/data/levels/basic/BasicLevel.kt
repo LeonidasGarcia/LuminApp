@@ -9,6 +9,7 @@ import com.luminteam.lumin.data.levels.basic.sections.SequentialExecution4
 import com.luminteam.lumin.data.levels.basic.sections.SequentialExecution5
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminGreen
+import com.luminteam.lumin.ui.theme.LuminOrange
 import com.luminteam.lumin.ui.theme.LuminRed
 import com.luminteam.lumin.ui.theme.LuminYellow
 
@@ -54,8 +55,8 @@ val AdvancedLevel = LevelData(
         SequentialExecution5
     ),
     titleColor = LuminBlack,
-    buttonColor = LuminRed,
+    buttonColor = LuminOrange,
     icon = R.drawable.advanced_icon,
-    iconColor = LuminRed,
+    iconColor = LuminOrange,
     description = "Conviértete en un experto"
 )

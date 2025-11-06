@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,7 +23,6 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,19 +30,14 @@ import androidx.navigation3.runtime.NavKey
 import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.components.LuminButton
 import com.luminteam.lumin.ui.components.Separator
-import com.luminteam.lumin.ui.screens.learn.practice.components.results.FeedbackButton
-import com.luminteam.lumin.ui.screens.learn.practice.components.results.Results
-import com.luminteam.lumin.ui.screens.learn.practice.components.results.RetryButton
 import com.luminteam.lumin.ui.screens.learn.practice.domain.ResultData
 import com.luminteam.lumin.ui.screens.learn.practice.domain.ResultType
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminCyan
-import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminDarkestGray
 import com.luminteam.lumin.ui.theme.LuminGray
 import com.luminteam.lumin.ui.theme.LuminGreen
 import com.luminteam.lumin.ui.theme.LuminLightGray
-import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
 import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
 import kotlinx.serialization.Serializable
@@ -136,7 +128,7 @@ fun PracticeResultsScreen(
                         -1
                     }
                 }.filter { it != -1 },
-                resultMessageIcon = R.drawable.evaluation_icon,
+                resultMessageIcon = R.drawable.practice_icon,
                 resultMessageIconColor = LuminCyan,
                 resultMessage = "¡Sección perfectamente superada!",
                 needFeedback = false,
