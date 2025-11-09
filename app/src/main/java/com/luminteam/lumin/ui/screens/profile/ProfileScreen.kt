@@ -4,18 +4,23 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.components.Separator
@@ -24,18 +29,78 @@ import com.luminteam.lumin.ui.components.SubtitleText
 import com.luminteam.lumin.ui.components.TitleText
 import com.luminteam.lumin.ui.screens.profile.components.PurchaseUltimate
 import com.luminteam.lumin.ui.screens.profile.components.UserProgressBar
-import com.luminteam.lumin.ui.screens.profile.components.UserStat
-import com.luminteam.lumin.ui.theme.LuminGreen
+import com.luminteam.lumin.ui.screens.profile.components.MetricCard
+import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminLightGray
 import com.luminteam.lumin.ui.theme.LuminOrange
-import com.luminteam.lumin.ui.theme.LuminTheme
+import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
 import kotlinx.serialization.Serializable
+import androidx.compose.foundation.lazy.grid.items
 
 @Serializable
 data object ProfileScreen : NavKey
 
+data class MetricCardData(
+    val text: String,
+    val valueIcon: Int,
+    val iconColor: Color,
+    val valueText: String
+)
+
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    rootViewModel: RootNavigationViewModel,
+    navigateUltimatePurchase: () -> Unit
+) {
+    val currentUserData = rootViewModel.currentUserData.collectAsStateWithLifecycle().value
+    val currentUserMetricsData =
+        rootViewModel.currentUserMetricsData.collectAsStateWithLifecycle().value
+
+    val levels = rootViewModel.levels.collectAsStateWithLifecycle().value.levels
+    val currentLevel = levels[currentUserMetricsData.currentLevelId]!!
+
+    val pages = rootViewModel.pages.collectAsStateWithLifecycle().value.pages
+    val currentPage = pages[currentUserMetricsData.currentPageId]!!
+
+    val metricCardsData = listOf<MetricCardData>(
+        MetricCardData(
+            text = "Nivel más alto alcanzado",
+            valueIcon = currentLevel.icon,
+            iconColor = currentLevel.iconColor,
+            valueText = currentLevel.name
+        ),
+        MetricCardData(
+            text = "Secciones superadas",
+            valueIcon = R.drawable.medal_icon,
+            iconColor = LuminCyan,
+            valueText = currentUserMetricsData.succededSectionsCount.toString() + "/" + currentUserMetricsData.totalSectionsCount.toString()
+        ),
+        MetricCardData(
+            text = "Última página alcanzada",
+            valueIcon = R.drawable.theory_icon,
+            iconColor = LuminCyan,
+            valueText = "pág. " + currentPage.pageNumber.toString()
+        ),
+        MetricCardData(
+            text = "Promedio de prácticas",
+            valueIcon = R.drawable.practice_icon,
+            iconColor = LuminCyan,
+            valueText = currentUserMetricsData.averageScore.toString()
+        ),
+        MetricCardData(
+            text = "Intentos de práctica realizados",
+            valueIcon = R.drawable.retry_icon,
+            iconColor = LuminLightGray,
+            valueText = currentUserMetricsData.totalPracticeRetries.toString()
+        ),
+        MetricCardData(
+            text = "Retos diarios completados",
+            valueIcon = R.drawable.brain_icon,
+            iconColor = LuminOrange,
+            valueText = currentUserMetricsData.succededDailyPracticeCount.toString()
+        )
+    )
+
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(20.dp),
         modifier = Modifier.fillMaxSize()
@@ -49,7 +114,7 @@ fun ProfileScreen() {
                 modifier = Modifier.fillMaxSize()
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.placeholder_image),
+                    painter = painterResource(id = currentUserData.userIcon),
                     contentDescription = "Foto de perfil placeholder",
                     modifier = Modifier
                         .size(90.dp)
@@ -57,11 +122,11 @@ fun ProfileScreen() {
                 )
                 Column(
                     verticalArrangement = Arrangement.spacedBy(5.dp),
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.weight(1f)
                 ) {
-                    SubtitleText(text = "Leonidas Garcia Lescano")
-                    SmallText(text = "leonidasgarcialescano@gmail.com", isUnderlined = true)
-                    SmallText(text = "20 años")
+                    SubtitleText(text = currentUserData.username)
+                    SmallText(text = currentUserData.email, isUnderlined = true)
+                    SmallText(text = currentUserData.age.toString() + " años", isUnderlined = true)
                 }
             }
         }
@@ -72,78 +137,39 @@ fun ProfileScreen() {
             TitleText(text = "Tus Estadísticas")
         }
         item {
-            UserProgressBar(progress = 0.8f)
+            UserProgressBar(progress = currentUserMetricsData.succededSectionsCount.toFloat() / currentUserMetricsData.totalSectionsCount.toFloat())
         }
         item {
-            Row {
-                UserStat(
-                    text = "Nivel más alto alcanzado",
-                    valueIcon = R.drawable.basic_icon,
-                    iconColor = LuminGreen,
-                    valueText = "Básico"
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                UserStat(
-                    text = "Secciones superadas",
-                    valueIcon = R.drawable.medal_icon,
-                    valueText = "40/50"
-                )
-            }
-        }
-        item {
-            Row {
-                UserStat(
-                    text = "Última página alcanzada",
-                    valueIcon = R.drawable.theory_icon,
-                    valueText = "Pág. 24"
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                UserStat(
-                    text = "Promedio de prácticas",
-                    valueIcon = R.drawable.practice_icon,
-                    valueText = "8.5"
-                )
-            }
-        }
-        item {
-            Row {
-                UserStat(
-                    text = "Intentos de práctica realizados",
-                    valueIcon = R.drawable.retry_icon,
-                    iconColor = LuminLightGray,
-                    valueText = "51"
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                UserStat(
-                    text = "Retos diarios completados",
-                    valueIcon = R.drawable.brain_icon,
-                    iconColor = LuminOrange,
-                    valueText = "12"
-                )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .fillMaxWidth()
+            ) {
+                metricCardsData.chunked(2).forEach { pair ->
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(20.dp),
+                        modifier = Modifier.height(100.dp)
+                    ) {
+                        pair.forEach { (text, valueIcon, iconColor, valueText) ->
+                            MetricCard(
+                                modifier = Modifier
+                                    .weight(1f),
+                                text = text,
+                                valueIcon = valueIcon,
+                                iconColor = iconColor,
+                                valueText = valueText
+                            )
+                        }
+                    }
+                }
             }
         }
         item {
             Separator()
         }
         item {
-            PurchaseUltimate()
+            PurchaseUltimate(navigateUltimatePurchase = navigateUltimatePurchase)
         }
-    }
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
-@Composable
-fun ProfileScreenPreview() {
-    LuminTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            ProfileScreen()
-        }
-
     }
 }

@@ -1,6 +1,10 @@
 package com.luminteam.lumin.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
+import com.luminteam.lumin.ui.domain.CurrentContentUiState
+import com.luminteam.lumin.ui.screens.learn.practice.domain.Answer
 import com.luminteam.lumin.ui.screens.learn.practice.domain.CompleteTheCodeQuestion
 import com.luminteam.lumin.ui.screens.learn.practice.domain.FixTheCodeQuestion
 import com.luminteam.lumin.ui.screens.learn.practice.domain.FreeResponseQuestion
@@ -14,10 +18,13 @@ import com.luminteam.lumin.ui.screens.learn.practice.domain.ResultType
 import com.luminteam.lumin.ui.screens.learn.practice.domain.SingleSelectionQuestion
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Token
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Word
+import com.luminteam.lumin.ui.screens.learn.section.SectionScreen
+import com.luminteam.lumin.ui.screens.learn.theory.TheoryScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.util.logging.Level
 
 val hiperLongQuestion =
     "Lorem ipsum dolor sit amet, ct, sed do eiu laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, ct, sed do eiu laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing"
@@ -29,6 +36,10 @@ val wrongCode = """def hola_mundo():
 """.trimIndent()
 
 class LevelNavigationViewModel : ViewModel() {
+    private val _currentAppContentState = MutableStateFlow(CurrentContentUiState())
+    val currentAppContentState: StateFlow<CurrentContentUiState> =
+        _currentAppContentState.asStateFlow()
+
     // estas preguntas se deben solicitar cuando se accede a la práctica!!! solicitda desde el backend de lumin
     private val _questionsUiState = MutableStateFlow(QuestionsUiState())
     val questionsUiState: StateFlow<QuestionsUiState> = _questionsUiState.asStateFlow()
@@ -37,11 +48,18 @@ class LevelNavigationViewModel : ViewModel() {
     val questionsResultsUiState: StateFlow<QuestionsResultsUiState> =
         _questionsResultsUiState.asStateFlow()
 
+    fun updateCurrentAppContentState(currentContentUiState: CurrentContentUiState) {
+        _currentAppContentState.update {
+            currentContentUiState
+        }
+    }
 
     fun loadMockQuestions() {
         val questions: List<Question> = listOf(
             SingleSelectionQuestion(
+                id = 0,
                 question = "¿Cuál es el nombre de la estructura de datos en Python que almacena elementos en un formato de 'clave-valor'?",
+                description = "Responde a la siguiente pregunta:",
                 options = listOf(
                     "List",
                     "Set",
@@ -50,6 +68,8 @@ class LevelNavigationViewModel : ViewModel() {
                 )
             ),
             CompleteTheCodeQuestion(
+                id = 1,
+                description = "Completa el siguiente bloque de código:",
                 codeLines = listOf<Line>(
                     Line(
                         tokens = listOf<Token>(
@@ -91,10 +111,14 @@ class LevelNavigationViewModel : ViewModel() {
                 )
             ),
             FreeResponseQuestion(
-                question = hiperLongQuestion
+                id = 2,
+                question = hiperLongQuestion,
+                description = "Responde a la siguiente pregunta:"
             ),
             FixTheCodeQuestion(
-                wrongCode = wrongCode
+                id = 3,
+                wrongCode = wrongCode,
+                description = "El siguiente bloque de código tiene un error, corrígelo:"
             )
         )
 
@@ -106,6 +130,12 @@ class LevelNavigationViewModel : ViewModel() {
     private fun idOnBounds(questionId: Int): Boolean {
         val questions = questionsUiState.value.questions
         return !(questions.isEmpty() || questionId >= questions.size || questionId < 0)
+    }
+
+    fun getQuestionAnswers(): List<Answer> {
+        return questionsUiState.value.questions.map { question ->
+            question.answer
+        }
     }
 
     fun updateSingleSelectionAnswer(questionId: Int, selection: String?) {

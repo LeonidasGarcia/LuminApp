@@ -31,7 +31,9 @@ import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
 
 @Composable
-fun PurchaseUltimate() {
+fun PurchaseUltimate(
+    navigateUltimatePurchase: () -> Unit
+) {
     CodeBackground(
         modifier = Modifier
             .fillMaxWidth()
@@ -77,19 +79,8 @@ fun PurchaseUltimate() {
                 text = "Ver más",
                 buttonColor = LuminDarkGray,
                 textColor = LuminWhite,
-                onClick = {}
+                onClick = navigateUltimatePurchase
             )
         }
-    }
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
-@Composable
-fun PurchaseUltimatePreview() {
-    LuminTheme {
-        PurchaseUltimate()
     }
 }

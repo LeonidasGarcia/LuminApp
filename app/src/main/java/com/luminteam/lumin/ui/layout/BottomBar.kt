@@ -33,16 +33,21 @@ data class BarItem(
 fun BottomBar(
     navigateHome: () -> Unit,
     navigateProfile: () -> Unit,
-    navigateLevel: () -> Unit
+    navigateLevel: () -> Unit,
+    navigateSettings: () -> Unit,
+    showBottomBar: Boolean,
+    currentRoute: String,
+    setCurrentRoute: (String) -> Unit
 ) {
-
-    var currentRoute by remember { mutableStateOf("SectionsScreen") }
 
     val barItems = listOf(
         BarItem("MainScreen", R.drawable.home_icon, navigateHome),
         BarItem("SectionsScreen", R.drawable.brain_icon, navigateLevel),
-        BarItem("ProfileScreen", R.drawable.user_icon, navigateProfile)
+        BarItem("ProfileScreen", R.drawable.user_icon, navigateProfile),
+        BarItem("SettingsScreen", R.drawable.setttings_icon, navigateSettings)
     )
+
+    if (!showBottomBar) return
 
     NavigationBar(
         windowInsets = NavigationBarDefaults.windowInsets,
@@ -53,7 +58,7 @@ fun BottomBar(
                 selected = currentRoute == title,
                 onClick = {
                     if (currentRoute != title) {
-                        currentRoute = title
+                        setCurrentRoute(title)
                         action()
                     }
 

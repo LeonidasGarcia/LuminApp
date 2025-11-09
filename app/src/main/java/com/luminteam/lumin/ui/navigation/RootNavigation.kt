@@ -1,7 +1,6 @@
 package com.luminteam.lumin.ui.navigation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
@@ -9,10 +8,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -21,12 +24,71 @@ import androidx.navigation3.ui.NavDisplay
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.luminteam.lumin.ui.layout.BottomBar
 import com.luminteam.lumin.ui.layout.TopBar
+import com.luminteam.lumin.ui.screens.learn.chat.AiChatScreen
+import com.luminteam.lumin.ui.screens.learn.levels.LevelsScreen
+import com.luminteam.lumin.ui.screens.learn.section.SectionScreen
+import com.luminteam.lumin.ui.screens.learn.theory.TheoryScreen
 import com.luminteam.lumin.ui.theme.LuminBackground
+import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
+import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
 
 @Composable
-fun RootNavigation(modifier: Modifier = Modifier) {
-    val backStack = rememberNavBackStack(LevelNavigation)
+fun RootNavigation(
+    viewModel: RootNavigationViewModel = viewModel(),
+    modifier: Modifier = Modifier
+) {
+    val backStack = rememberNavBackStack(HomeNavigation)
     val systemUiController = rememberSystemUiController()
+
+    var currentRoute by remember { mutableStateOf("MainScreen") }
+
+    var currentUserData = viewModel.currentUserData.collectAsStateWithLifecycle().value
+
+    val levelNavigationViewModel: LevelNavigationViewModel = viewModel()
+
+    val levelBackStack = rememberNavBackStack(LevelsScreen)
+
+    val currentBackActionState = viewModel.currentTopBarBackAction.collectAsStateWithLifecycle()
+    val currentBackAction = currentBackActionState.value
+
+    val canGoBackState = viewModel.canGoBack.collectAsStateWithLifecycle()
+    val canGoBack = canGoBackState.value
+
+    val showGeneralPaddingState = viewModel.showGeneralPadding.collectAsStateWithLifecycle()
+    val showGeneralPadding = showGeneralPaddingState.value
+
+    val showBottomBarState = viewModel.showBottomBar.collectAsStateWithLifecycle()
+    val showBottomBar = showBottomBarState.value
+
+    val currentTitleTopBarState = viewModel.currentTitleTopBar.collectAsStateWithLifecycle()
+    val currentTitleTopBar = currentTitleTopBarState.value
+
+    val currentTopBarRightButtonActionTypeState =
+        viewModel.currentTopBarRightButtonActionType.collectAsStateWithLifecycle()
+    val currentTopBarRightButtonActionType = currentTopBarRightButtonActionTypeState.value
+
+    val showTopBarRightButtonState = viewModel.showTopBarRightButton.collectAsStateWithLifecycle()
+    val showTopBarRightButton = showTopBarRightButtonState.value
+
+    val generalPadding = if (showGeneralPadding) 20.dp else 0.dp
+
+    val currentUserContentState =
+        viewModel.currentUserContentState.collectAsStateWithLifecycle().value
+
+
+    // con esta navegacion especial, se tienen que hacer las operaciones de manera manual y en orden
+    fun navigateCurrentTheoryPage() {
+        levelNavigationViewModel.updateCurrentAppContentState(
+            currentUserContentState
+        )
+
+        backStack.removeLastOrNull()
+        backStack.add(LevelNavigation)
+        levelBackStack.add(SectionScreen)
+        levelBackStack.add(TheoryScreen)
+        currentRoute = "SectionsScreen"
+
+    }
 
     SideEffect {
         systemUiController.setStatusBarColor(
@@ -39,13 +101,25 @@ fun RootNavigation(modifier: Modifier = Modifier) {
         bottomBar = {
             BottomBar(
                 navigateHome = {
+                    backStack.removeLastOrNull()
                     backStack.add(HomeNavigation)
                 },
                 navigateProfile = {
+                    backStack.removeLastOrNull()
                     backStack.add(ProfileNavigation)
                 },
                 navigateLevel = {
+                    backStack.removeLastOrNull()
                     backStack.add(LevelNavigation)
+                },
+                navigateSettings = {
+                    backStack.removeLastOrNull()
+                    backStack.add(SettingsNavigation)
+                },
+                showBottomBar = showBottomBar,
+                currentRoute = currentRoute,
+                setCurrentRoute = {
+                    currentRoute = it
                 }
             )
         }
@@ -58,26 +132,69 @@ fun RootNavigation(modifier: Modifier = Modifier) {
         ) {
             Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                    .weight(1f),
             ) {
-                TopBar() {
-                    backStack.removeLastOrNull()
-                }
-
-                NavDisplay(
-                    backStack = backStack,
-                    modifier = Modifier.weight(1f),
-                    entryDecorators = listOf(
-                        rememberSaveableStateHolderNavEntryDecorator(),
-                        rememberViewModelStoreNavEntryDecorator()
-                    ), entryProvider = entryProvider {
-                        entry<HomeNavigation> { HomeNavigation() }
-                        entry<ProfileNavigation> { ProfileNavigation() }
-                        entry<LevelNavigation> { LevelNavigation() }
-                    }
+                TopBar(
+                    canGoBack = canGoBack,
+                    onBack = {
+                        currentBackAction()
+                    },
+                    titleTopBar = currentTitleTopBar,
+                    lives = currentUserData.lives,
+                    currentRightButtonActionType = currentTopBarRightButtonActionType,
+                    navigateAiChat = {
+                        // operaciones (si es que son necesarias)
+                        levelBackStack.add(AiChatScreen)
+                    },
+                    showTopBarRightButton = showTopBarRightButton
                 )
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(
+                            bottom = generalPadding,
+                            start = generalPadding,
+                            end = generalPadding
+                        ),
+                ) {
+                    NavDisplay(
+                        backStack = backStack,
+                        modifier = Modifier.weight(1f),
+                        entryDecorators = listOf(
+                            rememberSaveableStateHolderNavEntryDecorator(),
+                            rememberViewModelStoreNavEntryDecorator()
+                        ), entryProvider = entryProvider {
+                            entry<HomeNavigation> {
+                                viewModel.updateShowGeneralPadding(true)
+                                HomeNavigation(
+                                    rootViewModel = viewModel,
+                                    navigateCurrentTheoryPage = {
+                                        navigateCurrentTheoryPage()
+                                    }
+                                )
+                            }
+                            entry<ProfileNavigation> {
+                                ProfileNavigation(
+                                    rootViewModel = viewModel,
+                                )
+                            }
+                            entry<LevelNavigation> {
+                                viewModel.updateShowGeneralPadding(true)
+                                LevelNavigation(
+                                    viewModel = levelNavigationViewModel,
+                                    rootViewModel = viewModel,
+                                    levelBackStack = levelBackStack
+                                )
+                            }
+                            entry<SettingsNavigation> {
+                                viewModel.updateShowGeneralPadding(true)
+                                SettingsNavigation(rootViewModel = viewModel)
+                            }
+                        }
+                    )
+
+                }
             }
 
         }

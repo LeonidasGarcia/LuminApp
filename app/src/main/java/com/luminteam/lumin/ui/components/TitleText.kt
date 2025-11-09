@@ -17,7 +17,7 @@ fun TitleText(
         text = text,
         modifier = modifier,
         style = TextStyle(
-            fontSize = 24.sp,
+            fontSize = 30.sp,
             lineHeight = 30.sp,
             fontWeight = FontWeight.Bold,
             color = LuminWhite,

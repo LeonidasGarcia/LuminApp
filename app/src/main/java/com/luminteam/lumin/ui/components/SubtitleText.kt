@@ -21,7 +21,7 @@ fun SubtitleText(
         text = text,
         modifier = modifier,
         style = TextStyle(
-            fontSize = 16.sp,
+            fontSize = 20.sp,
             lineHeight = 30.sp,
             fontWeight = FontWeight.Bold,
             color = color,

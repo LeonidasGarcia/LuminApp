@@ -1,9 +1,11 @@
 package com.luminteam.lumin.ui.screens.profile.components
 
+import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,29 +24,27 @@ import androidx.compose.ui.unit.dp
 import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.components.SmallText
 import com.luminteam.lumin.ui.components.SubtitleText
-import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminDarkestGray
 import com.luminteam.lumin.ui.theme.LuminGreen
 import com.luminteam.lumin.ui.theme.LuminWhite
 
 @Composable
-fun UserStat(
-    modifier: Modifier = Modifier,
-    text: String = "Título de estadística",
-    valueIcon: Int = R.drawable.basic_icon,
-    iconColor: Color = LuminCyan,
-    valueText: String = "Valor",
+fun MetricCard(
+    modifier: Modifier,
+    text: String,
+    valueIcon: Int,
+    iconColor: Color,
+    valueText: String,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(5.dp),
-        modifier = Modifier
-            .width(150.dp)
-            .wrapContentHeight()
-            .clip(RoundedCornerShape(15.dp))
-            .background(color = LuminDarkestGray)
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier
+            .fillMaxHeight()
+            .background(color = LuminDarkestGray, shape = RoundedCornerShape(15.dp))
             .padding(20.dp)
     ) {
         SmallText(text = text)
+        Spacer(modifier = Modifier.height(5.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -63,14 +63,4 @@ fun UserStat(
             )
         }
     }
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
-@Composable
-fun UserStatPreview(
-) {
-    UserStat(text = "Nivel más alto alcanzado", valueIcon = R.drawable.basic_icon, iconColor = LuminGreen, valueText = "Básico")
 }

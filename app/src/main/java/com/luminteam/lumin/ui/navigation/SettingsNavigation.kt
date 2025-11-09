@@ -1,5 +1,8 @@
 package com.luminteam.lumin.ui.navigation
 
+import com.luminteam.lumin.ui.screens.settings.SettingsScreen
+
+
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,16 +15,14 @@ import androidx.navigation3.ui.NavDisplay
 import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.domain.TopBarBackAction
 import com.luminteam.lumin.ui.domain.TitleTopBar
-import com.luminteam.lumin.ui.screens.profile.LuminUltimatePurchaseScreen
-import com.luminteam.lumin.ui.screens.profile.ProfileScreen
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ProfileNavigation : NavKey
+data object SettingsNavigation : NavKey
 
 @Composable
-fun ProfileNavigation(
+fun SettingsNavigation(
     rootViewModel: RootNavigationViewModel
 ) {
     val updateCurrentBackAction: (TopBarBackAction) -> Unit = { backAction ->
@@ -43,7 +44,7 @@ fun ProfileNavigation(
         rootViewModel.updateCurrentTitleTopBar(it)
     }
 
-    val backStack = rememberNavBackStack(ProfileScreen)
+    val backStack = rememberNavBackStack(SettingsScreen)
 
     NavDisplay(
         backStack = backStack,
@@ -52,38 +53,17 @@ fun ProfileNavigation(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
         ), entryProvider = entryProvider {
-            entry<ProfileScreen> {
-                updateCurrentBackAction() {}
+            entry<SettingsScreen> {
+                updateCurrentBackAction { {} }
                 updateCanGoBack(false)
                 updateShowBottomBar(true)
                 updateCurrentTitleTopBar(
                     TitleTopBar(
-                        title = "Perfil",
-                        iconTitle = R.drawable.user_icon
+                        title = "Ajustes",
+                        iconTitle = R.drawable.setttings_icon
                     )
                 )
-                ProfileScreen(
-                    rootViewModel = rootViewModel,
-                    navigateUltimatePurchase = {
-                        backStack.add(LuminUltimatePurchaseScreen)
-                    })
-            }
-            entry<LuminUltimatePurchaseScreen> {
-                updateCurrentBackAction() {
-                    backStack.removeLastOrNull()
-                    updateShowGeneralPadding(true)
-                }
-                updateCanGoBack(true)
-                updateShowGeneralPadding(false)
-                updateShowBottomBar(true)
-                updateCurrentTitleTopBar(
-                    TitleTopBar(
-                        title = "Suscripción",
-                        iconTitle = R.drawable.shop_icon
-                    )
-                )
-
-                LuminUltimatePurchaseScreen()
+                SettingsScreen()
             }
         }
     )

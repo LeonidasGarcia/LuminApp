@@ -75,7 +75,9 @@ fun LuminButtonAlt(
             .height(90.dp)
             .clip(RoundedCornerShape(15.dp))
             .background(color = color)
-            .clickable(onClick = onClick)
+            .clickable {
+                onClick()
+            }
             .padding(start = 45.dp),
     ) {
         Column(
@@ -142,7 +144,9 @@ fun LuminSquareButtonAlt(
             .height(150.dp)
             .clip(RoundedCornerShape(15.dp))
             .background(color = color)
-            .clickable(onClick = onClick),
+            .clickable {
+                onClick()
+            },
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -199,7 +203,9 @@ fun LuminSmallButton(
             .height(45.dp)
             .clip(RoundedCornerShape(15.dp))
             .background(color = buttonColor)
-            .clickable(onClick = onClick)
+            .clickable {
+                onClick()
+            }
             .padding(horizontal = 20.dp)
 
     ) {

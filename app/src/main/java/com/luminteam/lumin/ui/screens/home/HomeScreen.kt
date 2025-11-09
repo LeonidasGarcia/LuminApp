@@ -1,35 +1,27 @@
-package com.luminteam.lumin.ui.screens.home.main
+package com.luminteam.lumin.ui.screens.home
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import com.luminteam.lumin.R
-import com.luminteam.lumin.ui.components.LuminButton
 import com.luminteam.lumin.ui.components.LuminButtonAlt
-import com.luminteam.lumin.ui.components.LuminContinueButton
 import com.luminteam.lumin.ui.components.ParagraphText
 import com.luminteam.lumin.ui.components.Separator
 import com.luminteam.lumin.ui.components.TitleText
-import com.luminteam.lumin.ui.theme.LuminTheme
-import com.luminteam.lumin.ui.screens.home.main.components.MainHeader
-import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminOrange
-import com.luminteam.lumin.ui.theme.LuminWhite
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object MainScreen : NavKey
+data object HomeScreen : NavKey
 
 @Composable
-fun MainScreen(
-    modifier: Modifier = Modifier
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    navigateCurrentTheoryPage: () -> Unit
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -55,7 +47,8 @@ fun MainScreen(
             LuminButtonAlt(
                 title = "Seguir estudiando",
                 description = "Básico: Variables y Salidas",
-                icon = R.drawable.next_arrow_icon
+                icon = R.drawable.next_arrow_icon,
+                onClick = navigateCurrentTheoryPage
             )
         }
         item {
@@ -75,16 +68,5 @@ fun MainScreen(
         item {
             ParagraphText(text = "El lenguaje de programación Python lleva ese nombre directamente en honor al grupo de comedia británico Monty Python.")
         }
-    }
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
-@Composable
-fun MainScreenPreview() {
-    LuminTheme {
-        MainScreen()
     }
 }

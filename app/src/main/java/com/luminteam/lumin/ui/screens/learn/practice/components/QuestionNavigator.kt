@@ -47,7 +47,8 @@ fun QuestionNavigator(
     canGoPrevious: Boolean,
     canGoNext: Boolean,
     onPreviousQuestion: () -> Unit,
-    onNextQuestion: () -> Unit
+    onNextQuestion: () -> Unit,
+    navigatePracticeResults: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
@@ -149,7 +150,7 @@ fun QuestionNavigator(
                         focusManager.clearFocus()
                         delay(300L)
                         if (isLastQuestion) {
-                            // ir a la pantalla de resultados
+                            navigatePracticeResults()
                         } else {
                             onNextQuestion()
                         }

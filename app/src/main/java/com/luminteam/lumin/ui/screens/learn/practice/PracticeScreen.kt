@@ -15,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
@@ -56,12 +57,18 @@ data object PracticeScreen : NavKey
 
 @Composable
 fun PracticeScreen(
-    viewModel: LevelNavigationViewModel
+    viewModel: LevelNavigationViewModel,
+    updateCurrentTitleTopBar: (String, Int) -> Unit,
+    navigatePracticeResults: () -> Unit
 ) {
     val questionsUiState = viewModel.questionsUiState.collectAsStateWithLifecycle()
     var questionPage by remember { mutableIntStateOf(0) }
 
     val currentQuestion = questionsUiState.value.questions[questionPage]
+
+    LaunchedEffect(questionPage) {
+        updateCurrentTitleTopBar("Pregunta " + (questionPage + 1), R.drawable.practice_icon)
+    }
 
     Column(
         modifier = Modifier
@@ -82,7 +89,8 @@ fun PracticeScreen(
                 if (questionPage < questionsUiState.value.questions.size - 1 && currentQuestion.answered) {
                     questionPage++
                 }
-            }
+            },
+            navigatePracticeResults = navigatePracticeResults
         )
         Text(text = currentQuestion.description, fontSize = 20.sp, fontWeight = FontWeight.Bold)
         when (currentQuestion) {
@@ -128,16 +136,5 @@ fun PracticeScreen(
                 }
             )
         }
-    }
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
-@Composable
-fun PracticeScreenPreview() {
-    LuminTheme {
-        PracticeScreen(viewModel = viewModel())
     }
 }

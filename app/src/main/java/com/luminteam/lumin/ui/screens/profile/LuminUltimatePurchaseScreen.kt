@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation3.runtime.NavKey
 import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.components.SubtitleText
 import com.luminteam.lumin.ui.screens.profile.components.CodeBackground
@@ -26,8 +27,11 @@ import com.luminteam.lumin.ui.screens.profile.components.LuminUltimateLogo
 import com.luminteam.lumin.ui.screens.profile.components.PurchaseBox
 import com.luminteam.lumin.ui.theme.LuminBackground
 import com.luminteam.lumin.ui.theme.LuminBlack
+import kotlinx.serialization.Serializable
 
-@Preview
+@Serializable
+data object LuminUltimatePurchaseScreen : NavKey
+
 @Composable
 fun LuminUltimatePurchaseScreen(
     modifier: Modifier = Modifier

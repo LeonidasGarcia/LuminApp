@@ -39,8 +39,10 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luminteam.lumin.R
-import com.luminteam.lumin.data.SectionData
-import com.luminteam.lumin.data.levels.basic.BasicLevel
+import com.luminteam.lumin.ui.domain.Calification
+import com.luminteam.lumin.ui.domain.CalificationsUiState
+import com.luminteam.lumin.ui.domain.CurrentContentUiState
+import com.luminteam.lumin.ui.domain.SectionData
 import com.luminteam.lumin.ui.screens.learn.levels.components.LockedSectionButton
 import com.luminteam.lumin.ui.screens.sections.components.UnlockedSectionButton
 import com.luminteam.lumin.ui.theme.LuminBlack
@@ -67,8 +69,14 @@ fun LevelAccordion(
     foldedBackgroundColor: Color,
     unfoldedTextColor: Color,
     foldedTextColor: Color,
-    sections: List<SectionData>
+    sections: List<SectionData>,
+    currentUserContentState: CurrentContentUiState,
+    levelId: Int,
+    califications: Map<Int, Calification>,
+    onSectionSelected: (Int, Int) -> Unit
 ) {
+    val currentSectionId = currentUserContentState.currentSectionId!!
+
     val foldedValues: AccordionValues = AccordionValues(
         iconColor = foldedIconColor,
         backgroundColor = foldedBackgroundColor,
@@ -153,42 +161,28 @@ fun LevelAccordion(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                sections.forEach { (title, description, locked, current) ->
-                    if (locked) {
-                        LockedSectionButton(title = title, description = description)
+                sections.forEachIndexed { index, section ->
+                    val associatedCalification = califications[section.id]
+                    val isCurrent = currentSectionId == section.id
+
+                    if (associatedCalification == null && !isCurrent) {
+                        LockedSectionButton(
+                            title = "Sección " + (index + 1),
+                            description = section.name
+                        )
                     } else {
                         UnlockedSectionButton(
-                            title = title,
-                            description = description,
-                            backgroundColor = if (current) unfoldedValues.iconColor else LuminLightGray,
-                            current = current
+                            title = "Sección " + (index + 1),
+                            description = section.name,
+                            backgroundColor = if (isCurrent) unfoldedValues.iconColor else LuminLightGray,
+                            current = isCurrent,
+                            onClick = {
+                                onSectionSelected(levelId, section.id)
+                            }
                         )
                     }
                 }
             }
         }
-    }
-
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
-@Composable
-fun AccordionPreview() {
-    LuminTheme {
-        LevelAccordion(
-            title = BasicLevel.name,
-            description = "Variables y Salidas",
-            icon = R.drawable.basic_icon,
-            unfoldedIconColor = LuminGreen,
-            foldedIconColor = LuminBlack,
-            unfoldedBackgroundColor = LuminDarkGray,
-            foldedBackgroundColor = LuminGreen,
-            unfoldedTextColor = LuminWhite,
-            foldedTextColor = LuminBlack,
-            sections = BasicLevel.sections
-        )
     }
 }

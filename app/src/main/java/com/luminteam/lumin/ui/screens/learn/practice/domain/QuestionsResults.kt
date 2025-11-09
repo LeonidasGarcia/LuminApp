@@ -3,8 +3,10 @@ package com.luminteam.lumin.ui.screens.learn.practice.domain
 import androidx.compose.ui.graphics.Color
 
 data class QuestionsResultsUiState(
+    // aquí me deben devolver algo más significativo
     val questionsResults: List<Boolean> = listOf(),
-    val resultType: ResultType = ResultType.Disapproved
+    val resultType: ResultType = ResultType.Disapproved,
+    val score: Int = 0
 )
 
 enum class ResultType {

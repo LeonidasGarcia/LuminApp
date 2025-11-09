@@ -1,28 +1,28 @@
 package com.luminteam.lumin.ui.screens.settings
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.components.LuminButtonAlt
 import com.luminteam.lumin.ui.components.LuminContentThemeButtonDefaults
-import com.luminteam.lumin.ui.components.ParagraphText
 import com.luminteam.lumin.ui.components.Separator
 import com.luminteam.lumin.ui.components.TitleText
-import com.luminteam.lumin.ui.screens.home.main.components.MainHeader
 import com.luminteam.lumin.ui.screens.settings.components.Option
 import com.luminteam.lumin.ui.screens.settings.components.SpecialOption
 import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminDarkGray
-import com.luminteam.lumin.ui.theme.LuminOrange
 import com.luminteam.lumin.ui.theme.LuminRed
 import com.luminteam.lumin.ui.theme.LuminTheme
+import kotlinx.serialization.Serializable
 
+@Serializable
+data object SettingsScreen : NavKey
 
 @Composable
 fun SettingsScreen(

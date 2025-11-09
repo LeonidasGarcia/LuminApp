@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.luminteam.lumin.R
@@ -22,7 +23,7 @@ fun UnlockedSectionButton(
     description: String,
     backgroundColor: Color,
     current: Boolean,
-    onCLick: () -> Unit = {}
+    onClick: () -> Unit
 ) {
     val icon = if (current) R.drawable.book_icon else R.drawable.medal_icon
 
@@ -32,12 +33,14 @@ fun UnlockedSectionButton(
         buttonColor = backgroundColor,
         icon = icon,
         iconColor = LuminBlack,
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier.padding(10.dp),
+        onClick = onClick
     ) {
         Column {
             Text(
                 text = description,
                 color = LuminGray,
+                textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Medium
             )
         }

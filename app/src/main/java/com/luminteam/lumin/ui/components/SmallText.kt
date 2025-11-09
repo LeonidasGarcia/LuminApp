@@ -24,7 +24,7 @@ fun SmallText(
         text = text,
         modifier = modifier,
         style = TextStyle(
-            fontSize = 12.sp,
+            fontSize = 16.sp,
             lineHeight = 15.sp,
             fontWeight = if (isBold) FontWeight.Bold else FontWeight.Medium,
             color = color,

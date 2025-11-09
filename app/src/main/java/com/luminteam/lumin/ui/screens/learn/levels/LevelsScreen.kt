@@ -4,39 +4,56 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
-import com.luminteam.lumin.R
-import com.luminteam.lumin.data.LevelData
-import com.luminteam.lumin.data.SectionData
-import com.luminteam.lumin.data.levels.basic.AdvancedLevel
-import com.luminteam.lumin.data.levels.basic.BasicLevel
-import com.luminteam.lumin.data.levels.basic.IntermediateLevel
-import com.luminteam.lumin.data.levels.basic.sections.SequentialExecution
 import com.luminteam.lumin.ui.components.LevelAccordion
 import com.luminteam.lumin.ui.components.ParagraphText
 import com.luminteam.lumin.ui.components.TitleText
-import com.luminteam.lumin.ui.theme.LuminTheme
+import com.luminteam.lumin.ui.domain.Calification
+import com.luminteam.lumin.ui.domain.CurrentContentUiState
+import com.luminteam.lumin.ui.domain.LevelData
+import com.luminteam.lumin.ui.domain.LevelDataUiState
+import com.luminteam.lumin.ui.domain.SectionData
+import com.luminteam.lumin.ui.domain.SectionDataUiState
 import com.luminteam.lumin.ui.theme.LuminWhite
-import com.luminteam.lumin.ui.screens.learn.levels.components.LockedSectionButton
-import com.luminteam.lumin.ui.screens.sections.components.UnlockedSectionButton
 import com.luminteam.lumin.ui.theme.LuminBlack
-import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminDarkestGray
-import com.luminteam.lumin.ui.theme.LuminGreen
+import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
+import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
 data object LevelsScreen : NavKey
 
 @Composable
-fun LevelsScreen() {
+fun LevelsScreen(
+    rootViewModel: RootNavigationViewModel,
+    viewModel: LevelNavigationViewModel,
+    navigateSection: () -> Unit
+) {
+    val levels = rootViewModel.levels.collectAsStateWithLifecycle().value.levels
+    val sections = rootViewModel.sections.collectAsStateWithLifecycle().value.sections
+    val currentUserContentState =
+        rootViewModel.currentUserContentState.collectAsStateWithLifecycle().value
+    val califications =
+        rootViewModel.califications.collectAsStateWithLifecycle().value.califications
+
+    // legacy
+    //val levelsUiState = viewModel.levelsUiState.collectAsStateWithLifecycle()
+    // val levels = levelsUiState.value.levels
+    val onSectionSelected: (Int, Int) -> Unit = { levelId, sectionId ->
+        viewModel.updateCurrentAppContentState(
+            CurrentContentUiState(
+                currentLevelId = levelId,
+                currentSectionId = sectionId
+            )
+        )
+        navigateSection()
+    }
+
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -54,11 +71,7 @@ fun LevelsScreen() {
         }
 
         items(
-            items = listOf<LevelData>(
-                BasicLevel,
-                IntermediateLevel,
-                AdvancedLevel
-            )
+            items = levels.values.toList()
         ) { level ->
             LevelAccordion(
                 title = level.name,
@@ -70,20 +83,12 @@ fun LevelsScreen() {
                 foldedBackgroundColor = level.buttonColor,
                 unfoldedTextColor = LuminWhite,
                 foldedTextColor = LuminBlack,
-                sections = level.sections
+                levelId = level.id,
+                sections = level.sections.map { sections[it]!! },
+                currentUserContentState = currentUserContentState,
+                califications = califications,
+                onSectionSelected = onSectionSelected
             )
         }
-
-    }
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
-@Composable
-fun LevelsScreenPreview() {
-    LuminTheme {
-        LevelsScreen()
     }
 }

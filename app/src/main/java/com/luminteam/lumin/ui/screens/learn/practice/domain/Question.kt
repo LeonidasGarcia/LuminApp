@@ -15,6 +15,7 @@ data class QuestionsUiState(
 )
 
 interface Question {
+    val id: Int
     val title: String
     val description: String
     val answered: Boolean
@@ -25,26 +26,33 @@ interface Question {
 data class SingleSelectionQuestion(
     val question: String,
     val options: List<String>,
+    override val id: Int,
     override val title: String = "Selecciona la Respuesta",
-    override val description: String = "Responde a la siguiente pregunta:",
+    override val description: String,
     override val answered: Boolean = false,
-    override val answer: SingleSelectionAnswer = SingleSelectionAnswer()
+    override val answer: SingleSelectionAnswer = SingleSelectionAnswer(questionId = id)
 ) : Question
 
 data class FreeResponseQuestion(
     val question: String,
+    override val id: Int,
     override val title: String = "Respuesta Libre",
-    override val description: String = "Responde a la siguiente pregunta:",
+    override val description: String,
     override val answered: Boolean = false,
-    override val answer: FreeResponseAnswer = FreeResponseAnswer()
+    override val answer: FreeResponseAnswer = FreeResponseAnswer(questionId = id)
 ) : Question
 
+// agregar enunciado
 data class FixTheCodeQuestion(
     val wrongCode: String,
+    override val id: Int,
     override val title: String = "Arregla el Código",
-    override val description: String = "El siguiente bloque de código tiene un error, corrígelo:",
+    override val description: String,
     override val answered: Boolean = false,
-    override val answer: FixTheCodeAnswer = FixTheCodeAnswer(correctedCode = wrongCode)
+    override val answer: FixTheCodeAnswer = FixTheCodeAnswer(
+        questionId = id,
+        correctedCode = wrongCode
+    )
 ) : Question
 
 data class CompleteTheCodeQuestion(
@@ -62,18 +70,21 @@ data class CompleteTheCodeQuestion(
             token
         )
     }).filterNotNull(),
+    override val id: Int,
     override val title: String = "Completa el Código",
-    override val description: String = "Completa el siguiente bloque de código:",
+    override val description: String,
     override val answered: Boolean = false,
     override val answer: CompleteTheCodeAnswer = CompleteTheCodeAnswer(
         orderedTokens = List(size = missingTokens.size) { null },
         assignedChunks = IntRange(0, missingTokens.size - 1).associateWith {
             null as String?
-        }.toMutableMap()
+        }.toMutableMap(),
+        questionId = id
     )
-) :
-    Question
+) : Question
 
+
+// es necesario manejar esto apenas llegue una pregunta del tipo COMPLETE_THE_CODE
 fun loadAnnotatedStrings(tokens: List<Token>): List<AnnotatedString?> {
     val language = CodeLang.Python
     val parser = PrettifyParser()
