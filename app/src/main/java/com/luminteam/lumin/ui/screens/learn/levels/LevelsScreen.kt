@@ -12,17 +12,14 @@ import androidx.navigation3.runtime.NavKey
 import com.luminteam.lumin.ui.components.LevelAccordion
 import com.luminteam.lumin.ui.components.ParagraphText
 import com.luminteam.lumin.ui.components.TitleText
-import com.luminteam.lumin.ui.domain.Calification
 import com.luminteam.lumin.ui.domain.CurrentContentUiState
-import com.luminteam.lumin.ui.domain.LevelData
-import com.luminteam.lumin.ui.domain.LevelDataUiState
-import com.luminteam.lumin.ui.domain.SectionData
-import com.luminteam.lumin.ui.domain.SectionDataUiState
 import com.luminteam.lumin.ui.theme.LuminWhite
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminDarkestGray
+import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
+import com.luminteam.lumin.ui.viewmodels.UserViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -30,20 +27,22 @@ data object LevelsScreen : NavKey
 
 @Composable
 fun LevelsScreen(
-    rootViewModel: RootNavigationViewModel,
+    contentViewModel: ContentViewModel,
+    userViewModel: UserViewModel,
     viewModel: LevelNavigationViewModel,
     navigateSection: () -> Unit
 ) {
-    val levels = rootViewModel.levels.collectAsStateWithLifecycle().value.levels
-    val sections = rootViewModel.sections.collectAsStateWithLifecycle().value.sections
+    val levels = contentViewModel.levels.collectAsStateWithLifecycle().value.levels
+    val sections = contentViewModel.sections.collectAsStateWithLifecycle().value.sections
     val currentUserContentState =
-        rootViewModel.currentUserContentState.collectAsStateWithLifecycle().value
+        userViewModel.currentUserContentState.collectAsStateWithLifecycle().value
     val califications =
-        rootViewModel.califications.collectAsStateWithLifecycle().value.califications
+        userViewModel.currentUserCalifications.collectAsStateWithLifecycle().value.califications
 
     // legacy
     //val levelsUiState = viewModel.levelsUiState.collectAsStateWithLifecycle()
     // val levels = levelsUiState.value.levels
+
     val onSectionSelected: (Int, Int) -> Unit = { levelId, sectionId ->
         viewModel.updateCurrentAppContentState(
             CurrentContentUiState(

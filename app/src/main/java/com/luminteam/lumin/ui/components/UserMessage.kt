@@ -43,7 +43,6 @@ fun UserMessage(
                 .padding(all = 20.dp),
         ) {
             Text(
-                modifier = Modifier.fillMaxWidth(),
                 text = text,
                 color = LuminWhite
             )

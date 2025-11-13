@@ -1,8 +1,6 @@
 package com.luminteam.lumin.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.navigation3.runtime.NavBackStack
-import androidx.navigation3.runtime.NavKey
 import com.luminteam.lumin.ui.domain.CurrentContentUiState
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Answer
 import com.luminteam.lumin.ui.screens.learn.practice.domain.CompleteTheCodeQuestion
@@ -18,13 +16,10 @@ import com.luminteam.lumin.ui.screens.learn.practice.domain.ResultType
 import com.luminteam.lumin.ui.screens.learn.practice.domain.SingleSelectionQuestion
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Token
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Word
-import com.luminteam.lumin.ui.screens.learn.section.SectionScreen
-import com.luminteam.lumin.ui.screens.learn.theory.TheoryScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.util.logging.Level
 
 val hiperLongQuestion =
     "Lorem ipsum dolor sit amet, ct, sed do eiu laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, ct, sed do eiu laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing"

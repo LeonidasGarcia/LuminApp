@@ -35,8 +35,10 @@ import com.luminteam.lumin.ui.theme.LuminWhite
 
 @Composable
 fun MessageBox(
+    placeholder: String,
     prompt: String,
-    onType: (String) -> Unit = {}
+    onType: (String) -> Unit = {},
+    onSend: () -> Unit = {}
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -59,14 +61,16 @@ fun MessageBox(
             textStyle = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
             shape = RoundedCornerShape(35.dp),
             placeholder = {
-                Text("Ingrese la respuesta aquí")
+                Text(placeholder)
             },
             modifier = Modifier
                 .weight(1f)
                 .height(50.dp)
         )
         Button(
-            onClick = {},
+            onClick = {
+                onSend()
+            },
             modifier = Modifier
                 .width(50.dp)
                 .height(50.dp),

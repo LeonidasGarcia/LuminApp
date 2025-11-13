@@ -149,4 +149,12 @@ dependencies {
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
+
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
+
+    // optional - RxJava2 support
+    implementation("androidx.datastore:datastore-preferences-rxjava2:1.1.7")
+
+    // optional - RxJava3 support
+    implementation("androidx.datastore:datastore-preferences-rxjava3:1.1.7")
 }

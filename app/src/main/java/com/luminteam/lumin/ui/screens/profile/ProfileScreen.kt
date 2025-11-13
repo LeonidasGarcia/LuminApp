@@ -4,15 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -33,9 +30,10 @@ import com.luminteam.lumin.ui.screens.profile.components.MetricCard
 import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminLightGray
 import com.luminteam.lumin.ui.theme.LuminOrange
+import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
+import com.luminteam.lumin.ui.viewmodels.UserViewModel
 import kotlinx.serialization.Serializable
-import androidx.compose.foundation.lazy.grid.items
 
 @Serializable
 data object ProfileScreen : NavKey
@@ -49,17 +47,18 @@ data class MetricCardData(
 
 @Composable
 fun ProfileScreen(
-    rootViewModel: RootNavigationViewModel,
+    userViewModel: UserViewModel,
+    contentViewModel: ContentViewModel,
     navigateUltimatePurchase: () -> Unit
 ) {
-    val currentUserData = rootViewModel.currentUserData.collectAsStateWithLifecycle().value
+    val currentUserData = userViewModel.currentUserData.collectAsStateWithLifecycle().value
     val currentUserMetricsData =
-        rootViewModel.currentUserMetricsData.collectAsStateWithLifecycle().value
+        userViewModel.currentUserMetricsData.collectAsStateWithLifecycle().value
 
-    val levels = rootViewModel.levels.collectAsStateWithLifecycle().value.levels
+    val levels = contentViewModel.levels.collectAsStateWithLifecycle().value.levels
     val currentLevel = levels[currentUserMetricsData.currentLevelId]!!
 
-    val pages = rootViewModel.pages.collectAsStateWithLifecycle().value.pages
+    val pages = contentViewModel.pages.collectAsStateWithLifecycle().value.pages
     val currentPage = pages[currentUserMetricsData.currentPageId]!!
 
     val metricCardsData = listOf<MetricCardData>(

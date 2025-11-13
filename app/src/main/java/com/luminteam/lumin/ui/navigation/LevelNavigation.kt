@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
@@ -21,10 +20,13 @@ import com.luminteam.lumin.ui.screens.learn.chat.AiFeedbackChatScreen
 import com.luminteam.lumin.ui.screens.learn.levels.LevelsScreen
 import com.luminteam.lumin.ui.screens.learn.practice.PracticeResultsScreen
 import com.luminteam.lumin.ui.screens.learn.practice.PracticeScreen
-import com.luminteam.lumin.ui.screens.learn.section.SectionScreen
+import com.luminteam.lumin.ui.screens.learn.section.SectionsScreen
 import com.luminteam.lumin.ui.screens.learn.theory.TheoryScreen
+import com.luminteam.lumin.ui.viewmodels.AIChatViewModel
+import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
+import com.luminteam.lumin.ui.viewmodels.UserViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -33,6 +35,9 @@ data object LevelNavigation : NavKey
 @Composable
 fun LevelNavigation(
     rootViewModel: RootNavigationViewModel,
+    userViewModel: UserViewModel,
+    contentViewModel: ContentViewModel,
+    aiChatViewModel: AIChatViewModel,
     viewModel: LevelNavigationViewModel = viewModel(),
     levelBackStack: NavBackStack<NavKey>
 ) {
@@ -83,10 +88,11 @@ fun LevelNavigation(
                 )
 
                 LevelsScreen(
-                    rootViewModel = rootViewModel,
-                    viewModel,
+                    contentViewModel = contentViewModel,
+                    userViewModel = userViewModel,
+                    viewModel = viewModel,
                     navigateSection = {
-                        backStack.add(SectionScreen)
+                        backStack.add(SectionsScreen)
                     })
             }
             entry<PracticeScreen> {
@@ -125,8 +131,9 @@ fun LevelNavigation(
                             currentPageId = null
                         )
                     )
-
                      */
+
+                    aiChatViewModel.clearMessages()
                     updateCurrentTopBarRightButtonActionType(TopBarRightButtonActionType.SHOW_LIVES)
                     backStack.removeLastOrNull()
                 }
@@ -136,6 +143,7 @@ fun LevelNavigation(
 
                 TheoryScreen(
                     rootViewModel = rootViewModel,
+                    contentViewModel = contentViewModel,
                     viewModel = viewModel,
                     navigateSection = {
                         backStack.removeLastOrNull()
@@ -159,9 +167,14 @@ fun LevelNavigation(
                 updateShowBottomBar(true)
 
                 viewModel.loadMockResults()
-                PracticeResultsScreen(viewModel = viewModel)
+                PracticeResultsScreen(
+                    viewModel = viewModel,
+                    navigateFeedback = {
+                        backStack.add(AiFeedbackChatScreen)
+                    }
+                )
             }
-            entry<SectionScreen> {
+            entry<SectionsScreen> {
                 Log.d("revision", "section cargado")
                 updateCurrentBackAction() {
                     /*
@@ -184,8 +197,9 @@ fun LevelNavigation(
                     )
                 )
 
-                SectionScreen(
-                    rootViewModel = rootViewModel,
+                SectionsScreen(
+                    userViewModel = userViewModel,
+                    contentViewModel = contentViewModel,
                     viewModel = viewModel,
                     navigateTheory = {
                         backStack.add(TheoryScreen)
@@ -210,10 +224,29 @@ fun LevelNavigation(
                 )
                 updateShowTopBarRightButton(false)
 
-                AiChatScreen()
+                AiChatScreen(
+                    aiChatViewModel = aiChatViewModel
+                )
             }
             entry<AiFeedbackChatScreen> {
-                AiFeedbackChatScreen()
+                updateCurrentBackAction() {
+                    updateShowTopBarRightButton(true)
+                    backStack.removeLastOrNull()
+                }
+                updateCanGoBack(true)
+                updateShowBottomBar(false)
+                updateCurrentTitleTopBar(
+                    TitleTopBar(
+                        title = "Retroalimentación IA",
+                        iconTitle = R.drawable.robot_icon
+                    )
+                )
+                updateShowTopBarRightButton(false)
+
+                AiFeedbackChatScreen(
+                    viewModel = viewModel,
+                    aiChatViewModel = aiChatViewModel
+                )
             }
         }
     )

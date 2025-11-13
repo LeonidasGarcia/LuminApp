@@ -17,16 +17,19 @@ import com.luminteam.lumin.ui.components.LuminSquareButtonAlt
 import com.luminteam.lumin.ui.components.ParagraphText
 import com.luminteam.lumin.ui.components.TitleText
 import com.luminteam.lumin.ui.theme.LuminDarkGray
+import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
+import com.luminteam.lumin.ui.viewmodels.UserViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SectionScreen : NavKey
+data object SectionsScreen : NavKey
 
 @Composable
-fun SectionScreen(
-    rootViewModel: RootNavigationViewModel,
+fun SectionsScreen(
+    userViewModel: UserViewModel,
+    contentViewModel: ContentViewModel,
     viewModel: LevelNavigationViewModel,
     navigateTheory: () -> Unit,
     navigatePractice: () -> Unit,
@@ -34,12 +37,12 @@ fun SectionScreen(
     val currentSectionId =
         viewModel.currentAppContentState.collectAsStateWithLifecycle().value.currentSectionId!!
     val sectionData =
-        rootViewModel.sections.collectAsStateWithLifecycle().value.sections[currentSectionId]!!
+        contentViewModel.sections.collectAsStateWithLifecycle().value.sections[currentSectionId]!!
 
     val currentAppContentState =
         viewModel.currentAppContentState.collectAsStateWithLifecycle().value
 
-    val califications = rootViewModel.califications.collectAsStateWithLifecycle().value
+    val califications = userViewModel.currentUserCalifications.collectAsStateWithLifecycle().value
 
     val calification = califications.califications[currentSectionId]
 
@@ -77,7 +80,8 @@ fun SectionScreen(
         }
         item {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
                 LuminSquareButtonAlt(
                     title = "Teoría",
@@ -85,7 +89,6 @@ fun SectionScreen(
                     description = sectionData.pages.size.toString() + " páginas",
                     onClick = navigateTheoryAction
                 )
-                Spacer(modifier = Modifier.weight(1f))
                 LuminSquareButtonAlt(
                     color = LuminDarkGray,
                     title = "Práctica",

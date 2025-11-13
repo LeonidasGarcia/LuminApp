@@ -26,15 +26,21 @@ import com.luminteam.lumin.ui.layout.BottomBar
 import com.luminteam.lumin.ui.layout.TopBar
 import com.luminteam.lumin.ui.screens.learn.chat.AiChatScreen
 import com.luminteam.lumin.ui.screens.learn.levels.LevelsScreen
-import com.luminteam.lumin.ui.screens.learn.section.SectionScreen
+import com.luminteam.lumin.ui.screens.learn.section.SectionsScreen
 import com.luminteam.lumin.ui.screens.learn.theory.TheoryScreen
 import com.luminteam.lumin.ui.theme.LuminBackground
+import com.luminteam.lumin.ui.viewmodels.AIChatViewModel
+import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
+import com.luminteam.lumin.ui.viewmodels.UserViewModel
 
 @Composable
 fun RootNavigation(
     viewModel: RootNavigationViewModel = viewModel(),
+    userViewModel: UserViewModel = viewModel(),
+    contentViewModel: ContentViewModel = viewModel(),
+    aiChatViewModel: AIChatViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
     val backStack = rememberNavBackStack(HomeNavigation)
@@ -42,7 +48,7 @@ fun RootNavigation(
 
     var currentRoute by remember { mutableStateOf("MainScreen") }
 
-    var currentUserData = viewModel.currentUserData.collectAsStateWithLifecycle().value
+    var currentUserData = userViewModel.currentUserData.collectAsStateWithLifecycle().value
 
     val levelNavigationViewModel: LevelNavigationViewModel = viewModel()
 
@@ -73,7 +79,7 @@ fun RootNavigation(
     val generalPadding = if (showGeneralPadding) 20.dp else 0.dp
 
     val currentUserContentState =
-        viewModel.currentUserContentState.collectAsStateWithLifecycle().value
+        userViewModel.currentUserContentState.collectAsStateWithLifecycle().value
 
 
     // con esta navegacion especial, se tienen que hacer las operaciones de manera manual y en orden
@@ -84,7 +90,7 @@ fun RootNavigation(
 
         backStack.removeLastOrNull()
         backStack.add(LevelNavigation)
-        levelBackStack.add(SectionScreen)
+        levelBackStack.add(SectionsScreen)
         levelBackStack.add(TheoryScreen)
         currentRoute = "SectionsScreen"
 
@@ -177,14 +183,19 @@ fun RootNavigation(
                             entry<ProfileNavigation> {
                                 ProfileNavigation(
                                     rootViewModel = viewModel,
+                                    userViewModel = userViewModel,
+                                    contentViewModel = contentViewModel
                                 )
                             }
                             entry<LevelNavigation> {
                                 viewModel.updateShowGeneralPadding(true)
                                 LevelNavigation(
+                                    userViewModel = userViewModel,
+                                    contentViewModel = contentViewModel,
                                     viewModel = levelNavigationViewModel,
                                     rootViewModel = viewModel,
-                                    levelBackStack = levelBackStack
+                                    levelBackStack = levelBackStack,
+                                    aiChatViewModel = aiChatViewModel
                                 )
                             }
                             entry<SettingsNavigation> {

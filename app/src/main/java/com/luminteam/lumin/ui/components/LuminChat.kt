@@ -4,11 +4,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,21 +21,36 @@ import androidx.compose.ui.unit.dp
 import com.luminteam.lumin.ui.domain.ChatMessage
 import com.luminteam.lumin.ui.domain.ChatMessageType
 import com.luminteam.lumin.ui.theme.LuminTheme
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun LuminChat(
     modifier: Modifier,
+    messages: List<ChatMessage>,
+    onSend: (String) -> Unit
     // más funciones para responder a su entorno
-    messages: List<ChatMessage>
 ) {
+
     var prompt by remember { mutableStateOf("") }
+
+    // scroll shit
+    val listState: LazyListState = rememberLazyListState()
+
+    LaunchedEffect(messages.size) {
+        if (messages.isNotEmpty()) {
+            listState.animateScrollToItem(messages.size - 2)
+        }
+    }
 
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         LazyColumn(
-            modifier = Modifier.weight(1f),
+            state = listState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.End
         ) {
@@ -52,6 +71,12 @@ fun LuminChat(
             prompt = prompt,
             onType = {
                 prompt = it
-            })
+            },
+            onSend = {
+                onSend(prompt)
+                prompt = ""
+            },
+            placeholder = "Escribe tu mensaje"
+        )
     }
 }

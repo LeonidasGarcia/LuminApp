@@ -14,7 +14,9 @@ import com.luminteam.lumin.ui.domain.TopBarBackAction
 import com.luminteam.lumin.ui.domain.TitleTopBar
 import com.luminteam.lumin.ui.screens.profile.LuminUltimatePurchaseScreen
 import com.luminteam.lumin.ui.screens.profile.ProfileScreen
+import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
+import com.luminteam.lumin.ui.viewmodels.UserViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,7 +24,9 @@ data object ProfileNavigation : NavKey
 
 @Composable
 fun ProfileNavigation(
-    rootViewModel: RootNavigationViewModel
+    rootViewModel: RootNavigationViewModel,
+    userViewModel: UserViewModel,
+    contentViewModel: ContentViewModel
 ) {
     val updateCurrentBackAction: (TopBarBackAction) -> Unit = { backAction ->
         rootViewModel.updateCurrentTopBarBackAction(backAction)
@@ -63,7 +67,8 @@ fun ProfileNavigation(
                     )
                 )
                 ProfileScreen(
-                    rootViewModel = rootViewModel,
+                    userViewModel = userViewModel,
+                    contentViewModel = contentViewModel,
                     navigateUltimatePurchase = {
                         backStack.add(LuminUltimatePurchaseScreen)
                     })

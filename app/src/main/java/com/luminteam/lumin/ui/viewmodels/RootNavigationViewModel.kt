@@ -6,12 +6,6 @@ import com.luminteam.lumin.ui.domain.TopBarBackAction
 import com.luminteam.lumin.ui.mock.Califications0Mock
 import com.luminteam.lumin.ui.domain.CalificationsUiState
 import com.luminteam.lumin.ui.domain.CurrentContentUiState
-import com.luminteam.lumin.ui.domain.LevelDataUiState
-import com.luminteam.lumin.ui.mock.MockLevelsDict
-import com.luminteam.lumin.ui.mock.MockPagesDict
-import com.luminteam.lumin.ui.mock.MockSectionsDict
-import com.luminteam.lumin.ui.domain.PageDataUiState
-import com.luminteam.lumin.ui.domain.SectionDataUiState
 import com.luminteam.lumin.ui.domain.TitleTopBar
 import com.luminteam.lumin.ui.domain.TopBarRightButtonActionType
 import com.luminteam.lumin.ui.domain.UserDataUiState
@@ -25,39 +19,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class RootNavigationViewModel : ViewModel() {
-    private val _currentUserDataUiState = MutableStateFlow<UserDataUiState>(
-        CurrentUserDataUiState0Mock
-    )
-    val currentUserData: StateFlow<UserDataUiState> = _currentUserDataUiState.asStateFlow()
-
-
-    private val _currentUserMetricsDataUiState = MutableStateFlow<UserMetricsDataUiState>(
-        CurrentUserMetricsDataUiState0Mock
-    )
-    val currentUserMetricsData: StateFlow<UserMetricsDataUiState> =
-        _currentUserMetricsDataUiState.asStateFlow()
-
-    private val _califications = MutableStateFlow<CalificationsUiState>(Califications0Mock)
-    val califications: StateFlow<CalificationsUiState> = _califications.asStateFlow()
-
-    // currentLevelId y currentSectionId siempre serán válidos!!
-    private val _currentUserContentState = MutableStateFlow<CurrentContentUiState>(
-        UserCurrentContentUiState0Mock
-    )
-    val currentUserContentState: StateFlow<CurrentContentUiState> =
-        _currentUserContentState.asStateFlow()
-
-    private val _levels =
-        MutableStateFlow<LevelDataUiState>(LevelDataUiState(levels = MockLevelsDict))
-    val levels: StateFlow<LevelDataUiState> = _levels.asStateFlow()
-
-    private val _sections =
-        MutableStateFlow<SectionDataUiState>(SectionDataUiState(sections = MockSectionsDict))
-    val sections: StateFlow<SectionDataUiState> = _sections.asStateFlow()
-
-    private val _pages = MutableStateFlow<PageDataUiState>(PageDataUiState(pages = MockPagesDict))
-    val pages: StateFlow<PageDataUiState> = _pages
-
     private val _currentTitleTopBar = MutableStateFlow<TitleTopBar>(
         TitleTopBar(
             title = "Inicio",
@@ -86,21 +47,6 @@ class RootNavigationViewModel : ViewModel() {
     private val _showTopBarRightButton = MutableStateFlow(true)
     val showTopBarRightButton: StateFlow<Boolean> = _showTopBarRightButton.asStateFlow()
 
-    fun UpdateUserData() {
-        // aqui se deben hacer llamadas al servidor de la app
-    }
-
-    fun updateUserMetricsData() {
-        // aqui se deben hacer llamadas al servidor de la app
-    }
-
-    fun updateCalifications() {
-        // aqui se deben hacer llamadas al servidor de la app
-    }
-
-    fun updateCurrentContentState() {
-        // aquí se deben hacer llamadas al servidor de la app
-    }
 
     fun updateCurrentTopBarRightButtonActionType(rightButtonActionType: TopBarRightButtonActionType) {
         _currentTopBarRightButtonActionType.update {

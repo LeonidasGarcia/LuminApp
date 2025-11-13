@@ -128,11 +128,11 @@ fun TopBarRightButton(
 ) {
     Row(
         modifier = Modifier
-            .width(70.dp)
+            .width(50.dp)
             .height(50.dp)
             .clip(RoundedCornerShape(15.dp))
             .background(if (showTopBarRightButton) LuminDarkGray else LuminBackground)
-            .padding(13.dp)
+            .padding(10.dp)
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
@@ -153,33 +153,35 @@ fun TopBarRightButton(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        when (currentLeftButtonActionType) {
-            TopBarRightButtonActionType.SHOW_LIVES -> {
-                Text(text = lives.toString(), color = LuminLightGray, fontSize = 20.sp)
-                Spacer(modifier = Modifier.width(5.dp))
-                Icon(
-                    painter = painterResource(id = R.drawable.energy_icon_alt),
-                    tint = LuminLightGray,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .width(20.dp)
-                        .height(20.dp)
-                        .align(Alignment.CenterVertically)
-                )
-            }
-
-            TopBarRightButtonActionType.SHOW_AI_CHAT ->
-                if (showTopBarRightButton) {
+        if (showTopBarRightButton) {
+            when (currentLeftButtonActionType) {
+                TopBarRightButtonActionType.SHOW_LIVES -> {
+                    Text(text = lives.toString(), color = LuminLightGray, fontSize = 15.sp)
+                    Spacer(modifier = Modifier.width(5.dp))
                     Icon(
-                        painter = painterResource(id = R.drawable.robot_icon),
+                        painter = painterResource(id = R.drawable.energy_icon_alt),
                         tint = LuminLightGray,
                         contentDescription = "",
                         modifier = Modifier
-                            .width(20.dp)
-                            .height(20.dp)
+                            .width(15.dp)
+                            .height(15.dp)
                             .align(Alignment.CenterVertically)
                     )
                 }
+
+                TopBarRightButtonActionType.SHOW_AI_CHAT ->
+                    if (showTopBarRightButton) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.robot_icon),
+                            tint = LuminLightGray,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .width(20.dp)
+                                .height(20.dp)
+                                .align(Alignment.CenterVertically)
+                        )
+                    }
+            }
         }
     }
 }
