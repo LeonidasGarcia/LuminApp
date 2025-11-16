@@ -40,6 +40,10 @@ class UserViewModel : ViewModel() {
     val currentUserContentState: StateFlow<CurrentContentUiState> =
         _currentUserContentState.asStateFlow()
 
+    fun updateCalifications() {
+        // aqui se deben hacer llamadas al servidor de la app
+    }
+
     fun UpdateUserData() {
         // aqui se deben hacer llamadas al servidor de la app
     }

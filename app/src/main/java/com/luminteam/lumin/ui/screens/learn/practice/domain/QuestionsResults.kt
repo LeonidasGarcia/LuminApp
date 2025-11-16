@@ -12,7 +12,7 @@ data class QuestionsResultsUiState(
 enum class ResultType {
     Disapproved,
     Approved,
-    FullyAproved
+    FullyApproved
 }
 
 data class ResultData(

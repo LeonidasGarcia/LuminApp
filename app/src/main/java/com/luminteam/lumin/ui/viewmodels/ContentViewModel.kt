@@ -24,8 +24,4 @@ class ContentViewModel : ViewModel() {
 
     private val _pages = MutableStateFlow<PageDataUiState>(PageDataUiState(pages = MockPagesDict))
     val pages: StateFlow<PageDataUiState> = _pages
-
-    fun updateCalifications() {
-        // aqui se deben hacer llamadas al servidor de la app
-    }
 }

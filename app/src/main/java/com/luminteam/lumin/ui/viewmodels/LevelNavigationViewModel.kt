@@ -265,7 +265,7 @@ class LevelNavigationViewModel : ViewModel() {
         val resultType = when {
             totalApproved < 3 -> ResultType.Disapproved
             totalApproved >= 3 && totalApproved < 5 -> ResultType.Approved
-            else -> ResultType.FullyAproved
+            else -> ResultType.FullyApproved
         }
 
         _questionsResultsUiState.update {

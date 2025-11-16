@@ -3,7 +3,6 @@ package com.luminteam.lumin.ui.domain
 data class UserDataUiState(
     val id: Int,
     val username: String,
-    // neeed to change this in the future
     val userIcon: Int,
     val email: String,
     val age: Int,
