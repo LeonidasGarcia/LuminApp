@@ -47,7 +47,6 @@ class RootNavigationViewModel : ViewModel() {
     private val _showTopBarRightButton = MutableStateFlow(true)
     val showTopBarRightButton: StateFlow<Boolean> = _showTopBarRightButton.asStateFlow()
 
-
     fun updateCurrentTopBarRightButtonActionType(rightButtonActionType: TopBarRightButtonActionType) {
         _currentTopBarRightButtonActionType.update {
             rightButtonActionType

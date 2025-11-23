@@ -1,5 +1,6 @@
 package com.luminteam.lumin.ui.components
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,9 +30,9 @@ import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminDarkestGray
-import com.luminteam.lumin.ui.theme.LuminGray
 import com.luminteam.lumin.ui.theme.LuminLightGray
 import com.luminteam.lumin.ui.theme.LuminWhite
+import com.luminteam.lumin.util.sound.playTap
 
 data class LuminContentTheme(
     val titleColor: Color,
@@ -53,10 +54,6 @@ object LuminContentThemeButtonDefaults {
     )
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
 @Composable
 fun LuminButtonAlt(
     modifier: Modifier = Modifier,
@@ -65,8 +62,10 @@ fun LuminButtonAlt(
     description: String = "Descripción del botón",
     icon: Int = R.drawable.book_icon,
     contentTheme: LuminContentTheme = LuminContentThemeButtonDefaults.light,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
+    val playTap = playTap()
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -76,6 +75,7 @@ fun LuminButtonAlt(
             .clip(RoundedCornerShape(15.dp))
             .background(color = color)
             .clickable {
+                playTap()
                 onClick()
             }
             .padding(start = 45.dp),

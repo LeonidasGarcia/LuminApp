@@ -1,23 +1,98 @@
 package com.luminteam.lumin.ui.viewmodels
 
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.luminteam.lumin.util.alarm.AlarmScheduler
+import com.luminteam.lumin.data.repository.SettingsRepository
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.time.LocalTime
 
-// En el futuro tiene que heredar AndroidViewModel
-class SettingsViewModel : ViewModel() {
-    private val _SFX_ON = MutableStateFlow<Boolean>(true)
-    val SFX_ON: StateFlow<Boolean> = _SFX_ON.asStateFlow()
+class SettingsViewModel(
+    private val repository: SettingsRepository,
+    private val alarmScheduler: AlarmScheduler,
+) : ViewModel() {
+    data class UIState(
+        val isSfxOn: Boolean = true,
+        val isVibrationOn: Boolean = true,
+        val isDailyReminderOn: Boolean = true,
+        val dailyReminderTime: String = "20:00",
+    )
 
-    private val _VIBRATION_ON = MutableStateFlow<Boolean>(true)
-    val VIBRATION_ON: StateFlow<Boolean> = _VIBRATION_ON.asStateFlow()
+    val uiState: StateFlow<UIState> = combine(
+        repository.isSfxOn,
+        repository.isVibrationOn,
+        repository.isDailyReminderOn,
+        repository.dailyReminderTime,
+    ) { sfx, vibration, reminder, reminderTime ->
+        UIState(
+            isSfxOn = sfx,
+            isVibrationOn = vibration,
+            isDailyReminderOn = reminder,
+            dailyReminderTime = reminderTime,
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000), // Ahorra batería
+        initialValue = UIState()
+    )
 
-    private val _DAILY_REMINDER_ON = MutableStateFlow<Boolean>(true)
-    val DAILY_REMINDER_ON: StateFlow<Boolean> = _DAILY_REMINDER_ON.asStateFlow()
+    fun toggleSfx(value: Boolean) {
+        viewModelScope.launch {
+            repository.saveSfx(value)
+        }
+    }
 
-    private val _DAILY_REMINDER_TIME = MutableStateFlow<LocalTime>(LocalTime.of(20, 0))
-    val DAILY_REMINDER_TIME: StateFlow<LocalTime> = _DAILY_REMINDER_TIME.asStateFlow()
+    fun toggleVibration(value: Boolean) {
+        viewModelScope.launch {
+            repository.saveVibration(value)
+        }
+    }
+
+    fun toggleDailyReminder(value: Boolean) {
+        viewModelScope.launch {
+            repository.saveDailyReminder(value)
+
+            if (value) {
+                val timeString = repository.dailyReminderTime.first()
+                try {
+                    val time = LocalTime.parse(timeString)
+                    alarmScheduler.schedule(time)
+                } catch (e: Exception) {
+                    alarmScheduler.schedule(LocalTime.of(20, 0))
+                }
+            } else {
+                alarmScheduler.cancel()
+            }
+        }
+    }
+
+    fun setDailyReminderTime(hour: Int, minute: Int) {
+        viewModelScope.launch {
+            val time = LocalTime.of(hour, minute)
+            repository.saveDailyReminderTime(time.toString())
+
+            if (uiState.value.isDailyReminderOn) {
+                alarmScheduler.schedule(time)
+            }
+        }
+    }
+
+    companion object {
+        fun provideFactory(
+            repository: SettingsRepository,
+            scheduler: AlarmScheduler,
+        ): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                SettingsViewModel(repository, scheduler)
+            }
+        }
+    }
 }

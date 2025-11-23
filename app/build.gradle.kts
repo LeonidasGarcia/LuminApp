@@ -152,6 +152,8 @@ dependencies {
 
     implementation("androidx.datastore:datastore-preferences:1.1.7")
 
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
+
     // optional - RxJava2 support
     implementation("androidx.datastore:datastore-preferences-rxjava2:1.1.7")
 

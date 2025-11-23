@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
@@ -12,6 +17,12 @@
         android:roundIcon="@mipmap/ic_lumin_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Lumin">
+
+        <receiver
+            android:name=".util.alarm.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustResize"

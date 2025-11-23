@@ -276,7 +276,7 @@ fun PracticeResultsScreen(
         if (canContinue) {
             item {
                 LuminButton(
-                    title = "Retroalimentación",
+                    title = "Continuar",
                     titleColor = LuminBlack,
                     buttonColor = LuminGreen,
                     icon = R.drawable.book_icon,
