@@ -1,15 +1,19 @@
 package com.luminteam.lumin.ui.domain
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class UserDataUiState(
     val id: Int,
     val username: String,
-    val userIcon: Int,
     val email: String,
     val age: Int,
     val lives: Int,
-    val isPremium: Boolean
+    val isPremium: Boolean,
+    val newLife: String?
 )
 
+@Serializable
 data class UserMetricsDataUiState(
     val currentLevelId: Int,
     val succededSectionsCount: Int,

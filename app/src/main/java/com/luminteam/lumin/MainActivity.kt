@@ -16,6 +16,7 @@ import com.luminteam.lumin.data.repository.LocalSettingsRepository
 import com.luminteam.lumin.data.repository.LocalSoundManager
 import com.luminteam.lumin.data.repository.LocalVibrationManager
 import com.luminteam.lumin.data.repository.SettingsRepository
+import com.luminteam.lumin.ui.navigation.MainNavigation
 import com.luminteam.lumin.ui.navigation.RootNavigation
 import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.util.sound.SoundManager
@@ -33,7 +34,6 @@ class MainActivity : ComponentActivity() {
         val soundManager = SoundManager(applicationContext)
 
         setContent {
-
             val isSfxOn by settingsRepository.isSfxOn.collectAsState(initial = true)
 
             val appConfig = AppConfig(

@@ -28,8 +28,12 @@ import com.luminteam.lumin.ui.screens.profile.components.PurchaseUltimate
 import com.luminteam.lumin.ui.screens.profile.components.UserProgressBar
 import com.luminteam.lumin.ui.screens.profile.components.MetricCard
 import com.luminteam.lumin.ui.theme.LuminCyan
+import com.luminteam.lumin.ui.theme.LuminGreen
 import com.luminteam.lumin.ui.theme.LuminLightGray
 import com.luminteam.lumin.ui.theme.LuminOrange
+import com.luminteam.lumin.ui.theme.LuminRed
+import com.luminteam.lumin.ui.theme.LuminWhite
+import com.luminteam.lumin.ui.theme.LuminYellow
 import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.UserViewModel
@@ -64,8 +68,18 @@ fun ProfileScreen(
     val metricCardsData = listOf<MetricCardData>(
         MetricCardData(
             text = "Nivel más alto alcanzado",
-            valueIcon = currentLevel.icon,
-            iconColor = currentLevel.iconColor,
+            valueIcon = when (currentLevel.name) {
+                "Básico" -> R.drawable.basic_icon
+                "Intermedio" -> R.drawable.intermediate_icon
+                "Avanzado" -> R.drawable.advanced_icon
+                else -> 0
+            },
+            iconColor = when (currentLevel.name) {
+                "Básico" -> LuminGreen
+                "Intermedio" -> LuminYellow
+                "Avanzado" -> LuminRed
+                else -> LuminWhite
+            },
             valueText = currentLevel.name
         ),
         MetricCardData(
@@ -112,13 +126,13 @@ fun ProfileScreen(
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                Image(
+                /*Image(
                     painter = painterResource(id = currentUserData.userIcon),
                     contentDescription = "Foto de perfil placeholder",
                     modifier = Modifier
                         .size(90.dp)
                         .clip(RoundedCornerShape(10.dp))
-                )
+                )*/
                 Column(
                     verticalArrangement = Arrangement.spacedBy(5.dp),
                     modifier = Modifier.weight(1f)

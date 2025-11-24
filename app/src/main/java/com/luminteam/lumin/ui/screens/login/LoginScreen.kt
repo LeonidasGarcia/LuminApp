@@ -17,23 +17,29 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavKey
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import com.google.firebase.auth.GoogleAuthProvider
-import com.luminteam.lumin.SignInViewModel
+import com.luminteam.lumin.ui.viewmodels.SignInViewModel
 import com.luminteam.lumin.ui.screens.login.components.LoginButton
 import com.luminteam.lumin.ui.screens.login.components.LoginHeader
 import com.luminteam.lumin.ui.screens.login.components.LoginTerms
 import com.luminteam.lumin.ui.theme.LuminBackground
 import com.luminteam.lumin.ui.theme.LuminTheme
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object LoginScreen : NavKey
 
 @Composable
 fun LoginScreen(
     viewModel: SignInViewModel = viewModel(),
+    goRoot: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scope = rememberCoroutineScope()
@@ -55,12 +61,7 @@ fun LoginScreen(
 
                 scope.launch {
                     viewModel.authenticateWithServerAuthCode(serverAuthCode)
-                }
-
-
-                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                viewModel.signInWithGoogleCredential(credential) {
-                    // navegar a otra pantalla
+                    goRoot()
                 }
             }
         } catch (e: ApiException) {
@@ -103,16 +104,5 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(12.dp))
             LoginTerms()
         }
-    }
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF111818,
-)
-@Composable
-fun LoginScreenPreview() {
-    LuminTheme {
-        LoginScreen()
     }
 }

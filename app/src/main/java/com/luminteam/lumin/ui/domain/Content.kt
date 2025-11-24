@@ -1,18 +1,17 @@
 package com.luminteam.lumin.ui.domain
 
 import androidx.compose.ui.graphics.Color
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class LevelData(
     val id: Int,
     val name: String,
     val description: String,
     val sections: List<Int>,
-    // ui data for rendering
-    val icon: Int,
-    val iconColor: Color,
-    val buttonColor: Color
 )
 
+@Serializable
 data class SectionData(
     val id: Int,
     val name: String,
@@ -20,6 +19,7 @@ data class SectionData(
     val pages: List<Int>
 )
 
+@Serializable
 data class PageData(
     val id: Int,
     val content: String,

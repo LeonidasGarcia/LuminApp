@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
+import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.components.LevelAccordion
 import com.luminteam.lumin.ui.components.ParagraphText
 import com.luminteam.lumin.ui.components.TitleText
@@ -16,6 +17,9 @@ import com.luminteam.lumin.ui.domain.CurrentContentUiState
 import com.luminteam.lumin.ui.theme.LuminWhite
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminDarkestGray
+import com.luminteam.lumin.ui.theme.LuminGreen
+import com.luminteam.lumin.ui.theme.LuminRed
+import com.luminteam.lumin.ui.theme.LuminYellow
 import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
@@ -75,11 +79,26 @@ fun LevelsScreen(
             LevelAccordion(
                 title = level.name,
                 description = level.description,
-                icon = level.icon,
-                unfoldedIconColor = level.iconColor,
+                icon = when (level.name) {
+                    "Básico" -> R.drawable.basic_icon
+                    "Intermedio" -> R.drawable.intermediate_icon
+                    "Avanzado" -> R.drawable.advanced_icon
+                    else -> 0
+                },
+                unfoldedIconColor = when (level.name) {
+                    "Básico" -> LuminGreen
+                    "Intermedio" -> LuminYellow
+                    "Avanzado" -> LuminRed
+                    else -> LuminWhite
+                },
                 foldedIconColor = LuminBlack,
                 unfoldedBackgroundColor = LuminDarkestGray,
-                foldedBackgroundColor = level.buttonColor,
+                foldedBackgroundColor = when (level.name) {
+                    "Básico" -> LuminGreen
+                    "Intermedio" -> LuminYellow
+                    "Avanzado" -> LuminRed
+                    else -> LuminWhite
+                },
                 unfoldedTextColor = LuminWhite,
                 foldedTextColor = LuminBlack,
                 levelId = level.id,

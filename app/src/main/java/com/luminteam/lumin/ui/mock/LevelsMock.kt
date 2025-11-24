@@ -11,9 +11,6 @@ val BasicMockLevel = LevelData(
     name = "Básico",
     description = "Lo fundamental",
     sections = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8),
-    icon = R.drawable.basic_icon,
-    iconColor = LuminGreen,
-    buttonColor = LuminGreen
 )
 
 val IntermediateMockLevel = LevelData(
@@ -21,9 +18,6 @@ val IntermediateMockLevel = LevelData(
     name = "Intermedio",
     description = "Sube tu nivel",
     sections = listOf(9, 10, 11, 12, 13, 14, 15),
-    icon = R.drawable.intermediate_icon,
-    iconColor = LuminYellow,
-    buttonColor = LuminYellow
 )
 
 val AdvancedMOckLevel = LevelData(
@@ -31,7 +25,4 @@ val AdvancedMOckLevel = LevelData(
     name = "Avanzado",
     description = "Conviértete en experto",
     sections = listOf(16, 17, 18, 19, 20),
-    icon = R.drawable.advanced_icon,
-    iconColor = LuminRed,
-    buttonColor = LuminRed
 )

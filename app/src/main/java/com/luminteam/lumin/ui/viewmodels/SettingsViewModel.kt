@@ -15,17 +15,17 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 
+data class UIState(
+    val isSfxOn: Boolean = true,
+    val isVibrationOn: Boolean = true,
+    val isDailyReminderOn: Boolean = true,
+    val dailyReminderTime: String = "20:00",
+)
+
 class SettingsViewModel(
     private val repository: SettingsRepository,
     private val alarmScheduler: AlarmScheduler,
 ) : ViewModel() {
-    data class UIState(
-        val isSfxOn: Boolean = true,
-        val isVibrationOn: Boolean = true,
-        val isDailyReminderOn: Boolean = true,
-        val dailyReminderTime: String = "20:00",
-    )
-
     val uiState: StateFlow<UIState> = combine(
         repository.isSfxOn,
         repository.isVibrationOn,
