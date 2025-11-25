@@ -125,6 +125,7 @@ fun SettingsScreen(
                 contentTheme = LuminContentThemeButtonDefaults.dark,
                 onClick = {
                     vibrate()
+                    viewModel.logout()
                 },
             )
         }

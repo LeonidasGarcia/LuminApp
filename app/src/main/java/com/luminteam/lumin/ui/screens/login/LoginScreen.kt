@@ -38,8 +38,7 @@ data object LoginScreen : NavKey
 
 @Composable
 fun LoginScreen(
-    signInViewModel: SignInViewModel,
-    goRoot: () -> Unit,
+    signInViewModel: SignInViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
     val scope = rememberCoroutineScope()
@@ -56,12 +55,14 @@ fun LoginScreen(
             val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
             val serverAuthCode: String? = account.serverAuthCode
 
+            Log.d("Foto de perfil", account.photoUrl.toString())
+
             if (serverAuthCode != null) {
                 Log.d("Autenticacion", "Server Auth Code obtenido: $serverAuthCode")
 
                 scope.launch {
+                    signInViewModel.saveProfilePhotoUri(account.photoUrl.toString())
                     signInViewModel.authenticateWithServerAuthCode(serverAuthCode)
-                    goRoot()
                 }
             }
         } catch (e: ApiException) {
@@ -87,7 +88,6 @@ fun LoginScreen(
                 val options = GoogleSignInOptions.Builder(
                     GoogleSignInOptions.DEFAULT_SIGN_IN
                 )
-                    // no estoy seguro
                     .requestIdToken(tokenServer)
                     .requestEmail()
                     .requestProfile()

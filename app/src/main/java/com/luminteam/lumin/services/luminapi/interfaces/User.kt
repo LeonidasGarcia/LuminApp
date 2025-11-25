@@ -8,6 +8,6 @@ import com.luminteam.lumin.ui.domain.UserMetricsDataUiState
 interface User {
     suspend fun getUserMetrics(jwt: String): UserMetricsDataUiState
     suspend fun getUserData(jwt: String): UserDataUiState
-    suspend fun getCalifications(jwt: String): List<Calification>
+    suspend fun getCalifications(jwt: String, id: Int): List<Calification>
     suspend fun postCreateSubscription()
 }

@@ -18,6 +18,7 @@ import com.luminteam.lumin.ui.theme.LuminWhite
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminDarkestGray
 import com.luminteam.lumin.ui.theme.LuminGreen
+import com.luminteam.lumin.ui.theme.LuminOrange
 import com.luminteam.lumin.ui.theme.LuminRed
 import com.luminteam.lumin.ui.theme.LuminYellow
 import com.luminteam.lumin.ui.viewmodels.ContentViewModel
@@ -88,7 +89,7 @@ fun LevelsScreen(
                 unfoldedIconColor = when (level.name) {
                     "Básico" -> LuminGreen
                     "Intermedio" -> LuminYellow
-                    "Avanzado" -> LuminRed
+                    "Avanzado" -> LuminOrange
                     else -> LuminWhite
                 },
                 foldedIconColor = LuminBlack,
@@ -96,7 +97,7 @@ fun LevelsScreen(
                 foldedBackgroundColor = when (level.name) {
                     "Básico" -> LuminGreen
                     "Intermedio" -> LuminYellow
-                    "Avanzado" -> LuminRed
+                    "Avanzado" -> LuminOrange
                     else -> LuminWhite
                 },
                 unfoldedTextColor = LuminWhite,

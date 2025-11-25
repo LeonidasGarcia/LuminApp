@@ -34,8 +34,8 @@ class UserRepository(private val client: HttpClient) : User {
         return response.body<UserMetricsDataUiState>()
     }
 
-    override suspend fun getCalifications(jwt: String): List<Calification> {
-        val response = client.get("/agente/qualifications") {
+    override suspend fun getCalifications(jwt: String, id: Int): List<Calification> {
+        val response = client.get("/user/qualifications?user_id=$id") {
             header("Authorization", "Bearer $jwt")
         }
 

@@ -26,7 +26,8 @@ data object ProfileNavigation : NavKey
 fun ProfileNavigation(
     rootViewModel: RootNavigationViewModel,
     userViewModel: UserViewModel,
-    contentViewModel: ContentViewModel
+    contentViewModel: ContentViewModel,
+    profilePhotoUri: String
 ) {
     val updateCurrentBackAction: (TopBarBackAction) -> Unit = { backAction ->
         rootViewModel.updateCurrentTopBarBackAction(backAction)
@@ -71,7 +72,8 @@ fun ProfileNavigation(
                     contentViewModel = contentViewModel,
                     navigateUltimatePurchase = {
                         backStack.add(LuminUltimatePurchaseScreen)
-                    }
+                    },
+                    profilePhotoUri = profilePhotoUri
                 )
             }
             entry<LuminUltimatePurchaseScreen> {

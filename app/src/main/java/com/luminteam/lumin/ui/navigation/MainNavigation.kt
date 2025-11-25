@@ -2,8 +2,10 @@ package com.luminteam.lumin.ui.navigation
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.ContentView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,20 +57,15 @@ fun MainNavigation(
     signInViewModel: SignInViewModel,
     userViewModel: UserViewModel,
     settingsViewModel: SettingsViewModel,
-
+    contentViewModel: ContentViewModel,
     modifier: Modifier = Modifier
 ) {
     val loginRepository = LocalLoginRepository.current
     val token by loginRepository.jwt.collectAsStateWithLifecycle(initialValue = null)
 
-    var startDestination = if (!token.isNullOrEmpty()) {
-        RootNavigation
-    } else {
-        LoginScreen
-    }
-
-    val backStack = rememberNavBackStack(startDestination)
     val systemUiController = rememberSystemUiController()
+
+    Log.d("Token revision", token.toString())
 
     SideEffect {
         systemUiController.setStatusBarColor(
@@ -76,36 +73,18 @@ fun MainNavigation(
         )
     }
 
-    Scaffold { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .background(color = LuminBackground)
-                .fillMaxSize()
-        ) {
-            NavDisplay(
-                backStack = backStack,
-                modifier = Modifier.weight(1f),
-                entryDecorators = listOf(
-                    rememberSaveableStateHolderNavEntryDecorator(),
-                    rememberViewModelStoreNavEntryDecorator()
-                ), entryProvider = entryProvider {
-                    entry<LoginScreen> {
-                        LoginScreen(
-                            signInViewModel = signInViewModel,
-                            goRoot = {
-                            backStack.removeLastOrNull()
-                            backStack.add(RootNavigation)
-                        })
-                    }
-                    entry<RootNavigation> {
-                        RootNavigation(
-                            userViewModel = userViewModel,
-                            settingsViewModel = settingsViewModel
-                        )
-                    }
-                }
-            )
-        }
+    if (!token.isNullOrEmpty()) {
+        Log.d("Token Revision", token.toString())
+        RootNavigation(
+            userViewModel = userViewModel,
+            settingsViewModel = settingsViewModel,
+            contentViewModel = contentViewModel
+        )
+        return
     }
+
+    Log.d("Token Revision", "Cargando login")
+    LoginScreen(
+        signInViewModel = signInViewModel
+    )
 }

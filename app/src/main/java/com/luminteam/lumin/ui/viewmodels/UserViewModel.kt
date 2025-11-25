@@ -28,25 +28,7 @@ class UserViewModel(
     private val loginRepository: LoginRepository
 ) : ViewModel() {
     init {
-        /*
-        viewModelScope.launch {
-            val jwt = loginRepository.jwt.first() //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MSIsImV4cCI6MTc2Mzk1OTE1M30.AMksUSj0KNrh5_82q3NE5YfFNZkD5ADFFT38qgkTVKo"
-            val userMetrics = userRepository.getUserMetrics(jwt)
 
-            _currentUserDataUiState.value = userRepository.getUserData(jwt)
-            _currentUserMetricsDataUiState.value = userMetrics
-            _currentUserCalifications.value =
-                CalificationsUiState(
-                    califications = userRepository.getCalifications(jwt)
-                        .associateBy { it.sectionId })
-            _currentUserContentState.value = CurrentContentUiState(
-                currentLevelId = userMetrics.currentLevelId,
-                currentSectionId = userMetrics.currentPageId,
-                currentPageId = userMetrics.currentPageId
-            )
-            Log.d("Datos", "Datos obtenidos: $userMetrics")
-        }
-         */
     }
 
     private val _currentUserDataUiState = MutableStateFlow<UserDataUiState>(
@@ -87,6 +69,32 @@ class UserViewModel(
 
     fun updateCurrentContentState() {
         // aquí se deben hacer llamadas al servidor de la app
+    }
+
+    fun loadUserData() {
+        Log.d("Datos", "Cargando datos de usuario")
+        viewModelScope.launch {
+            val jwt = loginRepository.jwt.first()
+            val userMetrics = userRepository.getUserMetrics(jwt)
+            val userData = userRepository.getUserData(jwt)
+
+            _currentUserDataUiState.value = userData
+            _currentUserMetricsDataUiState.value = userMetrics
+            _currentUserCalifications.value =
+                CalificationsUiState(
+                    califications = userRepository.getCalifications(jwt, userData.id)
+                        .associateBy { it.sectionId })
+            _currentUserContentState.value = CurrentContentUiState(
+                currentLevelId = userMetrics.currentLevelId,
+                currentSectionId = userMetrics.currentPageId,
+                currentPageId = userMetrics.currentPageId
+            )
+            Log.d("Datos", "Datos obtenidos: $userMetrics")
+        }
+    }
+
+    suspend fun getProfilePhotoUri(): String {
+        return loginRepository.profilePhotoUri.first()
     }
 
     companion object {

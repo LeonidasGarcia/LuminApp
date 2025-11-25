@@ -56,6 +56,10 @@ class SignInViewModel(
         }
     }
 
+    suspend fun saveProfilePhotoUri(uri: String) {
+        loginRepository.saveProfilePhotoUri(uri)
+    }
+
 
     companion object {
         fun provideFactory(repository: LoginRepository): ViewModelProvider.Factory =

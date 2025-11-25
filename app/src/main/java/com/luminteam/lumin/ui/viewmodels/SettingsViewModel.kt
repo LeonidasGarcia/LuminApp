@@ -46,6 +46,12 @@ class SettingsViewModel(
         initialValue = UIState()
     )
 
+    fun logout() {
+        viewModelScope.launch {
+            loginRepository.deleteJWT()
+        }
+    }
+
     fun toggleSfx(value: Boolean) {
         viewModelScope.launch {
             settingsRepository.saveSfx(value)

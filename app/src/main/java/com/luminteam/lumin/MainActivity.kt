@@ -23,6 +23,7 @@ import com.luminteam.lumin.services.luminapi.repositories.authRepository
 import com.luminteam.lumin.ui.navigation.MainNavigation
 import com.luminteam.lumin.ui.navigation.RootNavigation
 import com.luminteam.lumin.ui.theme.LuminTheme
+import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.SettingsViewModel
 import com.luminteam.lumin.ui.viewmodels.SignInViewModel
 import com.luminteam.lumin.ui.viewmodels.UserViewModel
@@ -69,6 +70,12 @@ class MainActivity : ComponentActivity() {
                         )
                     )
 
+                    val contentViewModel: ContentViewModel = viewModel(
+                        factory = ContentViewModel.provideFactory(
+                            loginRepository
+                        )
+                    )
+
                     val settingsViewModel: SettingsViewModel = viewModel(
                         factory = SettingsViewModel.provideFactory(
                             settingsRepository, loginRepository, alarmScheduler,
@@ -79,6 +86,7 @@ class MainActivity : ComponentActivity() {
                         signInViewModel = signInViewModel,
                         userViewModel = userViewModel,
                         settingsViewModel = settingsViewModel,
+                        contentViewModel = contentViewModel
                     )
                 }
             }

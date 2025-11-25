@@ -2,6 +2,7 @@ package com.luminteam.lumin.ui.navigation
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -76,6 +77,11 @@ fun RootNavigation(
         }
     }
 
+    LaunchedEffect(null) {
+        userViewModel.loadUserData()
+        contentViewModel.loadContent()
+    }
+
     LaunchedEffect(Unit) {
         val hasPermission = ContextCompat.checkSelfPermission(
             context,
@@ -90,6 +96,8 @@ fun RootNavigation(
 
     val backStack = rememberNavBackStack(HomeNavigation)
     val systemUiController = rememberSystemUiController()
+
+    var profilePhotoUri by remember { mutableStateOf<String>("") }
 
     var currentRoute by remember { mutableStateOf("MainScreen") }
 
@@ -139,6 +147,11 @@ fun RootNavigation(
         levelBackStack.add(TheoryScreen)
         currentRoute = "SectionsScreen"
 
+    }
+
+    LaunchedEffect(null) {
+        profilePhotoUri = userViewModel.getProfilePhotoUri()
+        Log.d("Foto de perfil", profilePhotoUri)
     }
 
     SideEffect {
@@ -230,6 +243,7 @@ fun RootNavigation(
                                     rootViewModel = viewModel,
                                     userViewModel = userViewModel,
                                     contentViewModel = contentViewModel,
+                                    profilePhotoUri = profilePhotoUri
                                 )
                             }
                             entry<LevelNavigation> {

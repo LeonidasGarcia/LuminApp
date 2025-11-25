@@ -15,6 +15,10 @@ class LoginRepository(
         preferences[PreferenceKeys.JWT] ?: ""
     }
 
+    val profilePhotoUri: Flow<String> = context.dataStore.data.map { preferences ->
+        preferences[PreferenceKeys.PROFILE_PHOTO_URI] ?: ""
+    }
+
     suspend fun saveJWT(value: String) {
         context.dataStore.edit { preferences ->
             preferences[PreferenceKeys.JWT] = value
@@ -24,6 +28,18 @@ class LoginRepository(
     suspend fun deleteJWT() {
         context.dataStore.edit { preferences ->
             preferences.remove(PreferenceKeys.JWT)
+        }
+    }
+
+    suspend fun saveProfilePhotoUri(value: String) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferenceKeys.PROFILE_PHOTO_URI] = value
+        }
+    }
+
+    suspend fun deleteProfilePhotoUri() {
+        context.dataStore.edit { preferences ->
+            preferences.remove(PreferenceKeys.PROFILE_PHOTO_URI)
         }
     }
 }

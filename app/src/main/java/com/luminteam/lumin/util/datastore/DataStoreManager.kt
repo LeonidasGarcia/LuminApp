@@ -18,4 +18,5 @@ object PreferenceKeys {
 
     // Otras cosas
     val JWT = stringPreferencesKey("jwt")
+    val PROFILE_PHOTO_URI = stringPreferencesKey("profile_photo_uri")
 }

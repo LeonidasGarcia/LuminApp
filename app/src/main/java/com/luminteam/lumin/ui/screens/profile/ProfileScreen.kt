@@ -1,19 +1,31 @@
 package com.luminteam.lumin.ui.screens.profile
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
+import coil3.compose.AsyncImage
 import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.components.Separator
 import com.luminteam.lumin.ui.components.SmallText
@@ -47,7 +59,8 @@ data class MetricCardData(
 fun ProfileScreen(
     userViewModel: UserViewModel,
     contentViewModel: ContentViewModel,
-    navigateUltimatePurchase: () -> Unit
+    navigateUltimatePurchase: () -> Unit,
+    profilePhotoUri: String
 ) {
     val currentUserData = userViewModel.currentUserData.collectAsStateWithLifecycle().value
     val currentUserMetricsData =
@@ -71,7 +84,7 @@ fun ProfileScreen(
             iconColor = when (currentLevel.name) {
                 "Básico" -> LuminGreen
                 "Intermedio" -> LuminYellow
-                "Avanzado" -> LuminRed
+                "Avanzado" -> LuminOrange
                 else -> LuminWhite
             },
             valueText = currentLevel.name
@@ -120,13 +133,15 @@ fun ProfileScreen(
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                /*Image(
-                    painter = painterResource(id = currentUserData.userIcon),
-                    contentDescription = "Foto de perfil placeholder",
-                    modifier = Modifier
-                        .size(90.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                )*/
+                if (profilePhotoUri.isNotEmpty()) {
+                    AsyncImage(
+                        model = profilePhotoUri,
+                        contentDescription = "Foto de perfil",
+                        modifier = Modifier
+                            .size(90.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                    )
+                }
                 Column(
                     verticalArrangement = Arrangement.spacedBy(5.dp),
                     modifier = Modifier.weight(1f)
@@ -155,8 +170,8 @@ fun ProfileScreen(
             ) {
                 metricCardsData.chunked(2).forEach { pair ->
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(20.dp),
-                        modifier = Modifier.height(100.dp)
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier.height(120.dp)
                     ) {
                         pair.forEach { (text, valueIcon, iconColor, valueText) ->
                             MetricCard(
