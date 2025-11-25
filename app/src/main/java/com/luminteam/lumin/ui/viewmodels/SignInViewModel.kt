@@ -11,7 +11,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
-import com.luminteam.lumin.data.repository.SettingsRepository
+import com.luminteam.lumin.data.repository.LoginRepository
 import com.luminteam.lumin.services.luminapi.dto.AuthCode
 import com.luminteam.lumin.services.luminapi.repositories.authRepository
 import io.ktor.client.HttpClient
@@ -43,24 +43,26 @@ data class AuthResponse(
     val message: String,
 )
 
-class SignInViewModel(/*private val settingsRepository: SettingsRepository*/) : ViewModel() {
+class SignInViewModel(
+    private val loginRepository: LoginRepository
+) : ViewModel() {
     private val auth: FirebaseAuth = Firebase.auth
-    private val _loading = MutableLiveData(false)
+    private val loading = MutableLiveData(false)
 
-    // guardar jwt
-    suspend fun authenticateWithServerAuthCode(serverAuthCode: String) {
-        //val loginResult = authRepository.postGoogleLogin(AuthCode(serverAuthCode))
-        //settingsRepository.saveJWT(loginResult.token)
+    fun authenticateWithServerAuthCode(serverAuthCode: String) {
+        viewModelScope.launch {
+            val loginResult = authRepository.postGoogleLogin(AuthCode(serverAuthCode))
+            loginRepository.saveJWT(loginResult.token)
+        }
     }
 
-    /*
+
     companion object {
-        fun provideFactory(repository: SettingsRepository): ViewModelProvider.Factory =
+        fun provideFactory(repository: LoginRepository): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     SignInViewModel(repository)
                 }
             }
     }
-     */
 }

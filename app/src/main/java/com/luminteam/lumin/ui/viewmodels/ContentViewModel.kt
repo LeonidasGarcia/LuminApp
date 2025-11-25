@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 class ContentViewModel : ViewModel() {
 
     init {
+        /*
         viewModelScope.launch {
             val jwt =
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MSIsImV4cCI6MTc2Mzk1OTE1M30.AMksUSj0KNrh5_82q3NE5YfFNZkD5ADFFT38qgkTVKo"
@@ -34,6 +35,7 @@ class ContentViewModel : ViewModel() {
                 SectionDataUiState(content.sections.associateBy { it.id })
             _pages.value = PageDataUiState(content.pages.associateBy { it.id })
         }
+         */
     }
 
     private val _levels =

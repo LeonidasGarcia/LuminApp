@@ -38,7 +38,7 @@ data object LoginScreen : NavKey
 
 @Composable
 fun LoginScreen(
-    viewModel: SignInViewModel = viewModel(),
+    signInViewModel: SignInViewModel,
     goRoot: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -60,7 +60,7 @@ fun LoginScreen(
                 Log.d("Autenticacion", "Server Auth Code obtenido: $serverAuthCode")
 
                 scope.launch {
-                    viewModel.authenticateWithServerAuthCode(serverAuthCode)
+                    signInViewModel.authenticateWithServerAuthCode(serverAuthCode)
                     goRoot()
                 }
             }

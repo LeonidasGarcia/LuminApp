@@ -6,20 +6,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
 import com.luminteam.lumin.R
-import com.luminteam.lumin.data.repository.LocalAlarmScheduler
-import com.luminteam.lumin.data.repository.LocalSettingsRepository
-import com.luminteam.lumin.data.repository.LocalSoundManager
 import com.luminteam.lumin.data.repository.LocalVibrationManager
 import com.luminteam.lumin.ui.components.LuminButtonAlt
 import com.luminteam.lumin.ui.components.LuminContentThemeButtonDefaults
+import com.luminteam.lumin.ui.components.LuminModal
 import com.luminteam.lumin.ui.components.Separator
 import com.luminteam.lumin.ui.components.TitleText
 import com.luminteam.lumin.ui.screens.settings.components.SwitchOption
@@ -38,18 +37,12 @@ data object SettingsScreen : NavKey
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel? = null,
+    viewModel: SettingsViewModel,
 ) {
-    val repository = LocalSettingsRepository.current
-    val context = LocalContext.current
-    val scheduler = LocalAlarmScheduler.current
-    val vibrator = LocalVibrationManager.current
-    val sound = LocalSoundManager.current
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val finalViewModel = viewModel ?: viewModel(
-        factory = SettingsViewModel.provideFactory(repository, scheduler)
-    )
-    val state by finalViewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val vibrator = LocalVibrationManager.current
 
     val formattedTime = remember(state.dailyReminderTime) {
         try {
@@ -59,6 +52,9 @@ fun SettingsScreen(
             "--:--"
         }
     }
+
+    var isShown by remember { mutableStateOf(false) }
+
 
     fun vibrate() {
         if (state.isVibrationOn) {
@@ -76,13 +72,23 @@ fun SettingsScreen(
         TimePickerDialog(
             context,
             { _, hour, minute ->
-                finalViewModel.setDailyReminderTime(hour, minute)
+                viewModel.setDailyReminderTime(hour, minute)
             },
             current.hour,
             current.minute,
             false
         ).show()
     }
+
+    LuminModal(
+        isShown = isShown,
+        title = "¿Eliminar cuenta?",
+        description = "Perderás todo tu progreso, racha y logros. Esta acción no se puede deshacer.",
+        confirmText = "Si. Eliminar",
+        cancelText = "No. Cancelar",
+        onDismissRequest = { isShown = false },
+        onConfirm = { /* Aca borras la cuenta :v */ }
+    )
 
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -95,14 +101,14 @@ fun SettingsScreen(
             SwitchOption(
                 text = "Efectos de sonido",
                 isActived = state.isSfxOn,
-                onClick = { finalViewModel.toggleSfx(it) }
+                onClick = { viewModel.toggleSfx(it) }
             )
         }
         item {
             SwitchOption(
                 text = "Vibración",
                 isActived = state.isVibrationOn,
-                onClick = { finalViewModel.toggleVibration(it) }
+                onClick = { viewModel.toggleVibration(it) }
             )
         }
         item {
@@ -132,7 +138,7 @@ fun SettingsScreen(
             SwitchOption(
                 text = "Recordatorio diario",
                 isActived = state.isDailyReminderOn,
-                onClick = { finalViewModel.toggleDailyReminder(it) }
+                onClick = { viewModel.toggleDailyReminder(it) }
             )
         }
         item {
@@ -183,6 +189,7 @@ fun SettingsScreen(
                 color = LuminRed,
                 onClick = {
                     vibrate()
+                    isShown = true
                 },
             )
         }

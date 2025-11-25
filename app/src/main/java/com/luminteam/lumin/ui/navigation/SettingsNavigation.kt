@@ -16,6 +16,7 @@ import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.domain.TopBarBackAction
 import com.luminteam.lumin.ui.domain.TitleTopBar
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
+import com.luminteam.lumin.ui.viewmodels.SettingsViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -23,7 +24,8 @@ data object SettingsNavigation : NavKey
 
 @Composable
 fun SettingsNavigation(
-    rootViewModel: RootNavigationViewModel
+    rootViewModel: RootNavigationViewModel,
+    settingsViewModel: SettingsViewModel,
 ) {
     val updateCurrentBackAction: (TopBarBackAction) -> Unit = { backAction ->
         rootViewModel.updateCurrentTopBarBackAction(backAction)
@@ -63,7 +65,9 @@ fun SettingsNavigation(
                         iconTitle = R.drawable.setttings_icon
                     )
                 )
-                SettingsScreen()
+                SettingsScreen(
+                    viewModel = settingsViewModel
+                )
             }
         }
     )

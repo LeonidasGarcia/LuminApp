@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.luminteam.lumin.data.repository.SettingsRepository
+import com.luminteam.lumin.data.repository.LoginRepository
+import com.luminteam.lumin.services.luminapi.repositories.AuthRepository
+import com.luminteam.lumin.services.luminapi.repositories.authRepository
 import com.luminteam.lumin.services.luminapi.repositories.userRepository
 import com.luminteam.lumin.ui.domain.CalificationsUiState
 import com.luminteam.lumin.ui.domain.CurrentContentUiState
@@ -22,14 +24,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-// nuevo viewmodel para separar todo
-
-class UserViewModel(/*private val settingsRepository: SettingsRepository*/) : ViewModel() {
+class UserViewModel(
+    private val loginRepository: LoginRepository
+) : ViewModel() {
     init {
+        /*
         viewModelScope.launch {
-            val jwt =
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MSIsImV4cCI6MTc2Mzk1OTE1M30.AMksUSj0KNrh5_82q3NE5YfFNZkD5ADFFT38qgkTVKo"
-
+            val jwt = loginRepository.jwt.first() //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MSIsImV4cCI6MTc2Mzk1OTE1M30.AMksUSj0KNrh5_82q3NE5YfFNZkD5ADFFT38qgkTVKo"
             val userMetrics = userRepository.getUserMetrics(jwt)
 
             _currentUserDataUiState.value = userRepository.getUserData(jwt)
@@ -43,9 +44,9 @@ class UserViewModel(/*private val settingsRepository: SettingsRepository*/) : Vi
                 currentSectionId = userMetrics.currentPageId,
                 currentPageId = userMetrics.currentPageId
             )
-
             Log.d("Datos", "Datos obtenidos: $userMetrics")
         }
+         */
     }
 
     private val _currentUserDataUiState = MutableStateFlow<UserDataUiState>(
@@ -76,7 +77,7 @@ class UserViewModel(/*private val settingsRepository: SettingsRepository*/) : Vi
         // aqui se deben hacer llamadas al servidor de la app
     }
 
-    fun UpdateUserData() {
+    fun updateUserData() {
         // aqui se deben hacer llamadas al servidor de la app
     }
 
@@ -88,17 +89,12 @@ class UserViewModel(/*private val settingsRepository: SettingsRepository*/) : Vi
         // aquí se deben hacer llamadas al servidor de la app
     }
 
-    /*
-        companion object {
-            fun provideFactory(repository: SettingsRepository): ViewModelProvider.Factory =
-                viewModelFactory {
-                    initializer {
-                        UserViewModel(repository)
-                    }
+    companion object {
+        fun provideFactory(repository: LoginRepository): ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    UserViewModel(repository)
                 }
-        }
-
-     */
-
-
+            }
+    }
 }

@@ -136,6 +136,8 @@ fun LuminSquareButtonAlt(
     contentTheme: LuminContentTheme = LuminContentThemeButtonDefaults.light,
     onClick: () -> Unit = {}
 ) {
+    val playTap = playTap()
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -145,6 +147,7 @@ fun LuminSquareButtonAlt(
             .clip(RoundedCornerShape(15.dp))
             .background(color = color)
             .clickable {
+                playTap()
                 onClick()
             },
     ) {
@@ -195,6 +198,8 @@ fun LuminSmallButton(
     buttonColor: Color = LuminCyan,
     onClick: () -> Unit = {}
 ) {
+    val playTap = playTap()
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -204,6 +209,7 @@ fun LuminSmallButton(
             .clip(RoundedCornerShape(15.dp))
             .background(color = buttonColor)
             .clickable {
+                playTap()
                 onClick()
             }
             .padding(horizontal = 20.dp)

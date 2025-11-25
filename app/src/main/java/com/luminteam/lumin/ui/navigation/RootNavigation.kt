@@ -43,6 +43,7 @@ import com.luminteam.lumin.ui.viewmodels.AIChatViewModel
 import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
+import com.luminteam.lumin.ui.viewmodels.SettingsViewModel
 import com.luminteam.lumin.ui.viewmodels.UserViewModel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
@@ -53,12 +54,16 @@ data object RootNavigation : NavKey
 @Composable
 fun RootNavigation(
     viewModel: RootNavigationViewModel = viewModel(),
-    userViewModel: UserViewModel = viewModel(),
+
+    //No debes poner viewModel por default a los que ya estan funcionales
+    userViewModel: UserViewModel,
+    settingsViewModel: SettingsViewModel,
+
     contentViewModel: ContentViewModel = viewModel(),
     aiChatViewModel: AIChatViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-    // Esto es para que lumincito te pregunte si kieres notis cuando la abras por primera vez
+    // Esto es para que Lumin te pregunte si quieres notificaciones cuando abras la app por primera vez
     val context = LocalContext.current
     val settingsRepository = LocalSettingsRepository.current
     val scope = rememberCoroutineScope()
@@ -224,23 +229,26 @@ fun RootNavigation(
                                 ProfileNavigation(
                                     rootViewModel = viewModel,
                                     userViewModel = userViewModel,
-                                    contentViewModel = contentViewModel
+                                    contentViewModel = contentViewModel,
                                 )
                             }
                             entry<LevelNavigation> {
                                 viewModel.updateShowGeneralPadding(true)
                                 LevelNavigation(
+                                    rootViewModel = viewModel,
                                     userViewModel = userViewModel,
                                     contentViewModel = contentViewModel,
                                     viewModel = levelNavigationViewModel,
-                                    rootViewModel = viewModel,
                                     levelBackStack = levelBackStack,
-                                    aiChatViewModel = aiChatViewModel
+                                    aiChatViewModel = aiChatViewModel,
                                 )
                             }
                             entry<SettingsNavigation> {
                                 viewModel.updateShowGeneralPadding(true)
-                                SettingsNavigation(rootViewModel = viewModel)
+                                SettingsNavigation(
+                                    rootViewModel = viewModel,
+                                    settingsViewModel = settingsViewModel
+                                )
                             }
                         }
                     )

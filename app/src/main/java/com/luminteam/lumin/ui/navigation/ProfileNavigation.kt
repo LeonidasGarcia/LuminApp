@@ -71,7 +71,8 @@ fun ProfileNavigation(
                     contentViewModel = contentViewModel,
                     navigateUltimatePurchase = {
                         backStack.add(LuminUltimatePurchaseScreen)
-                    })
+                    }
+                )
             }
             entry<LuminUltimatePurchaseScreen> {
                 updateCurrentBackAction() {

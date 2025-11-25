@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.luminteam.lumin.data.repository.LoginRepository
 import com.luminteam.lumin.util.alarm.AlarmScheduler
 import com.luminteam.lumin.data.repository.SettingsRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,14 +24,15 @@ data class UIState(
 )
 
 class SettingsViewModel(
-    private val repository: SettingsRepository,
+    private val settingsRepository: SettingsRepository,
+    private val loginRepository: LoginRepository,
     private val alarmScheduler: AlarmScheduler,
 ) : ViewModel() {
     val uiState: StateFlow<UIState> = combine(
-        repository.isSfxOn,
-        repository.isVibrationOn,
-        repository.isDailyReminderOn,
-        repository.dailyReminderTime,
+        settingsRepository.isSfxOn,
+        settingsRepository.isVibrationOn,
+        settingsRepository.isDailyReminderOn,
+        settingsRepository.dailyReminderTime,
     ) { sfx, vibration, reminder, reminderTime ->
         UIState(
             isSfxOn = sfx,
@@ -40,28 +42,28 @@ class SettingsViewModel(
         )
     }.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000), // Ahorra batería
+        started = SharingStarted.WhileSubscribed(1000),
         initialValue = UIState()
     )
 
     fun toggleSfx(value: Boolean) {
         viewModelScope.launch {
-            repository.saveSfx(value)
+            settingsRepository.saveSfx(value)
         }
     }
 
     fun toggleVibration(value: Boolean) {
         viewModelScope.launch {
-            repository.saveVibration(value)
+            settingsRepository.saveVibration(value)
         }
     }
 
     fun toggleDailyReminder(value: Boolean) {
         viewModelScope.launch {
-            repository.saveDailyReminder(value)
+            settingsRepository.saveDailyReminder(value)
 
             if (value) {
-                val timeString = repository.dailyReminderTime.first()
+                val timeString = settingsRepository.dailyReminderTime.first()
                 try {
                     val time = LocalTime.parse(timeString)
                     alarmScheduler.schedule(time)
@@ -77,7 +79,7 @@ class SettingsViewModel(
     fun setDailyReminderTime(hour: Int, minute: Int) {
         viewModelScope.launch {
             val time = LocalTime.of(hour, minute)
-            repository.saveDailyReminderTime(time.toString())
+            settingsRepository.saveDailyReminderTime(time.toString())
 
             if (uiState.value.isDailyReminderOn) {
                 alarmScheduler.schedule(time)
@@ -87,11 +89,12 @@ class SettingsViewModel(
 
     companion object {
         fun provideFactory(
-            repository: SettingsRepository,
+            settingsRepository: SettingsRepository,
+            loginRepository: LoginRepository,
             scheduler: AlarmScheduler,
         ): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                SettingsViewModel(repository, scheduler)
+                SettingsViewModel(settingsRepository, loginRepository, scheduler)
             }
         }
     }

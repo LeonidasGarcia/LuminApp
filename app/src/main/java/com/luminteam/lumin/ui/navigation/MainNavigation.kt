@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +31,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.luminteam.lumin.data.repository.LocalLoginRepository
 import com.luminteam.lumin.data.repository.LocalSettingsRepository
 import com.luminteam.lumin.ui.layout.BottomBar
 import com.luminteam.lumin.ui.layout.TopBar
@@ -43,14 +45,29 @@ import com.luminteam.lumin.ui.viewmodels.AIChatViewModel
 import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
+import com.luminteam.lumin.ui.viewmodels.SettingsViewModel
+import com.luminteam.lumin.ui.viewmodels.SignInViewModel
 import com.luminteam.lumin.ui.viewmodels.UserViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun MainNavigation(
+    signInViewModel: SignInViewModel,
+    userViewModel: UserViewModel,
+    settingsViewModel: SettingsViewModel,
+
     modifier: Modifier = Modifier
 ) {
-    val backStack = rememberNavBackStack(HomeNavigation)
+    val loginRepository = LocalLoginRepository.current
+    val token by loginRepository.jwt.collectAsStateWithLifecycle(initialValue = null)
+
+    var startDestination = if (!token.isNullOrEmpty()) {
+        RootNavigation
+    } else {
+        LoginScreen
+    }
+
+    val backStack = rememberNavBackStack(startDestination)
     val systemUiController = rememberSystemUiController()
 
     SideEffect {
@@ -74,13 +91,18 @@ fun MainNavigation(
                     rememberViewModelStoreNavEntryDecorator()
                 ), entryProvider = entryProvider {
                     entry<LoginScreen> {
-                        LoginScreen(goRoot = {
+                        LoginScreen(
+                            signInViewModel = signInViewModel,
+                            goRoot = {
                             backStack.removeLastOrNull()
                             backStack.add(RootNavigation)
                         })
                     }
                     entry<RootNavigation> {
-                        RootNavigation()
+                        RootNavigation(
+                            userViewModel = userViewModel,
+                            settingsViewModel = settingsViewModel
+                        )
                     }
                 }
             )
