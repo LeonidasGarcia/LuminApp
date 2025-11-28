@@ -72,6 +72,7 @@ val LocalSoundManager = staticCompositionLocalOf<SoundManager> {
 
 data class AppConfig(
     val isSfxOn: Boolean = true,
+    val isVibrationOn: Boolean = true,
 )
 
 val LocalAppConfig = staticCompositionLocalOf { AppConfig() }

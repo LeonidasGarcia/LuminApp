@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import com.luminteam.lumin.R
+import com.luminteam.lumin.data.repository.LocalAppConfig
 import com.luminteam.lumin.data.repository.LocalVibrationManager
 import com.luminteam.lumin.ui.components.LuminButtonAlt
 import com.luminteam.lumin.ui.components.LuminContentThemeButtonDefaults
@@ -41,6 +42,7 @@ fun SettingsScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val config = LocalAppConfig.current
     val context = LocalContext.current
     val vibrator = LocalVibrationManager.current
 
@@ -57,7 +59,7 @@ fun SettingsScreen(
 
 
     fun vibrate() {
-        if (state.isVibrationOn) {
+        if (config.isVibrationOn) {
             vibrator.vibrate()
         }
     }

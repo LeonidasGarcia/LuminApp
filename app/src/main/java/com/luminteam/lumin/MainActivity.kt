@@ -44,8 +44,11 @@ class MainActivity : ComponentActivity() {
         val soundManager = SoundManager(applicationContext)
 
         setContent {
+            // Config global
             val isSfxOn by settingsRepository.isSfxOn.collectAsState(initial = true)
-            val appConfig = AppConfig(isSfxOn = isSfxOn)
+            val isVibrationOn by settingsRepository.isVibrationOn.collectAsState(initial = true)
+
+            val appConfig = AppConfig(isSfxOn = isSfxOn, isVibrationOn = isVibrationOn)
 
             CompositionLocalProvider(
                 // Los repos

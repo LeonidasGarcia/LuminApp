@@ -31,6 +31,7 @@ fun LoginHeader(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LoginImageHeader()
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "Bienvenido a Lumin",
             color = LuminWhite,
