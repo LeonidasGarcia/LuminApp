@@ -17,6 +17,7 @@ data class UserDataUiState(
 data class UserMetricsDataUiState(
     val currentLevelId: Int,
     val succededSectionsCount: Int,
+    val currentSectionId: Int,
     val currentPageId: Int,
     val averageScore: Float,
     val totalPracticeRetries: Int,

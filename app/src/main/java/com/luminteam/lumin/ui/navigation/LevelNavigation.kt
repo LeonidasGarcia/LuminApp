@@ -70,6 +70,8 @@ fun LevelNavigation(
         rootViewModel.updateShowTopBarRightButton(it)
     }
 
+    val userId = userViewModel.currentUserData.collectAsStateWithLifecycle().value.id
+
     val currentAppContentState =
         viewModel.currentAppContentState.collectAsStateWithLifecycle().value
 
@@ -194,19 +196,40 @@ fun LevelNavigation(
             }
 
             entry<PracticeResultsScreen> {
+
+                LaunchedEffect(Unit) {
+                    val userId = userId
+                    val sectionId = currentAppContentState.currentSectionId!!
+
+                    viewModel.loadPracticeResults(userId = userId, sectionId = sectionId)
+                }
+
                 updateCurrentBackAction() {
                     backStack.removeLastOrNull()
                 }
                 updateCanGoBack(true)
                 updateShowBottomBar(true)
 
-                viewModel.loadMockResults()
-                PracticeResultsScreen(
-                    viewModel = viewModel,
-                    navigateFeedback = {
-                        backStack.add(AiFeedbackChatScreen)
+                //viewModel.loadMockResults()
+
+                val practiceResults =
+                    viewModel.questionsResultsUiState.collectAsStateWithLifecycle().value
+
+                Log.d("Results", practiceResults.questionsResults.toString())
+
+                if (practiceResults.questionsResults.isEmpty()) {
+                    Text("cargando resultados...")
+                } else {
+                    LaunchedEffect(Unit) {
+                        userViewModel.loadUserData()
                     }
-                )
+                    PracticeResultsScreen(
+                        viewModel = viewModel,
+                        navigateFeedback = {
+                            backStack.add(AiFeedbackChatScreen)
+                        }
+                    )
+                }
             }
             entry<SectionsScreen> {
                 Log.d("revision", "section cargado")

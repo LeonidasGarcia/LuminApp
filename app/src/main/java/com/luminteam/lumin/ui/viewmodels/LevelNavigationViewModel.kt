@@ -7,21 +7,28 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.luminteam.lumin.data.repository.LoginRepository
+import com.luminteam.lumin.services.luminapi.dto.AnswerRequest
+import com.luminteam.lumin.services.luminapi.dto.CompleteTheCodeAnswerRequest
 import com.luminteam.lumin.services.luminapi.dto.CompleteTheCodeResponse
 import com.luminteam.lumin.services.luminapi.dto.ContextData
 import com.luminteam.lumin.services.luminapi.dto.ContextDataRequest
+import com.luminteam.lumin.services.luminapi.dto.FixTheCodeAnswerRequest
 import com.luminteam.lumin.services.luminapi.dto.FixTheCodeResponse
+import com.luminteam.lumin.services.luminapi.dto.FreeResponseAnswerRequest
 import com.luminteam.lumin.services.luminapi.dto.FreeResponseResponse
+import com.luminteam.lumin.services.luminapi.dto.PracticeResponse
+import com.luminteam.lumin.services.luminapi.dto.QuestionResponse
+import com.luminteam.lumin.services.luminapi.dto.SingleSelectionAnswerRequest
 import com.luminteam.lumin.services.luminapi.dto.SingleSelectionResponse
+import com.luminteam.lumin.services.luminapi.dto.UserData
+import com.luminteam.lumin.services.luminapi.dto.PracticeResultsRequest
 import com.luminteam.lumin.services.luminapi.repositories.aIRepository
-import com.luminteam.lumin.services.luminapi.repositories.userRepository
-import com.luminteam.lumin.ui.domain.CalificationsUiState
 import com.luminteam.lumin.ui.domain.CurrentContentUiState
-import com.luminteam.lumin.ui.navigation.LevelNavigation
-import com.luminteam.lumin.ui.screens.learn.practice.components.questions.SingleSelection
-import com.luminteam.lumin.ui.screens.learn.practice.domain.Answer
+import com.luminteam.lumin.ui.screens.learn.practice.domain.CompleteTheCodeAnswer
 import com.luminteam.lumin.ui.screens.learn.practice.domain.CompleteTheCodeQuestion
+import com.luminteam.lumin.ui.screens.learn.practice.domain.FixTheCodeAnswer
 import com.luminteam.lumin.ui.screens.learn.practice.domain.FixTheCodeQuestion
+import com.luminteam.lumin.ui.screens.learn.practice.domain.FreeResponseAnswer
 import com.luminteam.lumin.ui.screens.learn.practice.domain.FreeResponseQuestion
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Indent
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Line
@@ -30,6 +37,7 @@ import com.luminteam.lumin.ui.screens.learn.practice.domain.Question
 import com.luminteam.lumin.ui.screens.learn.practice.domain.QuestionsResultsUiState
 import com.luminteam.lumin.ui.screens.learn.practice.domain.QuestionsUiState
 import com.luminteam.lumin.ui.screens.learn.practice.domain.ResultType
+import com.luminteam.lumin.ui.screens.learn.practice.domain.SingleSelectionAnswer
 import com.luminteam.lumin.ui.screens.learn.practice.domain.SingleSelectionQuestion
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Token
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Word
@@ -52,6 +60,9 @@ val wrongCode = """def hola_mundo():
 class LevelNavigationViewModel(
     private val loginRepository: LoginRepository
 ) : ViewModel() {
+    private val _practiceResponseState = MutableStateFlow(PracticeResponse(questions = listOf()))
+    val practiceResponseState: StateFlow<PracticeResponse> = _practiceResponseState.asStateFlow()
+
     private val _currentAppContentState = MutableStateFlow(CurrentContentUiState())
     val currentAppContentState: StateFlow<CurrentContentUiState> =
         _currentAppContentState.asStateFlow()
@@ -148,9 +159,37 @@ class LevelNavigationViewModel(
         return !(questions.isEmpty() || questionId >= questions.size || questionId < 0)
     }
 
-    fun getQuestionAnswers(): List<Answer> {
+    fun getQuestionAnswers(): List<AnswerRequest> {
         return questionsUiState.value.questions.map { question ->
-            question.answer
+            val answer = question.answer
+
+            return@map when (answer) {
+                is SingleSelectionAnswer ->
+                    SingleSelectionAnswerRequest(
+                        questionId = question.id,
+                        selection = answer.selection!!
+                    )
+
+                is FreeResponseAnswer ->
+                    FreeResponseAnswerRequest(
+                        questionId = question.id,
+                        answer = answer.answer
+                    )
+
+                is FixTheCodeAnswer ->
+                    FixTheCodeAnswerRequest(
+                        questionId = question.id,
+                        answer = answer.correctedCode
+                    )
+
+                is CompleteTheCodeAnswer ->
+                    CompleteTheCodeAnswerRequest(
+                        questionId = question.id,
+                        orderedTokens = answer.orderedTokens.map { it!! }
+                    )
+
+                else -> throw Exception("Invalid answer type")
+            }
         }
     }
 
@@ -281,6 +320,7 @@ class LevelNavigationViewModel(
             true,
             false
         )
+
         val totalApproved = questionsResults.filter { it }.size
 
         val resultType = when {
@@ -311,6 +351,10 @@ class LevelNavigationViewModel(
                 )
             )
 
+            _practiceResponseState.update {
+                practiceResponse
+            }
+
             val uiQuestions: List<Question> = practiceResponse.questions.map { questionResponse ->
                 when (questionResponse) {
                     is SingleSelectionResponse ->
@@ -338,9 +382,13 @@ class LevelNavigationViewModel(
                             codeLines = questionResponse.codeLines.map { lineResponse ->
                                 Line(tokens = lineResponse.tokens.map { tokenResponse ->
                                     val token = tokenResponse.token
-                                    if (token == "INDENT") Indent else if (token == "MISSING") Missing else Word(
-                                        token = token
-                                    )
+                                    when (token) {
+                                        "INDENT" -> Indent
+                                        "MISSING" -> Missing
+                                        else -> Word(
+                                            token = token
+                                        )
+                                    }
                                 })
                             },
                             missingTokens = questionResponse.missingTokens
@@ -352,6 +400,40 @@ class LevelNavigationViewModel(
                 it.copy(questions = uiQuestions)
             }
         }
+    }
+
+    fun loadPracticeResults(userId: Int, sectionId: Int) {
+        val questions: List<QuestionResponse> = practiceResponseState.value.questions
+        val answers: List<AnswerRequest> = getQuestionAnswers()
+        val userData = UserData(id = userId, sectionId = sectionId)
+
+        viewModelScope.launch {
+            val jwt = loginRepository.jwt.first()
+            val practiceResultsResponse = aIRepository.postPracticeResults(
+                jwt, PracticeResultsRequest(
+                    questions = questions,
+                    answers = answers,
+                    userData = userData
+                )
+            )
+
+            val totalApproved = practiceResultsResponse.questionsResults.filter { it }.size
+
+            val resultType = when {
+                totalApproved < 3 -> ResultType.Disapproved
+                totalApproved >= 3 && totalApproved < 5 -> ResultType.Approved
+                else -> ResultType.FullyApproved
+            }
+
+            _questionsResultsUiState.update {
+                it.copy(
+                    questionsResults = practiceResultsResponse.questionsResults,
+                    resultType = resultType,
+                    score = practiceResultsResponse.score
+                )
+            }
+        }
+
     }
 
     companion object {

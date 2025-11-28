@@ -18,6 +18,7 @@ val CurrentUserDataUiState0Mock = UserDataUiState(
 val CurrentUserMetricsDataUiState0Mock = UserMetricsDataUiState(
     currentLevelId = 0,
     succededSectionsCount = 11,
+    currentSectionId = 12,
     currentPageId = 70,
     averageScore = 4.2f,
     totalPracticeRetries = 16,

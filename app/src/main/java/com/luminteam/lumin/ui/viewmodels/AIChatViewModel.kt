@@ -2,6 +2,7 @@ package com.luminteam.lumin.ui.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.luminteam.lumin.services.luminapi.dto.AnswerRequest
 import com.luminteam.lumin.ui.domain.ChatMessage
 import com.luminteam.lumin.ui.domain.ChatMessageType
 import com.luminteam.lumin.ui.mock.messagesMock
@@ -72,7 +73,7 @@ print("Tarea completada ✅")
     }
 
     // for feedback chat
-    fun fetchFeedBackMessage(answers: List<Answer>) {
+    fun fetchFeedBackMessage(answers: List<AnswerRequest>) {
 
     }
 
