@@ -2,8 +2,11 @@ package com.luminteam.lumin.ui.navigation
 
 import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
@@ -27,6 +30,7 @@ import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.UserViewModel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -66,6 +70,12 @@ fun LevelNavigation(
         rootViewModel.updateShowTopBarRightButton(it)
     }
 
+    val currentAppContentState =
+        viewModel.currentAppContentState.collectAsStateWithLifecycle().value
+
+    val levels = contentViewModel.levels.collectAsStateWithLifecycle().value
+    val sections = contentViewModel.sections.collectAsStateWithLifecycle().value
+
 
     NavDisplay(
         backStack = backStack,
@@ -98,6 +108,17 @@ fun LevelNavigation(
             entry<PracticeScreen> {
                 // siempre debe recargar todas las preguntas al entrar a este lugar
                 // se debe implementar una manera de vaciar todas las preguntas cuando se termina el proceso de práctica!!!!
+
+
+                val currentLevelName = levels.levels[currentAppContentState.currentLevelId]!!.name
+                val currentSectionName =
+                    sections.sections[currentAppContentState.currentSectionId]!!.name
+
+                // cargamos la practica
+                LaunchedEffect(Unit) {
+                    viewModel.loadPractice(currentLevelName, currentSectionName)
+                }
+
                 updateCurrentBackAction() {
                     // más operacioes para limpiar el estado de la practica
                     backStack.removeLastOrNull()
@@ -105,23 +126,36 @@ fun LevelNavigation(
                 updateCanGoBack(true)
                 updateShowBottomBar(false)
 
-                viewModel.loadMockQuestions()
-                PracticeScreen(
-                    viewModel = viewModel,
-                    updateCurrentTitleTopBar = { title, iconTitle ->
-                        updateCurrentTitleTopBar(
-                            TitleTopBar(
-                                title = title,
-                                iconTitle = iconTitle
-                            )
-                        )
-                    },
-                    navigatePracticeResults = {
-                        backStack.removeLastOrNull()
-                        backStack.add(PracticeResultsScreen)
+                val questions =
+                    viewModel.questionsUiState.collectAsStateWithLifecycle().value.questions
+
+                if (questions.isEmpty()) {
+                    Text("cargando practica...")
+                } else {
+                    // actualizamos los datos del usuario
+                    LaunchedEffect(Unit) {
+                        userViewModel.loadUserData()
                     }
-                )
+                    PracticeScreen(
+                        viewModel = viewModel,
+                        updateCurrentTitleTopBar = { title, iconTitle ->
+                            updateCurrentTitleTopBar(
+                                TitleTopBar(
+                                    title = title,
+                                    iconTitle = iconTitle
+                                )
+                            )
+                        },
+                        navigatePracticeResults = {
+                            backStack.removeLastOrNull()
+                            backStack.add(PracticeResultsScreen)
+                        }
+                    )
+                }
+
+
             }
+
             entry<TheoryScreen> {
                 Log.d("revision", "theory cargado")
                 updateCurrentBackAction() {

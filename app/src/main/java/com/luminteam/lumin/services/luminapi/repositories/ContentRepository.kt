@@ -1,8 +1,8 @@
 package com.luminteam.lumin.services.luminapi.repositories
 
 import com.luminteam.lumin.services.luminapi.KtorClientFactory
+import com.luminteam.lumin.services.luminapi.dto.ContentResponse
 import com.luminteam.lumin.services.luminapi.interfaces.Content
-import com.luminteam.lumin.services.luminapi.interfaces.ContentResponse
 import com.luminteam.lumin.services.luminapi.interfaces.User
 import com.luminteam.lumin.ui.domain.Calification
 import com.luminteam.lumin.ui.domain.LevelData

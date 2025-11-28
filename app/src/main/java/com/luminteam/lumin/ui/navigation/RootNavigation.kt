@@ -62,6 +62,7 @@ fun RootNavigation(
 
     contentViewModel: ContentViewModel = viewModel(),
     aiChatViewModel: AIChatViewModel = viewModel(),
+    levelNavigationViewModel: LevelNavigationViewModel,
     modifier: Modifier = Modifier
 ) {
     // Esto es para que Lumin te pregunte si quieres notificaciones cuando abras la app por primera vez
@@ -102,8 +103,6 @@ fun RootNavigation(
     var currentRoute by remember { mutableStateOf("MainScreen") }
 
     var currentUserData = userViewModel.currentUserData.collectAsStateWithLifecycle().value
-
-    val levelNavigationViewModel: LevelNavigationViewModel = viewModel()
 
     val levelBackStack = rememberNavBackStack(LevelsScreen)
 

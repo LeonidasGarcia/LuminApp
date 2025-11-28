@@ -1,7 +1,24 @@
 package com.luminteam.lumin.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.luminteam.lumin.data.repository.LoginRepository
+import com.luminteam.lumin.services.luminapi.dto.CompleteTheCodeResponse
+import com.luminteam.lumin.services.luminapi.dto.ContextData
+import com.luminteam.lumin.services.luminapi.dto.ContextDataRequest
+import com.luminteam.lumin.services.luminapi.dto.FixTheCodeResponse
+import com.luminteam.lumin.services.luminapi.dto.FreeResponseResponse
+import com.luminteam.lumin.services.luminapi.dto.SingleSelectionResponse
+import com.luminteam.lumin.services.luminapi.repositories.aIRepository
+import com.luminteam.lumin.services.luminapi.repositories.userRepository
+import com.luminteam.lumin.ui.domain.CalificationsUiState
 import com.luminteam.lumin.ui.domain.CurrentContentUiState
+import com.luminteam.lumin.ui.navigation.LevelNavigation
+import com.luminteam.lumin.ui.screens.learn.practice.components.questions.SingleSelection
 import com.luminteam.lumin.ui.screens.learn.practice.domain.Answer
 import com.luminteam.lumin.ui.screens.learn.practice.domain.CompleteTheCodeQuestion
 import com.luminteam.lumin.ui.screens.learn.practice.domain.FixTheCodeQuestion
@@ -19,7 +36,9 @@ import com.luminteam.lumin.ui.screens.learn.practice.domain.Word
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 val hiperLongQuestion =
     "Lorem ipsum dolor sit amet, ct, sed do eiu laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, ct, sed do eiu laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing"
@@ -30,7 +49,9 @@ val wrongCode = """def hola_mundo():
     hola_mund()
 """.trimIndent()
 
-class LevelNavigationViewModel : ViewModel() {
+class LevelNavigationViewModel(
+    private val loginRepository: LoginRepository
+) : ViewModel() {
     private val _currentAppContentState = MutableStateFlow(CurrentContentUiState())
     val currentAppContentState: StateFlow<CurrentContentUiState> =
         _currentAppContentState.asStateFlow()
@@ -274,5 +295,71 @@ class LevelNavigationViewModel : ViewModel() {
                 resultType = resultType
             )
         }
+    }
+
+    fun loadPractice(levelName: String, sectionName: String) {
+        Log.d("Practica", "Cargando practica")
+        viewModelScope.launch {
+            val jwt = loginRepository.jwt.first()
+            val practiceResponse = aIRepository.postPractice(
+                jwt,
+                ContextDataRequest(
+                    contextData = ContextData(
+                        sectionName = sectionName,
+                        levelName = levelName
+                    )
+                )
+            )
+
+            val uiQuestions: List<Question> = practiceResponse.questions.map { questionResponse ->
+                when (questionResponse) {
+                    is SingleSelectionResponse ->
+                        SingleSelectionQuestion(
+                            id = questionResponse.id,
+                            question = questionResponse.question,
+                            options = questionResponse.options
+                        )
+
+                    is FreeResponseResponse ->
+                        FreeResponseQuestion(
+                            id = questionResponse.id,
+                            question = questionResponse.question,
+                        )
+
+                    is FixTheCodeResponse ->
+                        FixTheCodeQuestion(
+                            id = questionResponse.id,
+                            wrongCode = questionResponse.wrongCode
+                        )
+
+                    is CompleteTheCodeResponse ->
+                        CompleteTheCodeQuestion(
+                            id = questionResponse.id,
+                            codeLines = questionResponse.codeLines.map { lineResponse ->
+                                Line(tokens = lineResponse.tokens.map { tokenResponse ->
+                                    val token = tokenResponse.token
+                                    if (token == "INDENT") Indent else if (token == "MISSING") Missing else Word(
+                                        token = token
+                                    )
+                                })
+                            },
+                            missingTokens = questionResponse.missingTokens
+                        )
+                }
+            }
+
+            _questionsUiState.update {
+                it.copy(questions = uiQuestions)
+            }
+        }
+    }
+
+    companion object {
+        fun provideFactory(repository: LoginRepository): ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    LevelNavigationViewModel(repository)
+                }
+            }
     }
 }

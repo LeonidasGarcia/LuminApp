@@ -58,6 +58,7 @@ fun MainNavigation(
     userViewModel: UserViewModel,
     settingsViewModel: SettingsViewModel,
     contentViewModel: ContentViewModel,
+    levelNavigationViewModel: LevelNavigationViewModel,
     modifier: Modifier = Modifier
 ) {
     val loginRepository = LocalLoginRepository.current
@@ -78,7 +79,8 @@ fun MainNavigation(
         RootNavigation(
             userViewModel = userViewModel,
             settingsViewModel = settingsViewModel,
-            contentViewModel = contentViewModel
+            contentViewModel = contentViewModel,
+            levelNavigationViewModel = levelNavigationViewModel
         )
         return
     }

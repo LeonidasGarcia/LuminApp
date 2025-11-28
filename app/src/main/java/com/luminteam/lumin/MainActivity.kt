@@ -24,6 +24,7 @@ import com.luminteam.lumin.ui.navigation.MainNavigation
 import com.luminteam.lumin.ui.navigation.RootNavigation
 import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.viewmodels.ContentViewModel
+import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.SettingsViewModel
 import com.luminteam.lumin.ui.viewmodels.SignInViewModel
 import com.luminteam.lumin.ui.viewmodels.UserViewModel
@@ -85,11 +86,18 @@ class MainActivity : ComponentActivity() {
                         )
                     )
 
+                    val levelNavigationViewModel: LevelNavigationViewModel = viewModel(
+                        factory = LevelNavigationViewModel.provideFactory(
+                            loginRepository
+                        )
+                    )
+
                     MainNavigation(
                         signInViewModel = signInViewModel,
                         userViewModel = userViewModel,
                         settingsViewModel = settingsViewModel,
-                        contentViewModel = contentViewModel
+                        contentViewModel = contentViewModel,
+                        levelNavigationViewModel = levelNavigationViewModel
                     )
                 }
             }

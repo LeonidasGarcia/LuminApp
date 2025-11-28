@@ -139,6 +139,7 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:3.1.2")
     implementation("io.ktor:ktor-client-content-negotiation:3.1.2")
     implementation("io.ktor:ktor-serialization-kotlinx-json:3.1.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
