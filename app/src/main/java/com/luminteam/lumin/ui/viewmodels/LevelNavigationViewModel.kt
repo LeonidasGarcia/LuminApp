@@ -75,82 +75,25 @@ class LevelNavigationViewModel(
     val questionsResultsUiState: StateFlow<QuestionsResultsUiState> =
         _questionsResultsUiState.asStateFlow()
 
-    fun updateCurrentAppContentState(currentContentUiState: CurrentContentUiState) {
-        _currentAppContentState.update {
-            currentContentUiState
+    fun resetPractice() {
+        _questionsUiState.update {
+            QuestionsUiState()
+        }
+
+        _practiceResponseState.update {
+            PracticeResponse(questions = listOf())
         }
     }
 
-    fun loadMockQuestions() {
-        val questions: List<Question> = listOf(
-            SingleSelectionQuestion(
-                id = 0,
-                question = "¿Cuál es el nombre de la estructura de datos en Python que almacena elementos en un formato de 'clave-valor'?",
-                description = "Responde a la siguiente pregunta:",
-                options = listOf(
-                    "List",
-                    "Set",
-                    "Dict",
-                    "Tuple"
-                )
-            ),
-            CompleteTheCodeQuestion(
-                id = 1,
-                description = "Completa el siguiente bloque de código:",
-                codeLines = listOf<Line>(
-                    Line(
-                        tokens = listOf<Token>(
-                            Word(token = "def"),
-                            Missing,
-                            Word(token = "():")
-                        )
-                    ),
-                    Line(
-                        tokens = listOf<Token>(
-                            Indent,
-                            Word(token = "print('Hola mundo')")
-                        )
-                    ),
-                    Line(
-                        tokens = listOf<Token>(
-                            Missing,
-                            Word(token = "()")
-                        )
-                    ),
-                    Line(
-                        tokens = listOf<Token>(
-                            Missing,
-                            Word(token = "()")
-                        )
-                    ),
-                    Line(
-                        tokens = listOf<Token>(
-                            Missing,
-                            Word(token = "()")
-                        )
-                    )
-                ),
-                missingTokens = listOf(
-                    "saludar1",
-                    "saludar2",
-                    "saludar3",
-                    "saludar4"
-                )
-            ),
-            FreeResponseQuestion(
-                id = 2,
-                question = hiperLongQuestion,
-                description = "Responde a la siguiente pregunta:"
-            ),
-            FixTheCodeQuestion(
-                id = 3,
-                wrongCode = wrongCode,
-                description = "El siguiente bloque de código tiene un error, corrígelo:"
-            )
-        )
+    fun resetPracticeResults() {
+        _questionsResultsUiState.update {
+            QuestionsResultsUiState()
+        }
+    }
 
-        _questionsUiState.update {
-            it.copy(questions = questions)
+    fun updateCurrentAppContentState(currentContentUiState: CurrentContentUiState) {
+        _currentAppContentState.update {
+            currentContentUiState
         }
     }
 
@@ -308,32 +251,6 @@ class LevelNavigationViewModel(
                     questions = newQuestions
                 )
             }
-        }
-    }
-
-    // en la implementacion real, debemos enviar las preguntas junto a sus respuestas en formato json al backend para que nos retorne los resultados!!!
-    fun loadMockResults() {
-        val questionsResults = listOf(
-            true,
-            false,
-            true,
-            true,
-            false
-        )
-
-        val totalApproved = questionsResults.filter { it }.size
-
-        val resultType = when {
-            totalApproved < 3 -> ResultType.Disapproved
-            totalApproved >= 3 && totalApproved < 5 -> ResultType.Approved
-            else -> ResultType.FullyApproved
-        }
-
-        _questionsResultsUiState.update {
-            it.copy(
-                questionsResults = questionsResults,
-                resultType = resultType
-            )
         }
     }
 

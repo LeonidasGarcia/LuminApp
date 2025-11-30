@@ -15,6 +15,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.luminteam.lumin.R
+import com.luminteam.lumin.ui.components.LuminLoading
 import com.luminteam.lumin.ui.domain.TopBarBackAction
 import com.luminteam.lumin.ui.domain.TitleTopBar
 import com.luminteam.lumin.ui.domain.TopBarRightButtonActionType
@@ -110,7 +111,12 @@ fun LevelNavigation(
             entry<PracticeScreen> {
                 // siempre debe recargar todas las preguntas al entrar a este lugar
                 // se debe implementar una manera de vaciar todas las preguntas cuando se termina el proceso de práctica!!!!
-
+                updateCurrentTitleTopBar(
+                    TitleTopBar(
+                        title = "Práctica",
+                        iconTitle = R.drawable.practice_icon
+                    )
+                )
 
                 val currentLevelName = levels.levels[currentAppContentState.currentLevelId]!!.name
                 val currentSectionName =
@@ -122,7 +128,10 @@ fun LevelNavigation(
                 }
 
                 updateCurrentBackAction() {
-                    // más operacioes para limpiar el estado de la practica
+                    // más operaciones para limpiar el estado de la practica
+                    viewModel.resetPractice()
+                    viewModel.resetPracticeResults()
+
                     backStack.removeLastOrNull()
                 }
                 updateCanGoBack(true)
@@ -132,7 +141,7 @@ fun LevelNavigation(
                     viewModel.questionsUiState.collectAsStateWithLifecycle().value.questions
 
                 if (questions.isEmpty()) {
-                    Text("cargando practica...")
+                    LuminLoading()
                 } else {
                     // actualizamos los datos del usuario
                     LaunchedEffect(Unit) {
@@ -207,7 +216,16 @@ fun LevelNavigation(
                     viewModel.loadPracticeResults(userId = userId, sectionId = sectionId)
                 }
 
+                updateCurrentTitleTopBar(
+                    TitleTopBar(
+                        title = "Feedback",
+                        iconTitle = R.drawable.results_icon
+                    )
+                )
+                
                 updateCurrentBackAction() {
+                    viewModel.resetPracticeResults()
+                    viewModel.resetPracticeResults()
                     backStack.removeLastOrNull()
                 }
                 updateCanGoBack(true)
@@ -221,15 +239,27 @@ fun LevelNavigation(
                 Log.d("Results", practiceResults.questionsResults.toString())
 
                 if (practiceResults.questionsResults.isEmpty()) {
-                    Text("cargando resultados...")
+                    LuminLoading()
                 } else {
                     LaunchedEffect(Unit) {
                         userViewModel.loadUserData()
                     }
+
+                    val currentLevelName =
+                        levels.levels[currentAppContentState.currentLevelId]!!.name
+                    val currentSectionName =
+                        sections.sections[currentAppContentState.currentSectionId]!!.name
+
                     PracticeResultsScreen(
                         viewModel = viewModel,
                         navigateFeedback = {
                             backStack.add(AiFeedbackChatScreen)
+                        },
+                        retryPractice = {
+                            viewModel.resetPractice()
+                            viewModel.resetPracticeResults()
+                            backStack.removeLastOrNull()
+                            backStack.add(PracticeScreen)
                         }
                     )
                 }
