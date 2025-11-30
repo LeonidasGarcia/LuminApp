@@ -48,7 +48,8 @@ data object PracticeResultsScreen : NavKey
 @Composable
 fun PracticeResultsScreen(
     viewModel: LevelNavigationViewModel,
-    navigateFeedback: () -> Unit
+    navigateFeedback: () -> Unit,
+    retryPractice: () -> Unit
 ) {
     val questionsResultsUiState = viewModel.questionsResultsUiState.collectAsStateWithLifecycle()
 
@@ -308,7 +309,8 @@ fun PracticeResultsScreen(
                     buttonColor = LuminDarkestGray,
                     icon = R.drawable.retry_icon,
                     iconColor = LuminWhite,
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier.padding(8.dp),
+                    onClick = retryPractice
                 ) {
                     Column(
                         modifier = Modifier.width(140.dp),
