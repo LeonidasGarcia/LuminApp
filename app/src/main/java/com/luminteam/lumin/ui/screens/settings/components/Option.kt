@@ -54,8 +54,8 @@ fun Option(
                     tint = valueColor,
                     contentDescription = null,
                     modifier = Modifier
-                        .width(25.dp)
-                        .height(25.dp),
+                        .width(30.dp)
+                        .height(30.dp),
                 )
             }
             if (valueText.isNotEmpty()) {
