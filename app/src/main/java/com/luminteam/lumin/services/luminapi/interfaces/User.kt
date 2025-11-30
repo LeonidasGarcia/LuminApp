@@ -16,4 +16,8 @@ interface User {
         jwt: String,
         setLastPageRequest: SetLastPageRequest
     ): SetLastPageResponse
+
+    suspend fun postDeleteUser(
+        jwt: String
+    )
 }

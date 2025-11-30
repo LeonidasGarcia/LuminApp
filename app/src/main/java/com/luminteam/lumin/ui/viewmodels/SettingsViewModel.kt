@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.luminteam.lumin.data.repository.LoginRepository
 import com.luminteam.lumin.util.alarm.AlarmScheduler
 import com.luminteam.lumin.data.repository.SettingsRepository
+import com.luminteam.lumin.services.luminapi.repositories.userRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -48,6 +49,14 @@ class SettingsViewModel(
 
     fun logout() {
         viewModelScope.launch {
+            loginRepository.deleteJWT()
+        }
+    }
+
+    fun deleteAccount() {
+        viewModelScope.launch {
+            val jwt = loginRepository.jwt.first()
+            userRepository.postDeleteUser(jwt)
             loginRepository.deleteJWT()
         }
     }

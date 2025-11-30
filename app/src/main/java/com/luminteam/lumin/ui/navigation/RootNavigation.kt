@@ -77,11 +77,6 @@ fun RootNavigation(
         }
     }
 
-    LaunchedEffect(null) {
-        userViewModel.loadUserData()
-        contentViewModel.loadContent()
-    }
-
     LaunchedEffect(Unit) {
         val hasPermission = ContextCompat.checkSelfPermission(
             context,

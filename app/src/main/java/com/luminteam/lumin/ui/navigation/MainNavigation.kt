@@ -35,6 +35,7 @@ import androidx.navigation3.ui.NavDisplay
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.luminteam.lumin.data.repository.LocalLoginRepository
 import com.luminteam.lumin.data.repository.LocalSettingsRepository
+import com.luminteam.lumin.ui.components.LuminLoading
 import com.luminteam.lumin.ui.layout.BottomBar
 import com.luminteam.lumin.ui.layout.TopBar
 import com.luminteam.lumin.ui.screens.learn.chat.AiChatScreen
@@ -77,15 +78,28 @@ fun MainNavigation(
     }
 
     if (!token.isNullOrEmpty()) {
-
         Log.d("Token Revision", token.toString())
-        RootNavigation(
-            userViewModel = userViewModel,
-            settingsViewModel = settingsViewModel,
-            contentViewModel = contentViewModel,
-            levelNavigationViewModel = levelNavigationViewModel,
-            aiChatViewModel = aiChatViewModel
-        )
+
+        LaunchedEffect(null) {
+            userViewModel.loadUserData()
+            contentViewModel.loadContent()
+        }
+
+        // asegurar que todos los datos se cargan antes de entrar
+        val currentUserData = userViewModel.currentUserData.collectAsStateWithLifecycle().value
+
+        if (currentUserData.id == -1) {
+            LuminLoading()
+        } else {
+            RootNavigation(
+                userViewModel = userViewModel,
+                settingsViewModel = settingsViewModel,
+                contentViewModel = contentViewModel,
+                levelNavigationViewModel = levelNavigationViewModel,
+                aiChatViewModel = aiChatViewModel
+            )
+        }
+
     } else {
         Log.d("Token Revision", "Cargando login")
         LoginScreen(

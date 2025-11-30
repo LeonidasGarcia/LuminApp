@@ -180,6 +180,7 @@ fun LevelAccordion(
                         )
                     } else {
                         UnlockedSectionButton(
+                            associatedCalification = associatedCalification!!,
                             title = "Sección " + (index + 1),
                             description = section.name,
                             backgroundColor = if (isCurrent) unfoldedValues.iconColor else LuminLightGray,

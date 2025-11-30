@@ -60,6 +60,13 @@ class UserRepository(private val client: HttpClient) : User {
 
         return response.body<SetLastPageResponse>()
     }
+
+    override suspend fun postDeleteUser(jwt: String) {
+        client.post("/user/delete/account") {
+            header("Authorization", "Bearer $jwt")
+            contentType(ContentType.Application.Json)
+        }
+    }
 }
 
 val userRepository = UserRepository(KtorClientFactory.createClient())

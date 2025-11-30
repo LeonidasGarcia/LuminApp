@@ -187,11 +187,13 @@ fun ProfileScreen(
                 }
             }
         }
+        /*
         item {
             Separator()
         }
         item {
             PurchaseUltimate(navigateUltimatePurchase = navigateUltimatePurchase)
         }
+         */
     }
 }

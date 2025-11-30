@@ -12,24 +12,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.components.LuminButton
+import com.luminteam.lumin.ui.domain.Calification
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminGray
 import com.luminteam.lumin.ui.theme.LuminTheme
+import com.luminteam.lumin.util.isFullyApproved
 import com.luminteam.lumin.util.sound.LuminSounds
 import com.luminteam.lumin.util.sound.rememberSoundPlayer
 
 @Composable
 fun UnlockedSectionButton(
+    associatedCalification: Calification,
     title: String,
     description: String,
     backgroundColor: Color,
     current: Boolean,
     onClick: () -> Unit
 ) {
-    val icon = if (current) R.drawable.book_icon else R.drawable.medal_icon
+    val icon = if (current) R.drawable.book_icon else {
+        val isFullyApproved = isFullyApproved(associatedCalification.score)
+        if (isFullyApproved) {
+            R.drawable.trophy_icon
+        } else {
+            R.drawable.medal_icon
+        }
+    }
+    
     val playSound = rememberSoundPlayer()
-
 
     LuminButton(
         title = title,

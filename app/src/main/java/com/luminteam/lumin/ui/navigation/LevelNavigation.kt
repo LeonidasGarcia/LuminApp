@@ -166,8 +166,10 @@ fun LevelNavigation(
                     viewModel.questionsUiState.collectAsStateWithLifecycle().value.questions
 
                 if (questions.isEmpty()) {
+                    updateCanGoBack(false)
                     LuminLoading()
                 } else {
+                    updateCanGoBack(true)
                     // actualizamos los datos del usuario
                     LaunchedEffect(Unit) {
                         userViewModel.loadUserData()

@@ -108,7 +108,7 @@ fun SettingsScreen(
         cancelText = "No. Cancelar",
         onDismissRequest = { isShownDelete = false },
         onConfirm = {
-            viewModel.logout()
+            viewModel.deleteAccount()
         }
     )
 

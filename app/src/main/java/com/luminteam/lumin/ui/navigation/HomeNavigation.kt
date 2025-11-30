@@ -83,6 +83,8 @@ fun HomeNavigation(
                 )
 
                 HomeScreen(
+                    userViewModel = userViewModel,
+                    contentViewModel = contentViewModel,
                     navigateCurrentTheoryPage = navigateCurrentTheoryPage,
                     navigateDailyPractice = {
                         backStack.add(PracticeScreen)
@@ -142,8 +144,6 @@ fun HomeNavigation(
                         }
                     )
                 }
-
-
             }
 
             entry<PracticeResultsScreen> {

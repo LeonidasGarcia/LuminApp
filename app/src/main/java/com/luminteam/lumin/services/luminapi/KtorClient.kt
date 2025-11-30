@@ -80,7 +80,7 @@ object KtorClientFactory {
             }
 
             defaultRequest {
-                url("http://192.168.1.33:8000/") // Establecer una URL base
+                url("https://container-lumin.jollywater-7985bce0.eastus2.azurecontainerapps.io/") // Establecer una URL base
             }
         }
     }

@@ -31,7 +31,6 @@ import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminLightGray
 
-
 @Composable
 fun TopBar(
     canGoBack: Boolean,
@@ -163,8 +162,8 @@ fun TopBarRightButton(
                         tint = LuminLightGray,
                         contentDescription = "",
                         modifier = Modifier
-                            .width(15.dp)
-                            .height(15.dp)
+                            .width(25.dp)
+                            .height(25.dp)
                             .align(Alignment.CenterVertically)
                     )
                 }

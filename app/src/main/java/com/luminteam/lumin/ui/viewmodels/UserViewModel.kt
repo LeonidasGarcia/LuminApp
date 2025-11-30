@@ -9,17 +9,11 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.luminteam.lumin.data.repository.LoginRepository
 import com.luminteam.lumin.services.luminapi.dto.SetLastPageRequest
 import com.luminteam.lumin.services.luminapi.dto.SetLastPageResponse
-import com.luminteam.lumin.services.luminapi.repositories.AuthRepository
-import com.luminteam.lumin.services.luminapi.repositories.authRepository
 import com.luminteam.lumin.services.luminapi.repositories.userRepository
 import com.luminteam.lumin.ui.domain.CalificationsUiState
 import com.luminteam.lumin.ui.domain.CurrentContentUiState
 import com.luminteam.lumin.ui.domain.UserDataUiState
 import com.luminteam.lumin.ui.domain.UserMetricsDataUiState
-import com.luminteam.lumin.ui.mock.Califications0Mock
-import com.luminteam.lumin.ui.mock.CurrentUserDataUiState0Mock
-import com.luminteam.lumin.ui.mock.CurrentUserMetricsDataUiState0Mock
-import com.luminteam.lumin.ui.mock.UserCurrentContentUiState0Mock
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,25 +29,25 @@ class UserViewModel(
     }
 
     private val _currentUserDataUiState = MutableStateFlow<UserDataUiState>(
-        CurrentUserDataUiState0Mock
+        UserDataUiState()
     )
     val currentUserData: StateFlow<UserDataUiState> = _currentUserDataUiState.asStateFlow()
 
 
     private val _currentUserMetricsDataUiState = MutableStateFlow<UserMetricsDataUiState>(
-        CurrentUserMetricsDataUiState0Mock
+        UserMetricsDataUiState()
     )
     val currentUserMetricsData: StateFlow<UserMetricsDataUiState> =
         _currentUserMetricsDataUiState.asStateFlow()
 
     private val _currentUserCalifications =
-        MutableStateFlow<CalificationsUiState>(Califications0Mock)
+        MutableStateFlow<CalificationsUiState>(CalificationsUiState(califications = mapOf()))
     val currentUserCalifications: StateFlow<CalificationsUiState> =
         _currentUserCalifications.asStateFlow()
 
     // currentLevelId y currentSectionId siempre serán válidos!!
     private val _currentUserContentState = MutableStateFlow<CurrentContentUiState>(
-        UserCurrentContentUiState0Mock
+        CurrentContentUiState()
     )
     val currentUserContentState: StateFlow<CurrentContentUiState> =
         _currentUserContentState.asStateFlow()
