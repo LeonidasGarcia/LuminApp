@@ -149,8 +149,6 @@ dependencies {
 
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
 
-    implementation("androidx.core:core-splashscreen:1.0.1")
-
     implementation("androidx.datastore:datastore-preferences:1.1.7")
 
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
@@ -165,4 +163,7 @@ dependencies {
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
 
     implementation("io.ktor:ktor-client-logging:3.1.2")
+
+    implementation(libs.androidx.core.splashscreen)
+
 }
