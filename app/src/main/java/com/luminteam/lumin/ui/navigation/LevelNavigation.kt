@@ -112,12 +112,14 @@ fun LevelNavigation(
             entry<PracticeScreen> {
                 // siempre debe recargar todas las preguntas al entrar a este lugar
                 // se debe implementar una manera de vaciar todas las preguntas cuando se termina el proceso de práctica!!!!
+                /*
                 updateCurrentTitleTopBar(
                     TitleTopBar(
                         title = "Práctica",
                         iconTitle = R.drawable.practice_icon
                     )
                 )
+                */
 
                 val currentLevelName = levels.levels[currentAppContentState.currentLevelId]!!.name
                 val currentSectionName =

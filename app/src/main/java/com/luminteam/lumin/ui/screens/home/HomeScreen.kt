@@ -21,7 +21,8 @@ data object HomeScreen : NavKey
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navigateCurrentTheoryPage: () -> Unit
+    navigateCurrentTheoryPage: () -> Unit,
+    navigateDailyPractice: () -> Unit
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -56,7 +57,8 @@ fun HomeScreen(
                 title = "Reto diario",
                 description = "¡Ponte a prueba!",
                 color = LuminOrange,
-                icon = R.drawable.brain_icon
+                icon = R.drawable.brain_icon,
+                onClick = navigateDailyPractice
             )
         }
         item {

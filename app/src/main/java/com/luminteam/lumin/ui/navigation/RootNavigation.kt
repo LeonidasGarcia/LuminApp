@@ -230,6 +230,9 @@ fun RootNavigation(
                             entry<HomeNavigation> {
                                 viewModel.updateShowGeneralPadding(true)
                                 HomeNavigation(
+                                    levelNavigationViewModel = levelNavigationViewModel,
+                                    userViewModel = userViewModel,
+                                    contentViewModel = contentViewModel,
                                     rootViewModel = viewModel,
                                     navigateCurrentTheoryPage = {
                                         navigateCurrentTheoryPage()

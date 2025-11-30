@@ -12,6 +12,7 @@ import com.luminteam.lumin.services.luminapi.dto.CompleteTheCodeAnswerRequest
 import com.luminteam.lumin.services.luminapi.dto.CompleteTheCodeResponse
 import com.luminteam.lumin.services.luminapi.dto.ContextData
 import com.luminteam.lumin.services.luminapi.dto.ContextDataRequest
+import com.luminteam.lumin.services.luminapi.dto.DailyPracticeResultsRequest
 import com.luminteam.lumin.services.luminapi.dto.FixTheCodeAnswerRequest
 import com.luminteam.lumin.services.luminapi.dto.FixTheCodeResponse
 import com.luminteam.lumin.services.luminapi.dto.FreeResponseAnswerRequest
@@ -22,6 +23,7 @@ import com.luminteam.lumin.services.luminapi.dto.SingleSelectionAnswerRequest
 import com.luminteam.lumin.services.luminapi.dto.SingleSelectionResponse
 import com.luminteam.lumin.services.luminapi.dto.UserData
 import com.luminteam.lumin.services.luminapi.dto.PracticeResultsRequest
+import com.luminteam.lumin.services.luminapi.dto.UserDataDailyPractice
 import com.luminteam.lumin.services.luminapi.repositories.aIRepository
 import com.luminteam.lumin.ui.domain.CurrentContentUiState
 import com.luminteam.lumin.ui.screens.learn.practice.domain.CompleteTheCodeAnswer
@@ -315,6 +317,96 @@ class LevelNavigationViewModel(
 
             _questionsUiState.update {
                 it.copy(questions = uiQuestions)
+            }
+        }
+    }
+
+    fun loadDailyPractice() {
+        Log.d("Practica Diaria", "Cargando practica diaria")
+        viewModelScope.launch {
+            val jwt = loginRepository.jwt.first()
+            val practiceResponse = aIRepository.postDailyPractice(jwt = jwt)
+
+            _practiceResponseState.update {
+                practiceResponse
+            }
+
+            val uiQuestions: List<Question> = practiceResponse.questions.map { questionResponse ->
+                when (questionResponse) {
+                    is SingleSelectionResponse ->
+                        SingleSelectionQuestion(
+                            id = questionResponse.id,
+                            question = questionResponse.question,
+                            options = questionResponse.options
+                        )
+
+                    is FreeResponseResponse ->
+                        FreeResponseQuestion(
+                            id = questionResponse.id,
+                            question = questionResponse.question,
+                        )
+
+                    is FixTheCodeResponse ->
+                        FixTheCodeQuestion(
+                            id = questionResponse.id,
+                            wrongCode = questionResponse.wrongCode
+                        )
+
+                    is CompleteTheCodeResponse ->
+                        CompleteTheCodeQuestion(
+                            id = questionResponse.id,
+                            codeLines = questionResponse.codeLines.map { lineResponse ->
+                                Line(tokens = lineResponse.tokens.map { tokenResponse ->
+                                    val token = tokenResponse.token
+                                    when (token) {
+                                        "INDENT" -> Indent
+                                        "MISSING" -> Missing
+                                        else -> Word(
+                                            token = token
+                                        )
+                                    }
+                                })
+                            },
+                            missingTokens = questionResponse.missingTokens
+                        )
+                }
+            }
+
+            _questionsUiState.update {
+                it.copy(questions = uiQuestions)
+            }
+        }
+    }
+
+    fun loadDailyPracticeResults(sectionId: Int) {
+        val questions: List<QuestionResponse> = practiceResponseState.value.questions
+        val answers: List<AnswerRequest> = getQuestionAnswers()
+        val userData = UserDataDailyPractice(sectionId = sectionId)
+
+        viewModelScope.launch {
+            val jwt = loginRepository.jwt.first()
+            val practiceResultsResponse = aIRepository.postDailyPracticeResults(
+                jwt, DailyPracticeResultsRequest(
+                    questions = questions,
+                    answers = answers,
+                    userData = userData
+                )
+            )
+
+            val totalApproved = practiceResultsResponse.questionsResults.filter { it }.size
+
+            val resultType = when {
+                totalApproved < 3 -> ResultType.Disapproved
+                totalApproved >= 3 && totalApproved < 5 -> ResultType.Approved
+                else -> ResultType.FullyApproved
+            }
+
+            _questionsResultsUiState.update {
+                it.copy(
+                    questionsResults = practiceResultsResponse.questionsResults,
+                    resultType = resultType,
+                    score = practiceResultsResponse.score
+                )
             }
         }
     }
