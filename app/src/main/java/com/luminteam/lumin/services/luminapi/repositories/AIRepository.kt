@@ -16,6 +16,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 
 class AIRepository(private val client: HttpClient) : AI {
     override suspend fun postPractice(
@@ -46,14 +47,18 @@ class AIRepository(private val client: HttpClient) : AI {
         return practiceResultsResponse
     }
 
-    override suspend fun postDailyPractice(jwt: String): PracticeResponse {
-        val response = client.post("agente/dailyPractice") {
-            header("Authorization", "Bearer $jwt")
-            contentType(ContentType.Application.Json)
-        }
+    override suspend fun postDailyPractice(jwt: String): Result<PracticeResponse> {
+        try {
+            val response = client.post("agente/dailyPractice") {
+                header("Authorization", "Bearer $jwt")
+                contentType(ContentType.Application.Json)
+            }
 
-        val practiceResponse = response.body<PracticeResponse>()
-        return practiceResponse
+            val practiceResponse = response.body<PracticeResponse>()
+            return Result.success(practiceResponse)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 
     override suspend fun postDailyPracticeResults(

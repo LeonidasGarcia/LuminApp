@@ -15,7 +15,7 @@ interface AI {
         practiceResults: PracticeResultsRequest
     ): PracticeResultsResponse
 
-    suspend fun postDailyPractice(jwt: String): PracticeResponse
+    suspend fun postDailyPractice(jwt: String): Result<PracticeResponse>
     suspend fun postDailyPracticeResults(
         jwt: String,
         dailyPracticeResults: DailyPracticeResultsRequest

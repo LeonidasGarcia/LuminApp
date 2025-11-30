@@ -19,7 +19,10 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
+import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.response.ApplicationResponse
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.PolymorphicModuleBuilder
 import kotlinx.serialization.modules.polymorphic
@@ -57,9 +60,12 @@ val practiceResultsModule by lazy {
 
 val modules = practiceModule.plus(practiceResultsModule)
 
+class ForbiddenException(message: String) : Exception(message)
+
 object KtorClientFactory {
     fun createClient(): HttpClient {
         return HttpClient(CIO) {
+
             install(Logging) {
                 logger = Logger.SIMPLE
                 level = LogLevel.BODY

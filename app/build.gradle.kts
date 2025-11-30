@@ -163,7 +163,9 @@ dependencies {
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
 
     implementation("io.ktor:ktor-client-logging:3.1.2")
+    implementation("io.ktor:ktor-server-status-pages:3.1.2")
 
     implementation(libs.androidx.core.splashscreen)
+
 
 }

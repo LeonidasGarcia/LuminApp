@@ -2,6 +2,7 @@ package com.luminteam.lumin.ui.navigation
 
 import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -24,6 +25,8 @@ import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.UserViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlin.collections.get
 
@@ -36,6 +39,8 @@ fun HomeNavigation(
     levelNavigationViewModel: LevelNavigationViewModel,
     contentViewModel: ContentViewModel,
     userViewModel: UserViewModel,
+    rootScope: CoroutineScope,
+    snackbarHostState: SnackbarHostState,
     navigateCurrentTheoryPage: () -> Unit
 ) {
     val updateCurrentBackAction: (TopBarBackAction) -> Unit = {
@@ -86,6 +91,7 @@ fun HomeNavigation(
                     userViewModel = userViewModel,
                     contentViewModel = contentViewModel,
                     navigateCurrentTheoryPage = navigateCurrentTheoryPage,
+
                     navigateDailyPractice = {
                         backStack.add(PracticeScreen)
                     })
@@ -104,7 +110,15 @@ fun HomeNavigation(
 
                 // cargamos la practica diaria
                 LaunchedEffect(Unit) {
-                    levelNavigationViewModel.loadDailyPractice()
+                    val isSuccess = levelNavigationViewModel.loadDailyPractice()
+                    if (!isSuccess) {
+                        rootScope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = "Ya has tomado la práctica diaria, ¡regresa mañana!"
+                            )
+                        }
+                        backStack.removeLastOrNull()
+                    }
                 }
 
                 updateCurrentBackAction() {

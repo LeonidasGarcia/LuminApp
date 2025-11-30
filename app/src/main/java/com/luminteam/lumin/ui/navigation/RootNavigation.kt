@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -64,6 +66,8 @@ fun RootNavigation(
     levelNavigationViewModel: LevelNavigationViewModel,
     modifier: Modifier = Modifier
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     // Esto es para que Lumin te pregunte si quieres notificaciones cuando abras la app por primera vez
     val context = LocalContext.current
     val settingsRepository = LocalSettingsRepository.current
@@ -155,6 +159,9 @@ fun RootNavigation(
 
     Scaffold(
         modifier = Modifier.imePadding(),
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
         bottomBar = {
             BottomBar(
                 navigateHome = {
@@ -231,7 +238,9 @@ fun RootNavigation(
                                     rootViewModel = viewModel,
                                     navigateCurrentTheoryPage = {
                                         navigateCurrentTheoryPage()
-                                    }
+                                    },
+                                    snackbarHostState = snackbarHostState,
+                                    rootScope = scope
                                 )
                             }
                             entry<ProfileNavigation> {

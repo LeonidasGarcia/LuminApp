@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import coil.request.SuccessResult
 import com.luminteam.lumin.data.repository.LoginRepository
 import com.luminteam.lumin.services.luminapi.dto.AnswerRequest
 import com.luminteam.lumin.services.luminapi.dto.CompleteTheCodeAnswerRequest
@@ -49,6 +50,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.xml.transform.Result
 
 val hiperLongQuestion =
     "Lorem ipsum dolor sit amet, ct, sed do eiu laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, ct, sed do eiu laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscingaute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est labor Lorem ipsum dolor sit amet, consectetur adipiscing"
@@ -321,61 +323,67 @@ class LevelNavigationViewModel(
         }
     }
 
-    fun loadDailyPractice() {
+    suspend fun loadDailyPractice(): Boolean {
         Log.d("Practica Diaria", "Cargando practica diaria")
-        viewModelScope.launch {
-            val jwt = loginRepository.jwt.first()
-            val practiceResponse = aIRepository.postDailyPractice(jwt = jwt)
+        val jwt = loginRepository.jwt.first()
+        val practiceResult = aIRepository.postDailyPractice(jwt = jwt)
 
-            _practiceResponseState.update {
-                practiceResponse
-            }
+        if (practiceResult.isFailure) {
+            return false
+        }
 
-            val uiQuestions: List<Question> = practiceResponse.questions.map { questionResponse ->
-                when (questionResponse) {
-                    is SingleSelectionResponse ->
-                        SingleSelectionQuestion(
-                            id = questionResponse.id,
-                            question = questionResponse.question,
-                            options = questionResponse.options
-                        )
+        val practiceResponse = practiceResult.getOrNull()!!
 
-                    is FreeResponseResponse ->
-                        FreeResponseQuestion(
-                            id = questionResponse.id,
-                            question = questionResponse.question,
-                        )
+        _practiceResponseState.update {
+            practiceResponse
+        }
 
-                    is FixTheCodeResponse ->
-                        FixTheCodeQuestion(
-                            id = questionResponse.id,
-                            wrongCode = questionResponse.wrongCode
-                        )
+        val uiQuestions: List<Question> = practiceResponse.questions.map { questionResponse ->
+            when (questionResponse) {
+                is SingleSelectionResponse ->
+                    SingleSelectionQuestion(
+                        id = questionResponse.id,
+                        question = questionResponse.question,
+                        options = questionResponse.options
+                    )
 
-                    is CompleteTheCodeResponse ->
-                        CompleteTheCodeQuestion(
-                            id = questionResponse.id,
-                            codeLines = questionResponse.codeLines.map { lineResponse ->
-                                Line(tokens = lineResponse.tokens.map { tokenResponse ->
-                                    val token = tokenResponse.token
-                                    when (token) {
-                                        "INDENT" -> Indent
-                                        "MISSING" -> Missing
-                                        else -> Word(
-                                            token = token
-                                        )
-                                    }
-                                })
-                            },
-                            missingTokens = questionResponse.missingTokens
-                        )
-                }
-            }
+                is FreeResponseResponse ->
+                    FreeResponseQuestion(
+                        id = questionResponse.id,
+                        question = questionResponse.question,
+                    )
 
-            _questionsUiState.update {
-                it.copy(questions = uiQuestions)
+                is FixTheCodeResponse ->
+                    FixTheCodeQuestion(
+                        id = questionResponse.id,
+                        wrongCode = questionResponse.wrongCode
+                    )
+
+                is CompleteTheCodeResponse ->
+                    CompleteTheCodeQuestion(
+                        id = questionResponse.id,
+                        codeLines = questionResponse.codeLines.map { lineResponse ->
+                            Line(tokens = lineResponse.tokens.map { tokenResponse ->
+                                val token = tokenResponse.token
+                                when (token) {
+                                    "INDENT" -> Indent
+                                    "MISSING" -> Missing
+                                    else -> Word(
+                                        token = token
+                                    )
+                                }
+                            })
+                        },
+                        missingTokens = questionResponse.missingTokens
+                    )
             }
         }
+
+        _questionsUiState.update {
+            it.copy(questions = uiQuestions)
+        }
+
+        return true
     }
 
     fun loadDailyPracticeResults(sectionId: Int) {
