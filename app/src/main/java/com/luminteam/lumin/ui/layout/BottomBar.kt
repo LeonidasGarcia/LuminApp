@@ -43,7 +43,7 @@ fun BottomBar(
 
     val barItems = listOf(
         BarItem("MainScreen", R.drawable.home_icon, "Inicio",navigateHome),
-        BarItem("SectionsScreen", R.drawable.brain_icon, "Aprender", navigateLevel),
+        BarItem("SectionsScreen", R.drawable.learn_icon, "Aprender", navigateLevel),
         BarItem("ProfileScreen", R.drawable.user_icon, "Perfil", navigateProfile),
         BarItem("SettingsScreen", R.drawable.setttings_icon, "Ajustes", navigateSettings)
     )
