@@ -37,7 +37,7 @@ fun LuminChat(
     val listState: LazyListState = rememberLazyListState()
 
     LaunchedEffect(messages.size) {
-        if (messages.isNotEmpty()) {
+        if (messages.isNotEmpty() && messages.size >= 2) {
             listState.animateScrollToItem(messages.size - 2)
         }
     }

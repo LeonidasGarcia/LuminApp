@@ -69,7 +69,9 @@ fun MessageBox(
         )
         Button(
             onClick = {
-                onSend()
+                if (prompt != "") {
+                    onSend()
+                }
             },
             modifier = Modifier
                 .width(50.dp)

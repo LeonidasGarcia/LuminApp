@@ -271,6 +271,7 @@ fun LevelNavigation(
             }
             entry<AiChatScreen> {
                 updateCurrentBackAction() {
+                    aiChatViewModel.clearMessages()
                     backStack.removeLastOrNull()
                     updateShowTopBarRightButton(true)
                 }
@@ -284,12 +285,21 @@ fun LevelNavigation(
                 )
                 updateShowTopBarRightButton(false)
 
+                val levelName =
+                    contentViewModel.levels.collectAsStateWithLifecycle().value.levels[currentAppContentState.currentLevelId]!!.name
+                val sectionName =
+                    contentViewModel.sections.collectAsStateWithLifecycle().value.sections[currentAppContentState.currentSectionId]!!.name
+
                 AiChatScreen(
-                    aiChatViewModel = aiChatViewModel
+                    userViewModel = userViewModel,
+                    aiChatViewModel = aiChatViewModel,
+                    levelName = levelName,
+                    sectionName = sectionName
                 )
             }
             entry<AiFeedbackChatScreen> {
                 updateCurrentBackAction() {
+                    aiChatViewModel.clearMessages()
                     updateShowTopBarRightButton(true)
                     backStack.removeLastOrNull()
                 }
@@ -303,9 +313,23 @@ fun LevelNavigation(
                 )
                 updateShowTopBarRightButton(false)
 
+                val levelName =
+                    contentViewModel.levels.collectAsStateWithLifecycle().value.levels[currentAppContentState.currentLevelId]!!.name
+                val sectionName =
+                    contentViewModel.sections.collectAsStateWithLifecycle().value.sections[currentAppContentState.currentSectionId]!!.name
+
+                val questions =
+                    viewModel.practiceResponseState.collectAsStateWithLifecycle().value.questions
+                val answers = viewModel.getQuestionAnswers()
+
                 AiFeedbackChatScreen(
+                    userViewModel = userViewModel,
                     viewModel = viewModel,
-                    aiChatViewModel = aiChatViewModel
+                    aiChatViewModel = aiChatViewModel,
+                    levelName = levelName,
+                    sectionName = sectionName,
+                    questions = questions,
+                    answers = answers
                 )
             }
         }
