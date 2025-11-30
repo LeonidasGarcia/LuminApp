@@ -39,11 +39,8 @@ fun SwitchOption(
     isActived: Boolean = false,
     onClick: (Boolean) -> Unit = {}
 ) {
-    val playSound = rememberSoundPlayer()
-
     Column(
         modifier = Modifier.clickable {
-            playSound(LuminSounds.SWITCH)
             onClick(!isActived)
         }
     ) {

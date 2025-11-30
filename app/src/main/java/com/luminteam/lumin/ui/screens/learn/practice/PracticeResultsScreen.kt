@@ -76,7 +76,7 @@ fun PracticeResultsScreen(
             ResultData(
                 title = "Que pena...",
                 resultsPercentage = (questionsResults.filter { it }.size * 100 / questionsResults.size),
-                resultsCountIcon = R.drawable.user_icon,
+                resultsCountIcon = R.drawable.xmark_icon,
                 resultCountIconColor = LuminLightGray,
                 resultsCount = questionsResults.filter { !it }.size,
                 results = questionsResults.mapIndexed { index, bool ->
@@ -86,7 +86,7 @@ fun PracticeResultsScreen(
                         -1
                     }
                 }.filter { it != -1 },
-                resultMessageIcon = R.drawable.robot_icon,
+                resultMessageIcon = R.drawable.skull_icon,
                 resultMessageIconColor = LuminLightGray,
                 resultMessage = "Sección no superada",
                 needFeedback = true,
@@ -99,7 +99,7 @@ fun PracticeResultsScreen(
             ResultData(
                 title = "¡Lo lograste!",
                 resultsPercentage = (questionsResults.filter { it }.size * 100 / questionsResults.size),
-                resultsCountIcon = R.drawable.retry_icon,
+                resultsCountIcon = R.drawable.checkmark_icon,
                 resultCountIconColor = LuminCyan,
                 resultsCount = questionsResults.filter { it }.size,
                 results = questionsResults.mapIndexed { index, bool ->
@@ -109,7 +109,7 @@ fun PracticeResultsScreen(
                         -1
                     }
                 }.filter { it != -1 },
-                resultMessageIcon = R.drawable.next_arrow_icon,
+                resultMessageIcon = R.drawable.medal_icon,
                 resultMessageIconColor = LuminCyan,
                 resultMessage = "¡Sección superada!",
                 needFeedback = true,
@@ -122,7 +122,7 @@ fun PracticeResultsScreen(
             ResultData(
                 title = "¡Lo hiciste perfecto!",
                 resultsPercentage = (questionsResults.filter { it }.size * 100 / questionsResults.size),
-                resultsCountIcon = R.drawable.retry_icon,
+                resultsCountIcon = R.drawable.checkmark_icon,
                 resultCountIconColor = LuminCyan,
                 resultsCount = questionsResults.filter { it }.size,
                 results = questionsResults.mapIndexed { index, bool ->
@@ -132,7 +132,7 @@ fun PracticeResultsScreen(
                         -1
                     }
                 }.filter { it != -1 },
-                resultMessageIcon = R.drawable.practice_icon,
+                resultMessageIcon = R.drawable.trophy_icon,
                 resultMessageIconColor = LuminCyan,
                 resultMessage = "¡Sección perfectamente superada!",
                 needFeedback = false,

@@ -7,7 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.luminteam.lumin.data.repository.AppConfig
 import com.luminteam.lumin.util.alarm.AlarmScheduler
@@ -31,10 +34,12 @@ import com.luminteam.lumin.ui.viewmodels.SignInViewModel
 import com.luminteam.lumin.ui.viewmodels.UserViewModel
 import com.luminteam.lumin.util.sound.SoundManager
 import com.luminteam.lumin.util.vibration.VibrationManager
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        val splashScreen = installSplashScreen()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
@@ -44,6 +49,16 @@ class MainActivity : ComponentActivity() {
         val alarmScheduler = AlarmScheduler(applicationContext)
         val vibrationManager = VibrationManager(applicationContext)
         val soundManager = SoundManager(applicationContext)
+
+        var isReady by mutableStateOf(false)
+        var initialToken by mutableStateOf<String?>(null)
+
+        splashScreen.setKeepOnScreenCondition { !isReady }
+
+        lifecycleScope.launch {
+            initialToken = loginRepository.jwt.first()
+            isReady = true
+        }
 
         setContent {
             // Config global
@@ -99,14 +114,17 @@ class MainActivity : ComponentActivity() {
                         )
                     )
 
-                    MainNavigation(
-                        signInViewModel = signInViewModel,
-                        userViewModel = userViewModel,
-                        settingsViewModel = settingsViewModel,
-                        contentViewModel = contentViewModel,
-                        levelNavigationViewModel = levelNavigationViewModel,
-                        aiChatViewModel = aiChatViewModel
-                    )
+                    if (isReady) {
+                        MainNavigation(
+                            initialToken = initialToken,
+                            signInViewModel = signInViewModel,
+                            userViewModel = userViewModel,
+                            settingsViewModel = settingsViewModel,
+                            contentViewModel = contentViewModel,
+                            levelNavigationViewModel = levelNavigationViewModel,
+                            aiChatViewModel = aiChatViewModel
+                        )
+                    }
                 }
             }
         }

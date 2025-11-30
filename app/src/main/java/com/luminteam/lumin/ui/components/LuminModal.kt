@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -20,6 +21,8 @@ import com.luminteam.lumin.ui.theme.LuminBackground
 import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminRed
 import com.luminteam.lumin.ui.theme.LuminWhite
+import com.luminteam.lumin.util.sound.LuminSounds
+import com.luminteam.lumin.util.sound.rememberSoundPlayer
 
 @Preview(showSystemUi = false)
 @Composable
@@ -35,7 +38,12 @@ fun LuminModal(
     confirmColor: Color = LuminRed,
     confirmTextColor: Color = LuminWhite,
 ) {
+    val playSound = rememberSoundPlayer()
+
     if (isShown) {
+        LaunchedEffect(Unit) {
+            playSound(LuminSounds.MODAL)
+        }
         Dialog(
             onDismissRequest = onDismissRequest,
         ) {

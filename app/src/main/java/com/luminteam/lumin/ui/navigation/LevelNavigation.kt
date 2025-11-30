@@ -1,10 +1,15 @@
 package com.luminteam.lumin.ui.navigation
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -16,6 +21,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.components.LuminLoading
+import com.luminteam.lumin.ui.components.LuminModal
 import com.luminteam.lumin.ui.domain.TopBarBackAction
 import com.luminteam.lumin.ui.domain.TitleTopBar
 import com.luminteam.lumin.ui.domain.TopBarRightButtonActionType
@@ -80,7 +86,6 @@ fun LevelNavigation(
     val levels = contentViewModel.levels.collectAsStateWithLifecycle().value
     val sections = contentViewModel.sections.collectAsStateWithLifecycle().value
 
-
     NavDisplay(
         backStack = backStack,
         modifier = Modifier
@@ -90,7 +95,7 @@ fun LevelNavigation(
             rememberViewModelStoreNavEntryDecorator()
         ), entryProvider = entryProvider {
             entry<LevelsScreen> {
-                Log.d("revision", "levels cargado")
+                Log.d("revision", "Los niveles están cargado...")
                 updateCurrentBackAction() {}
                 updateCanGoBack(false)
                 updateShowBottomBar(true)
@@ -110,6 +115,23 @@ fun LevelNavigation(
                     })
             }
             entry<PracticeScreen> {
+                var isShownExit by remember { mutableStateOf(false) }
+
+                LuminModal(
+                    isShown = isShownExit,
+                    title = "¿Salir de la práctica?",
+                    description = "Gastaste 1 de energía para generar esta práctica, perderás todo tu progreso de la práctica y tendrás que empezar una nueva.",
+                    confirmText = "Si. Salir",
+                    cancelText = "No. Cancelar",
+                    onDismissRequest = { isShownExit = false },
+                    onConfirm = {
+                        viewModel.resetPractice()
+                        viewModel.resetPracticeResults()
+
+                        backStack.removeLastOrNull()
+                    }
+                )
+
                 // siempre debe recargar todas las preguntas al entrar a este lugar
                 // se debe implementar una manera de vaciar todas las preguntas cuando se termina el proceso de práctica!!!!
                 /*
@@ -131,12 +153,12 @@ fun LevelNavigation(
                 }
 
                 updateCurrentBackAction() {
-                    // más operaciones para limpiar el estado de la practica
-                    viewModel.resetPractice()
-                    viewModel.resetPracticeResults()
-
-                    backStack.removeLastOrNull()
+                    isShownExit = true
                 }
+                BackHandler {
+                    isShownExit = true
+                }
+
                 updateCanGoBack(true)
                 updateShowBottomBar(false)
 

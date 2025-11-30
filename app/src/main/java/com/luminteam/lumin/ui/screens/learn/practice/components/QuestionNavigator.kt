@@ -24,7 +24,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -36,6 +38,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.luminteam.lumin.R
+import com.luminteam.lumin.ui.components.LuminModal
+import com.luminteam.lumin.ui.theme.LuminBlack
+import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminLightGray
 import kotlinx.coroutines.delay
@@ -83,6 +88,25 @@ fun QuestionNavigator(
         1.05f at 1500
         1f at 3000
     }
+
+    var isShownFinish by remember { mutableStateOf(false) }
+
+    LuminModal(
+        isShown = isShownFinish,
+        title = "¿Terminar Práctica?",
+        description = "Enviarás la práctica para que el Agente Evaluador te califique. Si aún quieres modificar tus respuestas puedes presionar el botón de Cancelar",
+        confirmText = "Si. Terminar",
+        cancelText = "No. Cancelar",
+        onDismissRequest = {
+            isShownFinish = false
+        },
+        onConfirm = {
+            isShownFinish = false
+            navigatePracticeResults()
+        },
+        confirmColor = LuminCyan,
+        confirmTextColor = LuminBlack
+    )
 
     LaunchedEffect(canGoNext) {
         if (canGoNext) {
@@ -148,10 +172,10 @@ fun QuestionNavigator(
                 ) {
                     scope.launch {
                         focusManager.clearFocus()
-                        delay(300L)
                         if (isLastQuestion) {
-                            navigatePracticeResults()
+                            isShownFinish = true
                         } else {
+                            delay(300L)
                             onNextQuestion()
                         }
                     }

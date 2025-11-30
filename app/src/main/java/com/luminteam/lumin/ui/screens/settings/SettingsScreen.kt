@@ -16,6 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import com.luminteam.lumin.R
 import com.luminteam.lumin.data.repository.LocalAppConfig
+import com.luminteam.lumin.data.repository.LocalSoundManager
 import com.luminteam.lumin.data.repository.LocalVibrationManager
 import com.luminteam.lumin.ui.components.LuminButtonAlt
 import com.luminteam.lumin.ui.components.LuminContentThemeButtonDefaults
@@ -46,6 +47,7 @@ fun SettingsScreen(
 
     val config = LocalAppConfig.current
     val context = LocalContext.current
+    val soundManager = LocalSoundManager.current
     val vibrator = LocalVibrationManager.current
 
     val formattedTime = remember(state.dailyReminderTime) {
@@ -57,7 +59,8 @@ fun SettingsScreen(
         }
     }
 
-    var isShown by remember { mutableStateOf(false) }
+    var isShownLogout by remember { mutableStateOf(false) }
+    var isShownDelete by remember { mutableStateOf(false) }
 
     val playSound = rememberSoundPlayer()
 
@@ -85,15 +88,28 @@ fun SettingsScreen(
             false
         ).show()
     }
+    LuminModal(
+        isShown = isShownLogout,
+        title = "¿Salir cuenta?",
+        description = "Saldrás de tu sesión, puedes volver a iniciarla luego. Tu progreso se guardará.",
+        confirmText = "Si. Salir",
+        cancelText = "No. Cancelar",
+        onDismissRequest = { isShownLogout = false },
+        onConfirm = {
+            viewModel.logout()
+        }
+    )
 
     LuminModal(
-        isShown = isShown,
+        isShown = isShownDelete,
         title = "¿Eliminar cuenta?",
         description = "Perderás todo tu progreso, racha y logros. Esta acción no se puede deshacer.",
         confirmText = "Si. Eliminar",
         cancelText = "No. Cancelar",
-        onDismissRequest = { isShown = false },
-        onConfirm = { /* Aca borras la cuenta :v */ }
+        onDismissRequest = { isShownDelete = false },
+        onConfirm = {
+            viewModel.logout()
+        }
     )
 
     LazyColumn(
@@ -108,8 +124,9 @@ fun SettingsScreen(
                 text = "Efectos de sonido",
                 description = "Los efectos de sonido de la aplicación al momento de tocar botones",
                 isActived = state.isSfxOn,
-                onClick = {
-                    viewModel.toggleSfx(it)
+                onClick = { isTurningOn ->
+                    viewModel.toggleSfx(isTurningOn)
+                    if (isTurningOn) soundManager.play(LuminSounds.SWITCH)
                 }
             )
         }
@@ -118,9 +135,10 @@ fun SettingsScreen(
                 text = "Vibración",
                 description = "La vibración de la aplicación al momento de realizar acciones importantes",
                 isActived = state.isVibrationOn,
-                onClick = {
-                    viewModel.toggleVibration(it)
-                    vibrate()
+                onClick = { isTurningOn ->
+                    playSound(LuminSounds.SWITCH)
+                    viewModel.toggleVibration(isTurningOn)
+                    if (isTurningOn) vibrator.vibrate()
                 }
             )
         }
@@ -134,11 +152,12 @@ fun SettingsScreen(
             LuminButtonAlt(
                 title = "Cerrar sesión",
                 description = "",
+                icon = R.drawable.logout_icon,
                 color = LuminDarkGray,
                 contentTheme = LuminContentThemeButtonDefaults.dark,
                 onClick = {
                     vibrate()
-                    viewModel.logout()
+                    isShownLogout = true
                 },
             )
         }
@@ -153,14 +172,22 @@ fun SettingsScreen(
                 text = "Recordatorio diario",
                 description = "Recordatorio diario de lecciones",
                 isActived = state.isDailyReminderOn,
-                onClick = { viewModel.toggleDailyReminder(it) }
+                onClick = {
+                    playSound(LuminSounds.SWITCH)
+                    viewModel.toggleDailyReminder(it)
+                }
             )
         }
         item {
             Option(
                 text = "Hora de recordatorio",
                 valueText = formattedTime,
-                onClick = { if (state.isDailyReminderOn) showTimePicker() else Unit },
+                onClick = {
+                    if (state.isDailyReminderOn) {
+                        playSound(LuminSounds.TAP)
+                        showTimePicker()
+                    } else Unit
+                },
                 valueIcon = R.drawable.clock_icon,
                 valueColor = if (state.isDailyReminderOn) LuminCyan else LuminLightGray,
             )
@@ -205,8 +232,7 @@ fun SettingsScreen(
                 color = LuminRed,
                 onClick = {
                     vibrate()
-                    isShown = true
-                    playSound(LuminSounds.MODAL)
+                    isShownDelete = true
                 },
             )
         }

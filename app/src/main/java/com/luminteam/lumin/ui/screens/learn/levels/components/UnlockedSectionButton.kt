@@ -16,6 +16,8 @@ import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminGray
 import com.luminteam.lumin.ui.theme.LuminTheme
+import com.luminteam.lumin.util.sound.LuminSounds
+import com.luminteam.lumin.util.sound.rememberSoundPlayer
 
 @Composable
 fun UnlockedSectionButton(
@@ -26,6 +28,8 @@ fun UnlockedSectionButton(
     onClick: () -> Unit
 ) {
     val icon = if (current) R.drawable.book_icon else R.drawable.medal_icon
+    val playSound = rememberSoundPlayer()
+
 
     LuminButton(
         title = title,
@@ -34,7 +38,10 @@ fun UnlockedSectionButton(
         icon = icon,
         iconColor = LuminBlack,
         modifier = Modifier.padding(10.dp),
-        onClick = onClick
+        onClick = {
+            onClick()
+            playSound(LuminSounds.TAP)
+        }
     ) {
         Column {
             Text(

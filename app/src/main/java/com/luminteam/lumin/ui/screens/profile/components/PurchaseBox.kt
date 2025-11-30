@@ -64,7 +64,6 @@ fun PurchaseBox(
             .wrapContentHeight()
             .clip(RoundedCornerShape(15.dp))
             .background(color = LuminDarkestGray)
-            .clickable(onClick = {})
             .padding(20.dp)
     ) {
         SubtitleText(text = "Ilumínate con estos beneficios")

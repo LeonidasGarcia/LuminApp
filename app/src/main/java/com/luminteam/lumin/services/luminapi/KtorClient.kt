@@ -80,7 +80,7 @@ object KtorClientFactory {
             }
 
             defaultRequest {
-                url("http://10.0.2.2:8000/") // Establecer una URL base
+                url("http://192.168.1.33:8000/") // Establecer una URL base
             }
         }
     }

@@ -22,6 +22,12 @@ class SoundManager(
             .setAudioAttributes(audioAttributes)
             .build()
 
+        soundPool.setOnLoadCompleteListener { pool, sampleId, status ->
+            if (status == 0) {
+                pool.play(sampleId, 0f, 0f, 1, 0, 1f)
+            }
+        }
+
         LuminSounds.values().forEach { sound ->
             soundMap[sound] = soundPool.load(context, sound.resId, 1)
         }
@@ -29,7 +35,7 @@ class SoundManager(
 
     fun play(sound: LuminSounds) {
         val soundId = soundMap[sound] ?: return
-        soundPool.play(soundId, 1f, 1f, 1, 0, 1f)
+        soundPool.play(soundId, 0.85f, 0.85f, 1, 0, 1f)
     }
 
     fun release() {

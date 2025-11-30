@@ -35,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
 import com.luminteam.lumin.R
+import com.luminteam.lumin.ui.components.LuminModal
 import com.luminteam.lumin.ui.screens.learn.practice.components.QuestionNavigator
 import com.luminteam.lumin.ui.screens.learn.practice.components.questions.CompleteTheCode
 import com.luminteam.lumin.ui.screens.learn.practice.components.questions.FixTheCode
@@ -45,6 +46,7 @@ import com.luminteam.lumin.ui.screens.learn.practice.domain.FixTheCodeQuestion
 import com.luminteam.lumin.ui.screens.learn.practice.domain.FreeResponseQuestion
 import com.luminteam.lumin.ui.screens.learn.practice.domain.SingleSelectionQuestion
 import com.luminteam.lumin.ui.theme.LuminBackground
+import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminLightGray
@@ -91,6 +93,7 @@ fun PracticeScreen(
                 }
             },
             navigatePracticeResults = navigatePracticeResults
+
         )
         Text(text = currentQuestion.description, fontSize = 20.sp, fontWeight = FontWeight.Bold)
         when (currentQuestion) {

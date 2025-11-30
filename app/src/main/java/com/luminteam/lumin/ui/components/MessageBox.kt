@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luminteam.lumin.R
+import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminTheme
@@ -82,11 +83,11 @@ fun MessageBox(
         ) {
             Icon(
                 painterResource(R.drawable.send_icon),
-                tint = LuminWhite,
+                tint = LuminBlack,
                 contentDescription = "",
                 modifier = Modifier
-                    .width(30.dp)
-                    .height(30.dp)
+                    .width(25.dp)
+                    .height(25.dp)
             )
         }
     }

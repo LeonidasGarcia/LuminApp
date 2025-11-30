@@ -54,6 +54,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainNavigation(
+    initialToken: String?,
     signInViewModel: SignInViewModel,
     userViewModel: UserViewModel,
     settingsViewModel: SettingsViewModel,
@@ -63,7 +64,7 @@ fun MainNavigation(
     modifier: Modifier = Modifier
 ) {
     val loginRepository = LocalLoginRepository.current
-    val token by loginRepository.jwt.collectAsStateWithLifecycle(initialValue = null)
+    val token by loginRepository.jwt.collectAsStateWithLifecycle(initialValue = initialToken)
 
     val systemUiController = rememberSystemUiController()
 
@@ -76,6 +77,7 @@ fun MainNavigation(
     }
 
     if (!token.isNullOrEmpty()) {
+
         Log.d("Token Revision", token.toString())
         RootNavigation(
             userViewModel = userViewModel,
@@ -84,11 +86,10 @@ fun MainNavigation(
             levelNavigationViewModel = levelNavigationViewModel,
             aiChatViewModel = aiChatViewModel
         )
-        return
+    } else {
+        Log.d("Token Revision", "Cargando login")
+        LoginScreen(
+            signInViewModel = signInViewModel
+        )
     }
-
-    Log.d("Token Revision", "Cargando login")
-    LoginScreen(
-        signInViewModel = signInViewModel
-    )
 }
