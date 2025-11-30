@@ -29,11 +29,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import com.luminteam.lumin.R
 import com.luminteam.lumin.ui.components.LuminButton
+import com.luminteam.lumin.ui.components.LuminButtonAlt
+import com.luminteam.lumin.ui.components.LuminContentThemeButtonDefaults
 import com.luminteam.lumin.ui.components.Separator
 import com.luminteam.lumin.ui.screens.learn.practice.domain.ResultData
 import com.luminteam.lumin.ui.screens.learn.practice.domain.ResultType
 import com.luminteam.lumin.ui.theme.LuminBlack
 import com.luminteam.lumin.ui.theme.LuminCyan
+import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminDarkestGray
 import com.luminteam.lumin.ui.theme.LuminGray
 import com.luminteam.lumin.ui.theme.LuminGreen
@@ -73,7 +76,7 @@ fun PracticeResultsScreen(
             ResultData(
                 title = "Que pena...",
                 resultsPercentage = (questionsResults.filter { it }.size * 100 / questionsResults.size),
-                resultsCountIcon = R.drawable.user_icon,
+                resultsCountIcon = R.drawable.xmark_icon,
                 resultCountIconColor = LuminLightGray,
                 resultsCount = questionsResults.filter { !it }.size,
                 results = questionsResults.mapIndexed { index, bool ->
@@ -83,7 +86,7 @@ fun PracticeResultsScreen(
                         -1
                     }
                 }.filter { it != -1 },
-                resultMessageIcon = R.drawable.robot_icon,
+                resultMessageIcon = R.drawable.skull_icon,
                 resultMessageIconColor = LuminLightGray,
                 resultMessage = "Sección no superada",
                 needFeedback = true,
@@ -96,7 +99,7 @@ fun PracticeResultsScreen(
             ResultData(
                 title = "¡Lo lograste!",
                 resultsPercentage = (questionsResults.filter { it }.size * 100 / questionsResults.size),
-                resultsCountIcon = R.drawable.retry_icon,
+                resultsCountIcon = R.drawable.checkmark_icon,
                 resultCountIconColor = LuminCyan,
                 resultsCount = questionsResults.filter { it }.size,
                 results = questionsResults.mapIndexed { index, bool ->
@@ -106,7 +109,7 @@ fun PracticeResultsScreen(
                         -1
                     }
                 }.filter { it != -1 },
-                resultMessageIcon = R.drawable.next_arrow_icon,
+                resultMessageIcon = R.drawable.medal_icon,
                 resultMessageIconColor = LuminCyan,
                 resultMessage = "¡Sección superada!",
                 needFeedback = true,
@@ -119,7 +122,7 @@ fun PracticeResultsScreen(
             ResultData(
                 title = "¡Lo hiciste perfecto!",
                 resultsPercentage = (questionsResults.filter { it }.size * 100 / questionsResults.size),
-                resultsCountIcon = R.drawable.retry_icon,
+                resultsCountIcon = R.drawable.checkmark_icon,
                 resultCountIconColor = LuminCyan,
                 resultsCount = questionsResults.filter { it }.size,
                 results = questionsResults.mapIndexed { index, bool ->
@@ -129,7 +132,7 @@ fun PracticeResultsScreen(
                         -1
                     }
                 }.filter { it != -1 },
-                resultMessageIcon = R.drawable.practice_icon,
+                resultMessageIcon = R.drawable.trophy_icon,
                 resultMessageIconColor = LuminCyan,
                 resultMessage = "¡Sección perfectamente superada!",
                 needFeedback = false,
@@ -302,28 +305,16 @@ fun PracticeResultsScreen(
 
         if (canRetry) {
             item {
-                LuminButton(
+                LuminButtonAlt(
+                    color = LuminDarkGray,
                     title = "Intentalo de nuevo",
-                    titleColor = LuminWhite,
-                    buttonColor = LuminDarkestGray,
+                    description = "El agente tutor te dará recomendaciones",
                     icon = R.drawable.retry_icon,
-                    iconColor = LuminWhite,
-                    modifier = Modifier.padding(8.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.width(140.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(2.dp)
-                    ) {
-                        Text(
-                            text = "El agente tutor te dará recomendaciones",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium,
-                            textAlign = TextAlign.Center,
-                            color = LuminLightGray
-                        )
+                    contentTheme = LuminContentThemeButtonDefaults.dark,
+                    onClick = {
+                        /// Funcion para generar otra practica
                     }
-                }
+                )
             }
         }
     }
