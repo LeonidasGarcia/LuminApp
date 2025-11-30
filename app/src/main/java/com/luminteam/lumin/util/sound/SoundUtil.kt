@@ -6,14 +6,14 @@ import com.luminteam.lumin.data.repository.LocalAppConfig
 import com.luminteam.lumin.data.repository.LocalSoundManager
 
 @Composable
-fun playTap(): () -> Unit {
+fun rememberSoundPlayer(): (LuminSounds) -> Unit {
     val config = LocalAppConfig.current
     val soundManager = LocalSoundManager.current
 
-    return remember(config) {
-        {
+    return remember(config, soundManager) {
+        { sound ->
             if (config.isSfxOn) {
-                soundManager.tapSound()
+                soundManager.play(sound)
             }
         }
     }

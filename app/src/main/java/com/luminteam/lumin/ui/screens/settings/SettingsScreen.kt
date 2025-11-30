@@ -29,6 +29,8 @@ import com.luminteam.lumin.ui.theme.LuminDarkGray
 import com.luminteam.lumin.ui.theme.LuminLightGray
 import com.luminteam.lumin.ui.theme.LuminRed
 import com.luminteam.lumin.ui.viewmodels.SettingsViewModel
+import com.luminteam.lumin.util.sound.LuminSounds
+import com.luminteam.lumin.util.sound.rememberSoundPlayer
 import kotlinx.serialization.Serializable
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -56,6 +58,8 @@ fun SettingsScreen(
     }
 
     var isShown by remember { mutableStateOf(false) }
+
+    val playSound = rememberSoundPlayer()
 
 
     fun vibrate() {
@@ -102,15 +106,22 @@ fun SettingsScreen(
         item {
             SwitchOption(
                 text = "Efectos de sonido",
+                description = "Los efectos de sonido de la aplicación al momento de tocar botones",
                 isActived = state.isSfxOn,
-                onClick = { viewModel.toggleSfx(it) }
+                onClick = {
+                    viewModel.toggleSfx(it)
+                }
             )
         }
         item {
             SwitchOption(
                 text = "Vibración",
+                description = "La vibración de la aplicación al momento de realizar acciones importantes",
                 isActived = state.isVibrationOn,
-                onClick = { viewModel.toggleVibration(it) }
+                onClick = {
+                    viewModel.toggleVibration(it)
+                    vibrate()
+                }
             )
         }
         item {
@@ -140,6 +151,7 @@ fun SettingsScreen(
         item {
             SwitchOption(
                 text = "Recordatorio diario",
+                description = "Recordatorio diario de lecciones",
                 isActived = state.isDailyReminderOn,
                 onClick = { viewModel.toggleDailyReminder(it) }
             )
@@ -194,6 +206,7 @@ fun SettingsScreen(
                 onClick = {
                     vibrate()
                     isShown = true
+                    playSound(LuminSounds.MODAL)
                 },
             )
         }

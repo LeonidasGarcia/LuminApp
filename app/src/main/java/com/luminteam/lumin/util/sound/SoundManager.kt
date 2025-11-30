@@ -9,7 +9,7 @@ class SoundManager(
     context: Context
 ) {
     private val soundPool: SoundPool
-    private val clickSoundId: Int
+    private val soundMap = mutableMapOf<LuminSounds, Int>()
 
     init {
         val audioAttributes = AudioAttributes.Builder()
@@ -18,16 +18,18 @@ class SoundManager(
             .build()
 
         soundPool = SoundPool.Builder()
-            .setMaxStreams(1)
+            .setMaxStreams(5)
             .setAudioAttributes(audioAttributes)
             .build()
 
-        clickSoundId = soundPool.load(context, R.raw.sfx_tap, 1)
+        LuminSounds.values().forEach { sound ->
+            soundMap[sound] = soundPool.load(context, sound.resId, 1)
+        }
     }
 
-    fun tapSound() {
-        soundPool.play(clickSoundId, 1f, 1f, 1, 0, 1f)
-
+    fun play(sound: LuminSounds) {
+        val soundId = soundMap[sound] ?: return
+        soundPool.play(soundId, 1f, 1f, 1, 0, 1f)
     }
 
     fun release() {

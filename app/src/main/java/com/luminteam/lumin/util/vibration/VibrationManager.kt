@@ -13,7 +13,7 @@ class VibrationManager(
 
         if (vibrator.hasVibrator()) {
             vibrator.vibrate(
-                VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE)
+                VibrationEffect.createOneShot(250, VibrationEffect.DEFAULT_AMPLITUDE)
             )
         }
     }

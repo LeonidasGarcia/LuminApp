@@ -51,6 +51,8 @@ import com.luminteam.lumin.ui.theme.LuminGreen
 import com.luminteam.lumin.ui.theme.LuminLightGray
 import com.luminteam.lumin.ui.theme.LuminTheme
 import com.luminteam.lumin.ui.theme.LuminWhite
+import com.luminteam.lumin.util.sound.LuminSounds
+import com.luminteam.lumin.util.sound.rememberSoundPlayer
 
 data class AccordionValues(
     val iconColor: Color,
@@ -97,6 +99,9 @@ fun LevelAccordion(
         )
     )
 
+    val playSound = rememberSoundPlayer()
+    val dropdownSound = if (!unfolded) LuminSounds.DROPDOWN_DOWN else LuminSounds.DROPDOWN_UP
+
     val selectedValues = if (unfolded) unfoldedValues else foldedValues
 
     Column(
@@ -105,7 +110,10 @@ fun LevelAccordion(
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(10.dp))
-                .clickable { unfolded = unfolded.not() }
+                .clickable {
+                    unfolded = unfolded.not()
+                    playSound(dropdownSound)
+                }
                 .fillMaxWidth()
                 .padding(20.dp),
             horizontalArrangement = Arrangement.SpaceBetween,

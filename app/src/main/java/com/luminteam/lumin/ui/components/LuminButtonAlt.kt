@@ -32,7 +32,8 @@ import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.theme.LuminDarkestGray
 import com.luminteam.lumin.ui.theme.LuminLightGray
 import com.luminteam.lumin.ui.theme.LuminWhite
-import com.luminteam.lumin.util.sound.playTap
+import com.luminteam.lumin.util.sound.LuminSounds
+import com.luminteam.lumin.util.sound.rememberSoundPlayer
 
 data class LuminContentTheme(
     val titleColor: Color,
@@ -64,7 +65,7 @@ fun LuminButtonAlt(
     contentTheme: LuminContentTheme = LuminContentThemeButtonDefaults.light,
     onClick: () -> Unit = {},
 ) {
-    val playTap = playTap()
+    val playSound = rememberSoundPlayer()
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -75,7 +76,7 @@ fun LuminButtonAlt(
             .clip(RoundedCornerShape(15.dp))
             .background(color = color)
             .clickable {
-                playTap()
+                playSound(LuminSounds.TAP)
                 onClick()
             }
             .padding(start = 45.dp),
@@ -136,7 +137,7 @@ fun LuminSquareButtonAlt(
     contentTheme: LuminContentTheme = LuminContentThemeButtonDefaults.light,
     onClick: () -> Unit = {}
 ) {
-    val playTap = playTap()
+    val playSound = rememberSoundPlayer()
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -147,7 +148,7 @@ fun LuminSquareButtonAlt(
             .clip(RoundedCornerShape(15.dp))
             .background(color = color)
             .clickable {
-                playTap()
+                playSound(LuminSounds.TAP)
                 onClick()
             },
     ) {
@@ -198,7 +199,7 @@ fun LuminSmallButton(
     buttonColor: Color = LuminCyan,
     onClick: () -> Unit = {}
 ) {
-    val playTap = playTap()
+    val playSound = rememberSoundPlayer()
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -209,7 +210,7 @@ fun LuminSmallButton(
             .clip(RoundedCornerShape(15.dp))
             .background(color = buttonColor)
             .clickable {
-                playTap()
+                playSound(LuminSounds.TAP)
                 onClick()
             }
             .padding(horizontal = 20.dp)
