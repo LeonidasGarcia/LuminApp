@@ -1,5 +1,6 @@
 package com.luminteam.lumin.ui.screens.learn.theory
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +33,7 @@ import com.luminteam.lumin.ui.theme.LuminCyan
 import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.RootNavigationViewModel
+import com.luminteam.lumin.ui.viewmodels.UserViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -40,14 +42,23 @@ data object TheoryScreen : NavKey
 @Composable
 fun TheoryScreen(
     rootViewModel: RootNavigationViewModel,
+    userViewModel: UserViewModel,
     contentViewModel: ContentViewModel,
     viewModel: LevelNavigationViewModel,
     navigateSection: () -> Unit,
     updateCurrentTitleTopBar: (String, Int) -> Unit
 ) {
+
+
     val currentAppContentState =
         viewModel.currentAppContentState.collectAsStateWithLifecycle().value
     val currentSectionId = currentAppContentState.currentSectionId!!
+
+    Log.d(
+        "revision",
+        userViewModel.currentUserMetricsData.collectAsStateWithLifecycle().value.toString()
+    )
+
     val currentSection =
         contentViewModel.sections.collectAsStateWithLifecycle().value.sections[currentSectionId]!!
 
@@ -56,6 +67,13 @@ fun TheoryScreen(
     val pageIdList = currentSection.pages
     val pages = contentViewModel.pages.collectAsStateWithLifecycle().value.pages
     val currentPage = pages[currentPageId]!!
+
+    val currentUserLastPageId =
+        userViewModel.currentUserMetricsData.collectAsStateWithLifecycle().value.currentPageId
+    val currentUserLastPage = pages[currentUserLastPageId]!!
+
+    val currentUserMetricsData =
+        userViewModel.currentUserMetricsData.collectAsStateWithLifecycle().value
 
     //val currentSectionState = viewModel.currentSection.collectAsStateWithLifecycle()
     //val theory = currentSectionState.value!!.theory
@@ -69,6 +87,21 @@ fun TheoryScreen(
 
     LaunchedEffect(currentPageId) {
         lazyListState.animateScrollToItem(0)
+    }
+
+    // efecto encargado de ejecutar la actualizacion de la pagina en el servidor
+    LaunchedEffect(currentAppContentState) {
+        if (currentPage.pageNumber > currentUserLastPage.pageNumber) {
+            val updatedContentState = userViewModel.setLastPage(idPage = currentPage.id)
+
+            userViewModel.updateUserMetricsData(
+                currentUserMetricsData.copy(
+                    currentPageId = updatedContentState.id_page,
+                    currentSectionId = updatedContentState.id_section,
+                    currentLevelId = updatedContentState.id_level
+                )
+            )
+        }
     }
 
     LaunchedEffect(currentPageId) {

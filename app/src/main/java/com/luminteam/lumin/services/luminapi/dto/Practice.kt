@@ -21,7 +21,6 @@ data class SingleSelectionResponse(
     override val id: Int,
     val question: String,
     val options: List<String>,
-    val description: String
 ) : QuestionResponse
 
 @Serializable
@@ -29,7 +28,6 @@ data class SingleSelectionResponse(
 data class FreeResponseResponse(
     override val id: Int,
     val question: String,
-    val description: String
 ) : QuestionResponse
 
 @Serializable
@@ -37,7 +35,6 @@ data class FreeResponseResponse(
 data class FixTheCodeResponse(
     override val id: Int,
     val wrongCode: String,
-    val description: String
 ) : QuestionResponse
 
 @Serializable
@@ -46,7 +43,6 @@ data class CompleteTheCodeResponse(
     override val id: Int,
     val codeLines: List<LineResponse>,
     val missingTokens: List<String>,
-    val description: String
 ) : QuestionResponse
 
 @Serializable

@@ -2,6 +2,10 @@ package com.luminteam.lumin.ui.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.luminteam.lumin.data.repository.LoginRepository
 import com.luminteam.lumin.services.luminapi.dto.AnswerRequest
 import com.luminteam.lumin.ui.domain.ChatMessage
 import com.luminteam.lumin.ui.domain.ChatMessageType
@@ -12,7 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class AIChatViewModel : ViewModel() {
+class AIChatViewModel(private val loginRepository: LoginRepository) : ViewModel() {
     private val _messages = MutableStateFlow<List<ChatMessage>>(messagesMock)
     var messages: StateFlow<List<ChatMessage>> = _messages.asStateFlow()
 
@@ -82,5 +86,14 @@ print("Tarea completada ✅")
         _messages.update {
             listOf()
         }
+    }
+
+    companion object {
+        fun provideFactory(repository: LoginRepository): ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    LevelNavigationViewModel(repository)
+                }
+            }
     }
 }

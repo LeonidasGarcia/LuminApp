@@ -177,8 +177,11 @@ fun LevelNavigation(
                 updateShowBottomBar(false)
                 updateCurrentTopBarRightButtonActionType(TopBarRightButtonActionType.SHOW_AI_CHAT)
 
+                Log.d("revision", currentAppContentState.toString())
+
                 TheoryScreen(
                     rootViewModel = rootViewModel,
+                    userViewModel = userViewModel,
                     contentViewModel = contentViewModel,
                     viewModel = viewModel,
                     navigateSection = {

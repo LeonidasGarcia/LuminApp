@@ -59,9 +59,8 @@ fun RootNavigation(
     //No debes poner viewModel por default a los que ya estan funcionales
     userViewModel: UserViewModel,
     settingsViewModel: SettingsViewModel,
-
-    contentViewModel: ContentViewModel = viewModel(),
-    aiChatViewModel: AIChatViewModel = viewModel(),
+    contentViewModel: ContentViewModel,
+    aiChatViewModel: AIChatViewModel,
     levelNavigationViewModel: LevelNavigationViewModel,
     modifier: Modifier = Modifier
 ) {

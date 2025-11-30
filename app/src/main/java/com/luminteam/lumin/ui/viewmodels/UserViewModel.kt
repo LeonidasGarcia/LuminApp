@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.luminteam.lumin.data.repository.LoginRepository
+import com.luminteam.lumin.services.luminapi.dto.SetLastPageRequest
+import com.luminteam.lumin.services.luminapi.dto.SetLastPageResponse
 import com.luminteam.lumin.services.luminapi.repositories.AuthRepository
 import com.luminteam.lumin.services.luminapi.repositories.authRepository
 import com.luminteam.lumin.services.luminapi.repositories.userRepository
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class UserViewModel(
@@ -63,8 +66,10 @@ class UserViewModel(
         // aqui se deben hacer llamadas al servidor de la app
     }
 
-    fun updateUserMetricsData() {
-        // aqui se deben hacer llamadas al servidor de la app
+    fun updateUserMetricsData(userMetricsData: UserMetricsDataUiState) {
+        _currentUserMetricsDataUiState.update {
+            userMetricsData
+        }
     }
 
     fun updateCurrentContentState() {
@@ -86,7 +91,7 @@ class UserViewModel(
                         .associateBy { it.sectionId })
             _currentUserContentState.value = CurrentContentUiState(
                 currentLevelId = userMetrics.currentLevelId,
-                currentSectionId = userMetrics.currentPageId,
+                currentSectionId = userMetrics.currentSectionId,
                 currentPageId = userMetrics.currentPageId
             )
             Log.d("Datos", "Datos obtenidos: $userMetrics")
@@ -95,6 +100,11 @@ class UserViewModel(
 
     suspend fun getProfilePhotoUri(): String {
         return loginRepository.profilePhotoUri.first()
+    }
+
+    suspend fun setLastPage(idPage: Int): SetLastPageResponse {
+        val jwt = loginRepository.jwt.first()
+        return userRepository.postSetLastPage(jwt = jwt, SetLastPageRequest(id_page = idPage))
     }
 
     companion object {

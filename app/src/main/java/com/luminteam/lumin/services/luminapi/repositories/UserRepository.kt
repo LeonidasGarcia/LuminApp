@@ -3,6 +3,8 @@ package com.luminteam.lumin.services.luminapi.repositories
 import com.luminteam.lumin.services.luminapi.KtorClientFactory
 import com.luminteam.lumin.services.luminapi.dto.AuthCode
 import com.luminteam.lumin.services.luminapi.dto.LoginResult
+import com.luminteam.lumin.services.luminapi.dto.SetLastPageRequest
+import com.luminteam.lumin.services.luminapi.dto.SetLastPageResponse
 import com.luminteam.lumin.services.luminapi.interfaces.Auth
 import com.luminteam.lumin.services.luminapi.interfaces.User
 import com.luminteam.lumin.ui.domain.Calification
@@ -44,6 +46,19 @@ class UserRepository(private val client: HttpClient) : User {
 
     override suspend fun postCreateSubscription() {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun postSetLastPage(
+        jwt: String,
+        setLastPageRequest: SetLastPageRequest
+    ): SetLastPageResponse {
+        val response = client.post("/user/set_last_page") {
+            header("Authorization", "Bearer $jwt")
+            contentType(ContentType.Application.Json)
+            setBody(setLastPageRequest)
+        }
+
+        return response.body<SetLastPageResponse>()
     }
 }
 

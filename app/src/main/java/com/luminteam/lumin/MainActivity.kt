@@ -23,6 +23,7 @@ import com.luminteam.lumin.services.luminapi.repositories.authRepository
 import com.luminteam.lumin.ui.navigation.MainNavigation
 import com.luminteam.lumin.ui.navigation.RootNavigation
 import com.luminteam.lumin.ui.theme.LuminTheme
+import com.luminteam.lumin.ui.viewmodels.AIChatViewModel
 import com.luminteam.lumin.ui.viewmodels.ContentViewModel
 import com.luminteam.lumin.ui.viewmodels.LevelNavigationViewModel
 import com.luminteam.lumin.ui.viewmodels.SettingsViewModel
@@ -92,12 +93,19 @@ class MainActivity : ComponentActivity() {
                         )
                     )
 
+                    val aiChatViewModel: AIChatViewModel = viewModel(
+                        factory = AIChatViewModel.provideFactory(
+                            loginRepository
+                        )
+                    )
+
                     MainNavigation(
                         signInViewModel = signInViewModel,
                         userViewModel = userViewModel,
                         settingsViewModel = settingsViewModel,
                         contentViewModel = contentViewModel,
-                        levelNavigationViewModel = levelNavigationViewModel
+                        levelNavigationViewModel = levelNavigationViewModel,
+                        aiChatViewModel = aiChatViewModel
                     )
                 }
             }
