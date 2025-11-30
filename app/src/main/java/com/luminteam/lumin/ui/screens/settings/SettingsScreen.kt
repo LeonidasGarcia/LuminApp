@@ -189,6 +189,7 @@ fun SettingsScreen(
             LuminButtonAlt(
                 title = "Eliminar cuenta",
                 description = "",
+                icon = R.drawable.delete_icon,
                 color = LuminRed,
                 onClick = {
                     vibrate()
