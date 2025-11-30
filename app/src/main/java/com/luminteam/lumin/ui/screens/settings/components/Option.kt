@@ -52,7 +52,7 @@ fun Option(
                 Icon(
                     painter = painterResource(id = valueIcon),
                     tint = valueColor,
-                    contentDescription = null,
+                    contentDescription = "Icono de acción",
                     modifier = Modifier
                         .width(30.dp)
                         .height(30.dp),

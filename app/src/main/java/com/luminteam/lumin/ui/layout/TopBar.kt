@@ -87,7 +87,7 @@ fun TapBarLeftButton(
             Icon(
                 painter = painterResource(id = R.drawable.back_arrow_icon),
                 tint = LuminLightGray,
-                contentDescription = "",
+                contentDescription = "Icono",
                 modifier = Modifier
                     .width(30.dp)
                     .height(30.dp)
