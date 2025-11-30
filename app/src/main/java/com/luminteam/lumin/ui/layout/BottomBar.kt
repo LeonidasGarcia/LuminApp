@@ -25,6 +25,7 @@ import com.luminteam.lumin.ui.theme.LuminWhite
 data class BarItem(
     val title: String,
     val icon: Int,
+    val label: String,
     val action: () -> Unit
 )
 
@@ -41,10 +42,10 @@ fun BottomBar(
 ) {
 
     val barItems = listOf(
-        BarItem("MainScreen", R.drawable.home_icon, navigateHome),
-        BarItem("SectionsScreen", R.drawable.brain_icon, navigateLevel),
-        BarItem("ProfileScreen", R.drawable.user_icon, navigateProfile),
-        BarItem("SettingsScreen", R.drawable.setttings_icon, navigateSettings)
+        BarItem("MainScreen", R.drawable.home_icon, "Inicio",navigateHome),
+        BarItem("SectionsScreen", R.drawable.brain_icon, "Aprender", navigateLevel),
+        BarItem("ProfileScreen", R.drawable.user_icon, "Perfil", navigateProfile),
+        BarItem("SettingsScreen", R.drawable.setttings_icon, "Ajustes", navigateSettings)
     )
 
     if (!showBottomBar) return
@@ -53,7 +54,7 @@ fun BottomBar(
         windowInsets = NavigationBarDefaults.windowInsets,
         containerColor = LuminDarkGray,
     ) {
-        barItems.forEach { (title, icon, action) ->
+        barItems.forEach { (title, icon, label, action) ->
             NavigationBarItem(
                 selected = currentRoute == title,
                 onClick = {
@@ -66,7 +67,7 @@ fun BottomBar(
                 icon = {
                     Icon(
                         painter = painterResource(id = icon),
-                        contentDescription = title,
+                        contentDescription = label,
                         modifier = Modifier
                             .width(35.dp)
                             .height(35.dp)

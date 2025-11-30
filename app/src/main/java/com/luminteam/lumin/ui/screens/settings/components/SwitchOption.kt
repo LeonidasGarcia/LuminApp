@@ -70,7 +70,7 @@ fun SwitchOption(
             )
         }
         SmallText(
-            Modifier.padding(end = 50.dp),
+            Modifier.padding(end = 55.dp),
             text = description,
             color = LuminLightGray
         )
