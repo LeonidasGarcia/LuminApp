@@ -44,7 +44,8 @@ fun LevelNavigation(
     contentViewModel: ContentViewModel,
     aiChatViewModel: AIChatViewModel,
     viewModel: LevelNavigationViewModel = viewModel(),
-    levelBackStack: NavBackStack<NavKey>
+    levelBackStack: NavBackStack<NavKey>,
+    navigateCurrentTheoryPage: () -> Unit
 ) {
     Log.d("revision", "level nav cargado")
     val backStack = levelBackStack
@@ -222,7 +223,7 @@ fun LevelNavigation(
                         iconTitle = R.drawable.results_icon
                     )
                 )
-                
+
                 updateCurrentBackAction() {
                     viewModel.resetPracticeResults()
                     viewModel.resetPracticeResults()
@@ -245,10 +246,9 @@ fun LevelNavigation(
                         userViewModel.loadUserData()
                     }
 
-                    val currentLevelName =
-                        levels.levels[currentAppContentState.currentLevelId]!!.name
-                    val currentSectionName =
-                        sections.sections[currentAppContentState.currentSectionId]!!.name
+                    val currentAppSectionId = currentAppContentState.currentSectionId!!
+                    val currentUserSectionId =
+                        userViewModel.currentUserContentState.collectAsStateWithLifecycle().value.currentSectionId!!
 
                     PracticeResultsScreen(
                         viewModel = viewModel,
@@ -260,12 +260,23 @@ fun LevelNavigation(
                             viewModel.resetPracticeResults()
                             backStack.removeLastOrNull()
                             backStack.add(PracticeScreen)
-                        }
+                        },
+                        navigateCurrentTheoryPage = {
+                            backStack.removeLastOrNull()
+                            backStack.removeLastOrNull()
+                            navigateCurrentTheoryPage()
+                        },
+                        isCurrentSection = currentAppSectionId == currentUserSectionId
                     )
                 }
             }
             entry<SectionsScreen> {
                 Log.d("revision", "section cargado")
+
+                // para asegurarse de eliminar la practica almacenada
+                viewModel.resetPractice()
+                viewModel.resetPracticeResults()
+
                 updateCurrentBackAction() {
                     /*
                     viewModel.updateCurrentAppContentState(

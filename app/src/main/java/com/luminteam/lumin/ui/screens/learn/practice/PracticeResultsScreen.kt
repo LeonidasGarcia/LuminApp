@@ -49,7 +49,9 @@ data object PracticeResultsScreen : NavKey
 fun PracticeResultsScreen(
     viewModel: LevelNavigationViewModel,
     navigateFeedback: () -> Unit,
-    retryPractice: () -> Unit
+    retryPractice: () -> Unit,
+    navigateCurrentTheoryPage: () -> Unit,
+    isCurrentSection: Boolean
 ) {
     val questionsResultsUiState = viewModel.questionsResultsUiState.collectAsStateWithLifecycle()
 
@@ -274,7 +276,7 @@ fun PracticeResultsScreen(
             }
         }
 
-        if (canContinue) {
+        if (canContinue && isCurrentSection) {
             item {
                 LuminButton(
                     title = "Continuar",
@@ -282,7 +284,8 @@ fun PracticeResultsScreen(
                     buttonColor = LuminGreen,
                     icon = R.drawable.book_icon,
                     iconColor = LuminBlack,
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier.padding(8.dp),
+                    onClick = navigateCurrentTheoryPage
                 ) {
                     Column(
                         modifier = Modifier.width(140.dp),

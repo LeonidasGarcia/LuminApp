@@ -253,6 +253,10 @@ fun RootNavigation(
                                     viewModel = levelNavigationViewModel,
                                     levelBackStack = levelBackStack,
                                     aiChatViewModel = aiChatViewModel,
+                                    navigateCurrentTheoryPage = {
+                                        navigateCurrentTheoryPage()
+                                    }
+
                                 )
                             }
                             entry<SettingsNavigation> {
